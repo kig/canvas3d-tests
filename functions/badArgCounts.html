@@ -10,145 +10,360 @@
 */
 
 var methods = {
-  activeTexture : function(gl) { gl.activeTexture(); },
-  attachShader : function(gl) { gl.attachShader(); },
+   test_activeTexture : function(gl) {
+    assertFail(function(){ gl.activeTexture(); });
+  },
+   test_attachShader : function(gl) {
+    assertFail(function(){ gl.attachShader(); });
+  },
 
-  bindAttribLocation : function(gl) { gl.bindAttribLocation(); },
-  bindBuffer : function(gl) { gl.bindBuffer(); },
-  bindFramebuffer : function(gl) { gl.bindFramebuffer(); },
-  bindRenderbuffer : function(gl) { gl.bindRenderbuffer(); },
-  bindTexture : function(gl) { gl.bindTexture(); },
-  blendColor : function(gl) { gl.blendColor(); },
-  blendEquation : function(gl) { gl.blendEquation(); },
-  blendEquationSeparate : function(gl) { gl.blendEquationSeparate(); },
-  blendFunc : function(gl) { gl.blendFunc(); },
-  blendFuncSeparate : function(gl) { gl.blendFuncSeparate(); },
-  bufferData : function(gl) { gl.bufferData(); },
-  bufferSubData : function(gl) { gl.bufferSubData(); },
+   test_bindAttribLocation : function(gl) {
+    assertFail(function(){ gl.bindAttribLocation(); });
+  },
+   test_bindBuffer : function(gl) {
+    assertFail(function(){ gl.bindBuffer(); });
+  },
+   test_bindFramebuffer : function(gl) {
+    assertFail(function(){ gl.bindFramebuffer(); });
+  },
+   test_bindRenderbuffer : function(gl) {
+    assertFail(function(){ gl.bindRenderbuffer(); });
+  },
+   test_bindTexture : function(gl) {
+    assertFail(function(){ gl.bindTexture(); });
+  },
+   test_blendColor : function(gl) {
+    assertFail(function(){ gl.blendColor(); });
+  },
+   test_blendEquation : function(gl) {
+    assertFail(function(){ gl.blendEquation(); });
+  },
+   test_blendEquationSeparate : function(gl) {
+    assertFail(function(){ gl.blendEquationSeparate(); });
+  },
+   test_blendFunc : function(gl) {
+    assertFail(function(){ gl.blendFunc(); });
+  },
+   test_blendFuncSeparate : function(gl) {
+    assertFail(function(){ gl.blendFuncSeparate(); });
+  },
+   test_bufferData : function(gl) {
+    assertFail(function(){ gl.bufferData(); });
+  },
+   test_bufferSubData : function(gl) {
+    assertFail(function(){ gl.bufferSubData(); });
+  },
 
-  checkFramebufferStatus : function(gl) { gl.checkFramebufferStatus(); },
-  clear : function(gl) { gl.clear(); },
-  clearColor : function(gl) { gl.clearColor(); },
+   test_checkFramebufferStatus : function(gl) {
+    assertFail(function(){ gl.checkFramebufferStatus(); });
+  },
+   test_clear : function(gl) {
+    assertFail(function(){ gl.clear(); });
+  },
+   test_clearColor : function(gl) {
+    assertFail(function(){ gl.clearColor(); });
+  },
   // clearDepthf -> clearDepth
-  clearDepth : function(gl) { gl.clearDepth(); },
-  clearStencil : function(gl) { gl.clearStencil(); },
-  colorMask : function(gl) { gl.colorMask(); },
-  compileShader : function(gl) { gl.compileShader(); },
-  compressedTexImage2D : function(gl) { gl.compressedTexImage2D(); },
-  compressedTexSubImage2D : function(gl) { gl.compressedTexSubImage2D(); },
-  copyTexImage2D : function(gl) { gl.copyTexImage2D(); },
-  copyTexSubImage2D : function(gl) { gl.copyTexSubImage2D(); },
-  createProgram : function(gl) { gl.createProgram(null); },
-  createShader : function(gl) { gl.createShader(); },
-  cullFace : function(gl) { gl.cullFace(); },
+   test_clearDepth : function(gl) {
+    assertFail(function(){ gl.clearDepth(); });
+  },
+   test_clearStencil : function(gl) {
+    assertFail(function(){ gl.clearStencil(); });
+  },
+   test_colorMask : function(gl) {
+    assertFail(function(){ gl.colorMask(); });
+  },
+   test_compileShader : function(gl) {
+    assertFail(function(){ gl.compileShader(); });
+  },
+   test_compressedTexImage2D : function(gl) {
+    assertFail(function(){ gl.compressedTexImage2D(); });
+  },
+   test_compressedTexSubImage2D : function(gl) {
+    assertFail(function(){ gl.compressedTexSubImage2D(); });
+  },
+   test_copyTexImage2D : function(gl) {
+    assertFail(function(){ gl.copyTexImage2D(); });
+  },
+   test_copyTexSubImage2D : function(gl) {
+    assertFail(function(){ gl.copyTexSubImage2D(); });
+  },
+   test_createProgram : function(gl) {
+    assertFail(function(){ gl.createProgram(null); });
+  },
+   test_createShader : function(gl) {
+    assertFail(function(){ gl.createShader(); });
+  },
+   test_cullFace : function(gl) {
+    assertFail(function(){ gl.cullFace(); });
+  },
 
-  deleteBuffers : function(gl) { gl.deleteBuffers(); },
-  deleteFramebuffers : function(gl) { gl.deleteFramebuffers(); },
-  deleteProgram : function(gl) { gl.deleteProgram(); },
-  deleteRenderbuffers : function(gl) { gl.deleteRenderbuffers(); },
-  deleteShader : function(gl) { gl.deleteShader(); },
-  deleteTextures : function(gl) { gl.deleteTextures(); },
-  depthFunc : function(gl) { gl.depthFunc(); },
-  depthMask : function(gl) { gl.depthMask(); },
+   test_deleteBuffers : function(gl) {
+    assertFail(function(){ gl.deleteBuffers(); });
+  },
+   test_deleteFramebuffers : function(gl) {
+    assertFail(function(){ gl.deleteFramebuffers(); });
+  },
+   test_deleteProgram : function(gl) {
+    assertFail(function(){ gl.deleteProgram(); });
+  },
+   test_deleteRenderbuffers : function(gl) {
+    assertFail(function(){ gl.deleteRenderbuffers(); });
+  },
+   test_deleteShader : function(gl) {
+    assertFail(function(){ gl.deleteShader(); });
+  },
+   test_deleteTextures : function(gl) {
+    assertFail(function(){ gl.deleteTextures(); });
+  },
+   test_depthFunc : function(gl) {
+    assertFail(function(){ gl.depthFunc(); });
+  },
+   test_depthMask : function(gl) {
+    assertFail(function(){ gl.depthMask(); });
+  },
   // depthRangef -> depthRange
-  depthRange : function(gl) { gl.depthRange(); },
-  detachShader : function(gl) { gl.detachShader(); },
-  disable : function(gl) { gl.disable(); },
-  disableVertexAttribArray : function(gl) { gl.disableVertexAttribArray(); },
-  drawArrays : function(gl) { gl.drawArrays(); },
-  drawElements : function(gl) { gl.drawElements(); },
+   test_depthRange : function(gl) {
+    assertFail(function(){ gl.depthRange(); });
+  },
+   test_detachShader : function(gl) {
+    assertFail(function(){ gl.detachShader(); });
+  },
+   test_disable : function(gl) {
+    assertFail(function(){ gl.disable(); });
+  },
+   test_disableVertexAttribArray : function(gl) {
+    assertFail(function(){ gl.disableVertexAttribArray(); });
+  },
+   test_drawArrays : function(gl) {
+    assertFail(function(){ gl.drawArrays(); });
+  },
+   test_drawElements : function(gl) {
+    assertFail(function(){ gl.drawElements(); });
+  },
 
-  enable : function(gl) { gl.enable(); },
-  enableVertexAttribArray : function(gl) { gl.enableVertexAttribArray(); },
+   test_enable : function(gl) {
+    assertFail(function(){ gl.enable(); });
+  },
+   test_enableVertexAttribArray : function(gl) {
+    assertFail(function(){ gl.enableVertexAttribArray(); });
+  },
 
-  finish : function(gl) { gl.finish(); },
-  flush : function(gl) { gl.flush(); },
-  framebufferRenderbuffer : function(gl) { gl.framebufferRenderbuffer(); },
-  framebufferTexture2D : function(gl) { gl.framebufferTexture2D(); },
-  frontFace : function(gl) { gl.frontFace(); },
+   test_finish : function(gl) {
+    assertFail(function(){ gl.finish(); });
+  },
+   test_flush : function(gl) {
+    assertFail(function(){ gl.flush(); });
+  },
+   test_framebufferRenderbuffer : function(gl) {
+    assertFail(function(){ gl.framebufferRenderbuffer(); });
+  },
+   test_framebufferTexture2D : function(gl) {
+    assertFail(function(){ gl.framebufferTexture2D(); });
+  },
+   test_frontFace : function(gl) {
+    assertFail(function(){ gl.frontFace(); });
+  },
 
-  genBuffers : function(gl) { gl.genBuffers(); },
-  generateMipmap : function(gl) { gl.generateMipmap(); },
-  genFramebuffers : function(gl) { gl.genFramebuffers(); },
-  genRenderbuffers : function(gl) { gl.genRenderbuffers(); },
-  genTextures : function(gl) { gl.genTextures(); },
-  getParameter : function(gl) { gl.getParameter(); },
-  getActiveAttrib : function(gl) { gl.getActiveAttrib(); },
-  getActiveUniform : function(gl) { gl.getActiveUniform(); },
-  getAttachedShaders : function(gl) { gl.getAttachedShaders(); },
-  getAttribLocation : function(gl) { gl.getAttribLocation(); },
-  getBufferParameter : function(gl) { gl.getBufferParameter(); },
-  getError : function(gl) { gl.getError(null); },
-  getFramebufferAttachmentParameter : function(gl) { gl.getFramebufferAttachmentParameter(); },
-  getProgramParameter : function(gl) { gl.getProgramParameter(); },
-  getProgramInfoLog : function(gl) { gl.getProgramInfoLog(); },
-  getRenderbufferParameter : function(gl) { gl.getRenderbufferParameter(); },
-  getShaderParameter : function(gl) { gl.getShaderParameter(); },
-  getShaderInfoLog : function(gl) { gl.getShaderInfoLog(); },
-  getShaderPrecisionFormat : function(gl) { gl.getShaderPrecisionFormat(); },
-  getShaderSource : function(gl) { gl.getShaderSource(); },
-  getTexParameter : function(gl) { gl.getTexParameter(); },
-  getUniform : function(gl) { gl.getUniform(); },
-  getUniformLocation : function(gl) { gl.getUniformLocation(); },
-  getVertexAttrib : function(gl) { gl.getVertexAttrib(); },
-  getVertexAttribPointer : function(gl) { gl.getVertexAttribPointer(); },
+   test_genBuffers : function(gl) {
+    assertFail(function(){ gl.genBuffers(); });
+  },
+   test_generateMipmap : function(gl) {
+    assertFail(function(){ gl.generateMipmap(); });
+  },
+   test_genFramebuffers : function(gl) {
+    assertFail(function(){ gl.genFramebuffers(); });
+  },
+   test_genRenderbuffers : function(gl) {
+    assertFail(function(){ gl.genRenderbuffers(); });
+  },
+   test_genTextures : function(gl) {
+    assertFail(function(){ gl.genTextures(); });
+  },
+   test_getParameter : function(gl) {
+    assertFail(function(){ gl.getParameter(); });
+  },
+   test_getActiveAttrib : function(gl) {
+    assertFail(function(){ gl.getActiveAttrib(); });
+  },
+   test_getActiveUniform : function(gl) {
+    assertFail(function(){ gl.getActiveUniform(); });
+  },
+   test_getAttachedShaders : function(gl) {
+    assertFail(function(){ gl.getAttachedShaders(); });
+  },
+   test_getAttribLocation : function(gl) {
+    assertFail(function(){ gl.getAttribLocation(); });
+  },
+   test_getBufferParameter : function(gl) {
+    assertFail(function(){ gl.getBufferParameter(); });
+  },
+   test_getError : function(gl) {
+    assertFail(function(){ gl.getError(null); });
+  },
+   test_getFramebufferAttachmentParameter : function(gl) {
+    assertFail(function(){ gl.getFramebufferAttachmentParameter(); });
+  },
+   test_getProgramParameter : function(gl) {
+    assertFail(function(){ gl.getProgramParameter(); });
+  },
+   test_getProgramInfoLog : function(gl) {
+    assertFail(function(){ gl.getProgramInfoLog(); });
+  },
+   test_getRenderbufferParameter : function(gl) {
+    assertFail(function(){ gl.getRenderbufferParameter(); });
+  },
+   test_getShaderParameter : function(gl) {
+    assertFail(function(){ gl.getShaderParameter(); });
+  },
+   test_getShaderInfoLog : function(gl) {
+    assertFail(function(){ gl.getShaderInfoLog(); });
+  },
+   test_getShaderPrecisionFormat : function(gl) {
+    assertFail(function(){ gl.getShaderPrecisionFormat(); });
+  },
+   test_getShaderSource : function(gl) {
+    assertFail(function(){ gl.getShaderSource(); });
+  },
+   test_getTexParameter : function(gl) {
+    assertFail(function(){ gl.getTexParameter(); });
+  },
+   test_getUniform : function(gl) {
+    assertFail(function(){ gl.getUniform(); });
+  },
+   test_getUniformLocation : function(gl) {
+    assertFail(function(){ gl.getUniformLocation(); });
+  },
+   test_getVertexAttrib : function(gl) {
+    assertFail(function(){ gl.getVertexAttrib(); });
+  },
+   test_getVertexAttribPointer : function(gl) {
+    assertFail(function(){ gl.getVertexAttribPointer(); });
+  },
 
-  hint : function(gl) { gl.hint(); },
+   test_hint : function(gl) {
+    assertFail(function(){ gl.hint(); });
+  },
 
-  isBuffer : function(gl) { gl.isBuffer(); },
-  isEnabled : function(gl) { gl.isEnabled(); },
-  isFramebuffer : function(gl) { gl.isFramebuffer(); },
-  isProgram : function(gl) { gl.isProgram(); },
-  isRenderbuffer : function(gl) { gl.isRenderbuffer(); },
-  isShader : function(gl) { gl.isShader(); },
-  isTexture : function(gl) { gl.isTexture(); },
+   test_isBuffer : function(gl) {
+    assertFail(function(){ gl.isBuffer(); });
+  },
+   test_isEnabled : function(gl) {
+    assertFail(function(){ gl.isEnabled(); });
+  },
+   test_isFramebuffer : function(gl) {
+    assertFail(function(){ gl.isFramebuffer(); });
+  },
+   test_isProgram : function(gl) {
+    assertFail(function(){ gl.isProgram(); });
+  },
+   test_isRenderbuffer : function(gl) {
+    assertFail(function(){ gl.isRenderbuffer(); });
+  },
+   test_isShader : function(gl) {
+    assertFail(function(){ gl.isShader(); });
+  },
+   test_isTexture : function(gl) {
+    assertFail(function(){ gl.isTexture(); });
+  },
 
-  lineWidth : function(gl) { gl.lineWidth(); },
-  linkProgram : function(gl) { gl.linkProgram(); },
+   test_lineWidth : function(gl) {
+    assertFail(function(){ gl.lineWidth(); });
+  },
+   test_linkProgram : function(gl) {
+    assertFail(function(){ gl.linkProgram(); });
+  },
 
-  pixelStorei : function(gl) { gl.pixelStorei(); },
-  polygonOffset : function(gl) { gl.polygonOffset(); },
+   test_pixelStorei : function(gl) {
+    assertFail(function(){ gl.pixelStorei(); });
+  },
+   test_polygonOffset : function(gl) {
+    assertFail(function(){ gl.polygonOffset(); });
+  },
 
-  readPixels : function(gl) { gl.readPixels(); },
-  releaseShaderCompiler : function(gl) { gl.releaseShaderCompiler(); },
-  renderbufferStorage : function(gl) { gl.renderbufferStorage(); },
+   test_readPixels : function(gl) {
+    assertFail(function(){ gl.readPixels(); });
+  },
+   test_releaseShaderCompiler : function(gl) {
+    assertFail(function(){ gl.releaseShaderCompiler(); });
+  },
+   test_renderbufferStorage : function(gl) {
+    assertFail(function(){ gl.renderbufferStorage(); });
+  },
 
-  sampleCoverage : function(gl) { gl.sampleCoverage(); },
-  scissor : function(gl) { gl.scissor(); },
-  shaderBinary : function(gl) { gl.shaderBinary(); },
-  shaderSource : function(gl) { gl.shaderSource(); },
-  stencilFunc : function(gl) { gl.stencilFunc(); },
-  stencilFuncSeparate : function(gl) { gl.stencilFuncSeparate(); },
-  stencilMask : function(gl) { gl.stencilMask(); },
-  stencilMaskSeparate : function(gl) { gl.stencilMaskSeparate(); },
-  stencilOp : function(gl) { gl.stencilOp(); },
-  stencilOpSeparate : function(gl) { gl.stencilOpSeparate(); },
+   test_sampleCoverage : function(gl) {
+    assertFail(function(){ gl.sampleCoverage(); });
+  },
+   test_scissor : function(gl) {
+    assertFail(function(){ gl.scissor(); });
+  },
+   test_shaderBinary : function(gl) {
+    assertFail(function(){ gl.shaderBinary(); });
+  },
+   test_shaderSource : function(gl) {
+    assertFail(function(){ gl.shaderSource(); });
+  },
+   test_stencilFunc : function(gl) {
+    assertFail(function(){ gl.stencilFunc(); });
+  },
+   test_stencilFuncSeparate : function(gl) {
+    assertFail(function(){ gl.stencilFuncSeparate(); });
+  },
+   test_stencilMask : function(gl) {
+    assertFail(function(){ gl.stencilMask(); });
+  },
+   test_stencilMaskSeparate : function(gl) {
+    assertFail(function(){ gl.stencilMaskSeparate(); });
+  },
+   test_stencilOp : function(gl) {
+    assertFail(function(){ gl.stencilOp(); });
+  },
+   test_stencilOpSeparate : function(gl) {
+    assertFail(function(){ gl.stencilOpSeparate(); });
+  },
 
-  texImage2D : function(gl) { gl.texImage2D(); },
-  texImage2DHTML : function(gl) { gl.texImage2DHTML(); },
-  texParameter : function(gl) { gl.texParameter(); },
-  texSubImage2DHTML : function(gl) { gl.texSubImage2DHTML(); },
+   test_texImage2D : function(gl) {
+    assertFail(function(){ gl.texImage2D(); });
+  },
+   test_texImage2DHTML : function(gl) {
+    assertFail(function(){ gl.texImage2DHTML(); });
+  },
+   test_texParameter : function(gl) {
+    assertFail(function(){ gl.texParameter(); });
+  },
+   test_texSubImage2DHTML : function(gl) {
+    assertFail(function(){ gl.texSubImage2DHTML(); });
+  },
 
-  uniformf : function(gl) { gl.uniformf(); },
-  uniformi : function(gl) { gl.uniformi(); },
-  uniformMatrix : function(gl) { gl.uniformMatrix(); },
-  useProgram : function(gl) { gl.useProgram(); },
+   test_uniformf : function(gl) {
+    assertFail(function(){ gl.uniformf(); });
+  },
+   test_uniformi : function(gl) {
+    assertFail(function(){ gl.uniformi(); });
+  },
+   test_uniformMatrix : function(gl) {
+    assertFail(function(){ gl.uniformMatrix(); });
+  },
+   test_useProgram : function(gl) {
+    assertFail(function(){ gl.useProgram(); });
+  },
 
-  validateProgram : function(gl) { gl.validateProgram(); },
-  vertexAttrib : function(gl) { gl.vertexAttrib(); },
-  vertexAttribPointer : function(gl) { gl.vertexAttribPointer(); },
-  viewport : function(gl) { gl.viewport(); }
-}
-
-function makeFailureTest(f) {
-  return function(gl){
-    assertFail(function(){f(gl)});
+   test_validateProgram : function(gl) {
+    assertFail(function(){ gl.validateProgram(); });
+  },
+   test_vertexAttrib : function(gl) {
+    assertFail(function(){ gl.vertexAttrib(); });
+  },
+   test_vertexAttribPointer : function(gl) {
+    assertFail(function(){ gl.vertexAttribPointer(); });
+  },
+   test_viewport : function(gl) {
+    assertFail(function(){ gl.viewport(); });
   }
 }
 
-for (var i in methods) {
-  Tests["test_"+i] = makeFailureTest(methods[i]);
-}
+for (var i in methods)
+  Tests[i] = methods[i];
 
 Tests.startUnit = function() {
   var canvas = document.getElementById('gl');
