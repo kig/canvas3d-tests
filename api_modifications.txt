@@ -1,0 +1,70 @@
+bufferData -> void bufferData (uint target, Array data, uint elementType, uint usage)
+bufferSubData -> void bufferSubData (uint target, uint offset, Array data, uint elementType)
+
+clearDepthf -> void clearDepth (float depth)
+
+deleteBuffers -> void deleteBuffers (Array buffers)
+deleteTextures -> void deleteTextures (Array textures)
+
+drawElements -> void drawElements (uint mode, uint count, Array indices)
+
+getActiveAttrib -> Object getActiveAttrib (uint program, uint index)
+getActiveUniform -> Object getActiveUniform (uint program, uint index)
+getAttachedShaders -> Array getAttachedShaders (uint program)
+getAttribLocation int -> int getAttribLocation (uint program, string name)
+getBooleanv -> Object getParameter (uint pname)
+-getFloatv
+-getIntegerv
+-getPointerv
+-getString
+getFramebufferAttachmentParameteriv -> int getFramebufferAttachmentParameter (uint target, uint attachment, uint pname)
+getProgramiv -> Object getProgramParameter (uint program, uint pname)
+getProgramInfoLog -> string getProgramInfoLog (uint program)
+getRenderbufferParameteriv -> int getRenderbufferParameter (uint target, uint pname)
+getTexParameteriv -> Object getTexParameter (uint target, uint pname)
+-getTexParameterfv
+getUniformfv -> Object getUniform (uint program, uint pname)
+-getUniformiv
+getVertexAttribfv -> Object getVertexAttrib (uint index, uint pname)
+-getVertexAttribiv
+-getVertexAttribPointerv
+
+readPixels -> Object readPixels (int x, int y, uint width, uint height, uint format, uint type)
+
+texParameterf -> Object getTexParameter (uint target, uint pname)
+-texParameteri
+-texParameterfv
+-texParameteriv
+
+uniform1f -> void uniformf (int location, Array values)
+-uniform2f
+-uniform3f
+-uniform4f
+-uniform1fv
+-uniform2fv
+-uniform3fv
+-uniform4fv
+uniform1i -> void uniformi (int location, Array values)
+-uniform2i
+-uniform3i
+-uniform4i
+-uniform1iv
+-uniform2iv
+-uniform3iv
+-uniform4iv
+uniformMatrix2fv -> void uniformMatrix (int location, Array values)
+-uniformMatrix3fv
+-uniformMatrix4fv
+
+vertexAttrib1f -> void vertexAttrib (uint idx, Array values)
+-vertexAttrib2f
+-vertexAttrib3f
+-vertexAttrib4f
+-vertexAttrib1fv
+-vertexAttrib2fv
+-vertexAttrib3fv
+-vertexAttrib4fv
+
+
++void texImage2DHTML (uint target, int level, DOMImageElement image)
++void texSubImage2DHTML (uint target, int level, DOMImageElement image, int xoff, int yoff, int width, int height)
