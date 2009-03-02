@@ -8,6 +8,10 @@ deleteTextures -> void deleteTextures (Array textures)
 
 drawElements -> void drawElements (uint mode, uint count, Array indices)
 
+genBuffers -> int genBuffers (uint count)
+genFramebuffers -> int genFramebuffers (uint count)
+genRenderbuffers -> int genRenderbuffers (uint count)
+genTextures -> int genTextures (uint count)
 getActiveAttrib -> Object getActiveAttrib (uint program, uint index)
 getActiveUniform -> Object getActiveUniform (uint program, uint index)
 getAttachedShaders -> Array getAttachedShaders (uint program)
@@ -21,6 +25,7 @@ getFramebufferAttachmentParameteriv -> int getFramebufferAttachmentParameter (ui
 getProgramiv -> Object getProgramParameter (uint program, uint pname)
 getProgramInfoLog -> string getProgramInfoLog (uint program)
 getRenderbufferParameteriv -> int getRenderbufferParameter (uint target, uint pname)
+getShaderInfoLog -> string getShaderInfoLog (uint shader)
 getTexParameteriv -> Object getTexParameter (uint target, uint pname)
 -getTexParameterfv
 getUniformfv -> Object getUniform (uint program, uint pname)
@@ -30,6 +35,8 @@ getVertexAttribfv -> Object getVertexAttrib (uint index, uint pname)
 -getVertexAttribPointerv
 
 readPixels -> Object readPixels (int x, int y, uint width, uint height, uint format, uint type)
+
+shaderSource -> void shaderSource (uint shader, string source)
 
 texParameterf -> Object getTexParameter (uint target, uint pname)
 -texParameteri
