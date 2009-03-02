@@ -5,7 +5,7 @@ clearDepthf -> void clearDepth (float depth)
 
 deleteBuffers -> void deleteBuffers (Array buffers)
 deleteTextures -> void deleteTextures (Array textures)
-
+depthRangef -> void depthRange (float value)
 drawElements -> void drawElements (uint mode, uint count, Array indices)
 
 genBuffers -> int genBuffers (uint count)
@@ -21,10 +21,12 @@ getBooleanv -> Object getParameter (uint pname)
 -getIntegerv
 -getPointerv
 -getString
+getBufferParameteriv -> int getBufferParameter (uint target, uint value)
 getFramebufferAttachmentParameteriv -> int getFramebufferAttachmentParameter (uint target, uint attachment, uint pname)
 getProgramiv -> Object getProgramParameter (uint program, uint pname)
 getProgramInfoLog -> string getProgramInfoLog (uint program)
 getRenderbufferParameteriv -> int getRenderbufferParameter (uint target, uint pname)
+getShaderiv -> string getShaderParameter (uint shader, uint pname)
 getShaderInfoLog -> string getShaderInfoLog (uint shader)
 getTexParameteriv -> Object getTexParameter (uint target, uint pname)
 -getTexParameterfv

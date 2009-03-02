@@ -118,8 +118,8 @@ Tests.test_depthFunc = function(gl) {
 Tests.test_depthMask = function(gl) {
   assertFail(function(){ gl.depthMask(0,0); });
 }
-Tests.test_depthRangef = function(gl) {
-  assertFail(function(){ gl.depthRangef(0,0,0); });
+Tests.test_depthRange = function(gl) {
+  assertFail(function(){ gl.depthRange(0,0); });
 }
 Tests.test_detachShader = function(gl) {
   assertFail(function(){ gl.detachShader(0,0,0); });
@@ -184,11 +184,11 @@ Tests.test_getAttachedShaders = function(gl) {
 Tests.test_getAttribLocation = function(gl) {
   assertFail(function(){ gl.getAttribLocation(0,0,0); });
 }
-Tests.test_getBooleanv = function(gl) {
-  assertFail(function(){ gl.getBooleanv(0,0,0); });
+Tests.test_getParameter = function(gl) {
+  assertFail(function(){ gl.getParameter(0,0); });
 }
-Tests.test_getBufferParameteriv = function(gl) {
-  assertFail(function(){ gl.getBufferParameteriv(0,0,0,0); });
+Tests.test_getBufferParameter = function(gl) {
+  assertFail(function(){ gl.getBufferParameter(0,0,0); });
 }
 Tests.test_getError = function(gl) {
   assertFail(function(){ gl.getError(0); });
@@ -196,8 +196,8 @@ Tests.test_getError = function(gl) {
 Tests.test_getFramebufferAttachmentParameter = function(gl) {
   assertFail(function(){ gl.getFramebufferAttachmentParameter(0,0,0,0); });
 }
-Tests.test_getProgramiv = function(gl) {
-  assertFail(function(){ gl.getProgramiv(0,0,0,0); });
+Tests.test_getProgramParameter = function(gl) {
+  assertFail(function(){ gl.getProgramParameter(0,0,0); });
 }
 Tests.test_getProgramInfoLog = function(gl) {
   assertFail(function(){ gl.getProgramInfoLog(0,0); });
@@ -205,8 +205,8 @@ Tests.test_getProgramInfoLog = function(gl) {
 Tests.test_getRenderbufferParameter = function(gl) {
   assertFail(function(){ gl.getRenderbufferParameter(0,0,0); });
 }
-Tests.test_getShaderiv = function(gl) {
-  assertFail(function(){ gl.getShaderiv(0,0,0,0); });
+Tests.test_getShaderParameter = function(gl) {
+  assertFail(function(){ gl.getShaderParameter(0,0,0); });
 }
 Tests.test_getShaderInfoLog = function(gl) {
   assertFail(function(){ gl.getShaderInfoLog(0,0); });
@@ -220,23 +220,11 @@ Tests.test_getShaderSource = function(gl) {
 Tests.test_getTexParameter = function(gl) {
   assertFail(function(){ gl.getTexParameter(0,0,0); });
 }
-Tests.test_getTexParameter = function(gl) {
-  assertFail(function(){ gl.getTexParameter(0,0,0); });
-}
 Tests.test_getUniform = function(gl) {
   assertFail(function(){ gl.getUniform(0,0,0); });
 }
-Tests.test_getUniform = function(gl) {
-  assertFail(function(){ gl.getUniform(0,0,0); });
-}
-Tests.test_getUniform = function(gl) {
-  assertFail(function(){ gl.getUniform(0,0,0); });
-}
-Tests.test_getVertexAttrib = function(gl) {
-  assertFail(function(){ gl.getVertexAttrib(0,0,0); });
-}
-Tests.test_getVertexAttrib = function(gl) {
-  assertFail(function(){ gl.getVertexAttrib(0,0,0); });
+Tests.test_getUniformLocation = function(gl) {
+  assertFail(function(){ gl.getUniformLocation(0,0,0); });
 }
 Tests.test_getVertexAttrib = function(gl) {
   assertFail(function(){ gl.getVertexAttrib(0,0,0); });
@@ -319,23 +307,26 @@ Tests.test_stencilOpSeparate = function(gl) {
 Tests.test_texImage2D = function(gl) {
   assertFail(function(){ gl.texImage2D(0,0,0,0,0,0,0,0,0,0); });
 }
-Tests.test_texParameterf = function(gl) {
-  assertFail(function(){ gl.texParameterf(0,0,0,0); });
+Tests.test_getTexParameter = function(gl) {
+  assertFail(function(){ gl.getTexParameter(0,0,0); });
+}
+Tests.test_getTexParameter = function(gl) {
+  assertFail(function(){ gl.getTexParameter(0,0,0); });
 }
 Tests.test_texSubImage2D = function(gl) {
   assertFail(function(){ gl.texSubImage2D(0,0,0,0,0,0,0,0,0,0); });
 }
-Tests.test_uniform1f = function(gl) {
-  assertFail(function(){ gl.uniform1f(0,0,0); });
+Tests.test_uniformf = function(gl) {
+  assertFail(function(){ gl.uniformf(0,0,0); });
 }
-Tests.test_uniform1i = function(gl) {
-  assertFail(function(){ gl.uniform1i(0,0,0); });
+Tests.test_uniformf = function(gl) {
+  assertFail(function(){ gl.uniformf(0,0,0); });
 }
-Tests.test_uniformMatrix = function(gl) {
-  assertFail(function(){ gl.uniformMatrix(0,0,0); });
+Tests.test_uniformi = function(gl) {
+  assertFail(function(){ gl.uniformi(0,0,0); });
 }
-Tests.test_uniformMatrix = function(gl) {
-  assertFail(function(){ gl.uniformMatrix(0,0,0); });
+Tests.test_uniformi = function(gl) {
+  assertFail(function(){ gl.uniformi(0,0,0); });
 }
 Tests.test_uniformMatrix = function(gl) {
   assertFail(function(){ gl.uniformMatrix(0,0,0); });
@@ -352,26 +343,8 @@ Tests.test_vertexAttrib = function(gl) {
 Tests.test_vertexAttrib = function(gl) {
   assertFail(function(){ gl.vertexAttrib(0,0,0); });
 }
-Tests.test_vertexAttrib = function(gl) {
-  assertFail(function(){ gl.vertexAttrib(0,0,0); });
-}
-Tests.test_vertexAttrib = function(gl) {
-  assertFail(function(){ gl.vertexAttrib(0,0,0); });
-}
-Tests.test_vertexAttrib = function(gl) {
-  assertFail(function(){ gl.vertexAttrib(0,0,0); });
-}
-Tests.test_vertexAttrib = function(gl) {
-  assertFail(function(){ gl.vertexAttrib(0,0,0); });
-}
-Tests.test_vertexAttrib = function(gl) {
-  assertFail(function(){ gl.vertexAttrib(0,0,0); });
-}
-Tests.test_vertexAttrib = function(gl) {
-  assertFail(function(){ gl.vertexAttrib(0,0,0); });
-}
-Tests.test_vertexAttrib = function(gl) {
-  assertFail(function(){ gl.vertexAttrib(0,0,0); });
+Tests.test_vertexAttribPointer = function(gl) {
+  assertFail(function(){ gl.vertexAttribPointer(0,0,0,0,0,0,0); });
 }
 Tests.test_viewport = function(gl) {
   assertFail(function(){ gl.viewport(0,0,0,0,0); });

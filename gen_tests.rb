@@ -2,7 +2,7 @@ api = File.read("gl2.h").strip.split("\n")
 mods = {}
 File.read("api_modifications.txt").strip.split("\n").each{|l|
   l = l.strip
-  next if l.empty? || l =~ /^#/
+  next if l.empty? or l =~ /^#/
   if l[0,1] == "+"
     ret_type, fname, args = l[1..-1].split(/\s+/,3)
     api.push("GL_APICALL #{ret_type} GL_APIENTRY gl#{fname} #{args}")
@@ -14,9 +14,10 @@ File.read("api_modifications.txt").strip.split("\n").each{|l|
       replacement = ""
     else
       fname, replacement = l.split(/\s*->\s*/,2)
-      ret_type, fname, args = replacement.split(/\s+/,3)
-      replacement = "GL_APICALL #{ret_type} GL_APIENTRY gl#{fname} #{args}"
+      ret_type, nfname, args = replacement.split(/\s+/,3)
+      replacement = "GL_APICALL #{ret_type} GL_APIENTRY gl#{nfname} #{args}"
     end
+#     puts fname + ": " + replacement
     api.map!{|a|
       if a =~ /GL_APIENTRY\s+gl#{fname}/i
         replacement
@@ -28,7 +29,7 @@ File.read("api_modifications.txt").strip.split("\n").each{|l|
 }
 
 
-constants = api.grep(/^#define/).map{|l|
+constants = api.grep(/^#define GL_/).map{|l|
   _, name, val = l.strip.split(/\s+/)
   name = name.sub(/^GL_/, "")
   [name, val]
@@ -44,6 +45,51 @@ funcs = api.grep(/^GL_APICALL/).map{|l|
 
 
 tests = {
+  "constants" =>
+  "var constants = {\n" +
+  constants.map{|c,v| "#{c} : #{v}"}.join(",\n") + "\n}\n" + %Q(
+Tests.testOES20Constants = function(gl) {
+  for (var i in constants) {
+    assertProperty(gl, i) &&
+    assertEquals(i, gl[i], constants[i]);
+  }
+  var extended = false;
+  for (var i in gl) {
+    if (i.match(/^[A-Z_]+$/) && constants[i] == null) {
+      if (!extended) {
+        extended = true;
+        var h = document.createElement('h3');
+        h.textContent = "Also found the following extra constants";
+        __testLog__.appendChild(h);
+      }
+      log(i);
+    }
+  }
+}
+  ),
+  
+  "methods" =>
+  "var methods = [\n" +
+  funcs.map{|_,fn,args| fn.dump }.join(",\n") + "\n]\n" + %Q(
+Tests.testOES20Methods = function(gl) {
+  for (var i=0; i<methods.length; i++) {
+    assertProperty(gl, methods[i]);
+  }
+  var extended = false;
+  for (var i in gl) {
+    if (i.match(/^[a-z_]+$/) && methods.indexOf(i) == -1) {
+      if (!extended) {
+        extended = true;
+        var h = document.createElement('h3');
+        h.textContent = "Also found the following extra properties";
+        __testLog__.appendChild(h);
+      }
+      log(i);
+    }
+  }
+}
+  ),
+  
   "badArgsArityLessThanArgc" => funcs.map {|_,fn,args|
     s = "Tests.test_#{fn} = function(gl) {\n"
     (0...args.length).each{|i|
@@ -51,14 +97,14 @@ tests = {
                 (["0"] * i).join(",")}); });\n"
     }
     s << "}"
-  },
+  }.join("\n"),
 
   "badArgsArityMoreThanArgc" => funcs.map {|_,fn,args|
     s = "Tests.test_#{fn} = function(gl) {\n"
     s << "  assertFail(function(){ gl.#{fn}(#{
               (["0"] * (args.length+1)).join(",")}); });\n"
     s << "}"
-  }
+  }.join("\n")
 }
 
 test_header = <<EOF
@@ -91,9 +137,10 @@ Tests.startUnit = function() {
 EOF
 
 tests.each{|n,t|
+  puts "Generating conformance/#{n}.html"
   File.open("conformance/#{n}.html", "w") {|f|
     f.puts(test_header)
-    f.puts(t.join("\n"))
+    f.puts(t)
     f.puts(test_footer)
   }
 }

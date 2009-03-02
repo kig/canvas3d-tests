@@ -5,150 +5,130 @@
 <script type="application/x-javascript" src="../unit.js"></script>
 <script type="application/x-javascript">
 
-/* The following list of methods is parsed from
-   http://www.khronos.org/registry/gles/api/2.0/gl2.h
+/*
+  The following tests are generated from
+  http://www.khronos.org/registry/gles/api/2.0/gl2.h
+  and api_modifications.txt
 */
-
 var methods = [
-  "activeTexture",
-  "attachShader",
-  "bindAttribLocation",
-  "bindBuffer",
-  "bindFramebuffer",
-  "bindRenderbuffer",
-  "bindTexture",
-  "blendColor",
-  "blendEquation",
-  "blendEquationSeparate",
-  "blendFunc",
-  "blendFuncSeparate",
-  "bufferData",
-  "bufferSubData",
-  "checkFramebufferStatus",
-  "clear",
-  "clearColor",
-  // clearDepthf -> clearDepth
-  "clearDepth",
-  "clearStencil",
-  "colorMask",
-  "compileShader",
-  "compressedTexImage2D",
-  "compressedTexSubImage2D",
-  "copyTexImage2D",
-  "copyTexSubImage2D",
-  "createProgram",
-  "createShader",
-  "cullFace",
-  "deleteBuffers",
-  "deleteFramebuffers",
-  "deleteProgram",
-  "deleteRenderbuffers",
-  "deleteShader",
-  "deleteTextures",
-  "depthFunc",
-  "depthMask",
-  // depthRangef -> depthRange
-  "depthRange",
-  "detachShader",
-  "disable",
-  "disableVertexAttribArray",
-  "drawArrays",
-  "drawElements",
-  "enable",
-  "enableVertexAttribArray",
-  "finish",
-  "flush",
-  "framebufferRenderbuffer",
-  "framebufferTexture2D",
-  "frontFace",
-  "genBuffers",
-  "generateMipmap",
-  "genFramebuffers",
-  "genRenderbuffers",
-  "genTextures",
-
-  // getBooleanv, getFloatv, getIntegerv, getString -> getParameter
-  "getParameter",
-
-  "getActiveAttrib",
-  "getActiveUniform",
-  "getAttachedShaders",
-  "getAttribLocation",
-  // getBufferParameteriv -> getBufferParameter
-  "getBufferParameter",
-  "getError",
-  // getFramebufferAttachmentParameteriv -> getFramebufferAttachmentParameter
-  "getFramebufferAttachmentParameter",
-  // getProgramiv -> getProgramParameter
-  "getProgramParameter",
-  "getProgramInfoLog",
-  // getRenderbufferParameteriv -> getRenderbufferParameter
-  "getRenderbufferParameter",
-  // getShaderiv -> getShaderParameter
-  "getShaderParameter",
-  "getShaderInfoLog",
-  "getShaderPrecisionFormat",
-  "getShaderSource",
-  // getTexParameterif, getTexParameteriv -> getTexParameter
-  "getTexParameter",
-  // getUniformfv, getUniformiv -> getUniform
-  "getUniform",
-  "getUniformLocation",
-  // getVertexAttribfv, getVertexAttribiv -> getVertexAttrib
-  "getVertexAttrib",
-  // getVertexAttribPointerv -> getVertexAttribPointer
-  "getVertexAttribPointer",
-  "hint",
-  "isBuffer",
-  "isEnabled",
-  "isFramebuffer",
-  "isProgram",
-  "isRenderbuffer",
-  "isShader",
-  "isTexture",
-  "lineWidth",
-  "linkProgram",
-  "pixelStorei",
-  "polygonOffset",
-  "readPixels",
-  "releaseShaderCompiler",
-  "renderbufferStorage",
-  "sampleCoverage",
-  "scissor",
-  "shaderBinary",
-  "shaderSource",
-  "stencilFunc",
-  "stencilFuncSeparate",
-  "stencilMask",
-  "stencilMaskSeparate",
-  "stencilOp",
-  "stencilOpSeparate",
-  "texImage2D",
-  // addition
-  "texImage2DHTML",
-  // texParameter[fi]v? -> texParameter
-  "texParameter",
-  // addition
-  "texSubImage2DHTML",
-  // uniform[1234]fv? -> uniformf
-  "uniformf",
-  // uniform[1234]fi? -> uniformi
-  "uniformi",
-  // uniformMatrix2fv, uniformMatrix3fv, uniformMatrix4fv -> uniformMatrix
-  "uniformMatrix",
-  "useProgram",
-  "validateProgram",
-  // vertexAttrib[1234]fv?, vertexAttribPointerv -> vertexAttrib
-  "vertexAttrib",
-  "viewport"
+"activeTexture",
+"attachShader",
+"bindAttribLocation",
+"bindBuffer",
+"bindFramebuffer",
+"bindRenderbuffer",
+"bindTexture",
+"blendColor",
+"blendEquation",
+"blendEquationSeparate",
+"blendFunc",
+"blendFuncSeparate",
+"bufferData",
+"bufferSubData",
+"checkFramebufferStatus",
+"clear",
+"clearColor",
+"clearDepth",
+"clearStencil",
+"colorMask",
+"compileShader",
+"compressedTexImage2D",
+"compressedTexSubImage2D",
+"copyTexImage2D",
+"copyTexSubImage2D",
+"createProgram",
+"createShader",
+"cullFace",
+"deleteBuffers",
+"deleteFramebuffers",
+"deleteProgram",
+"deleteRenderbuffers",
+"deleteShader",
+"deleteTextures",
+"depthFunc",
+"depthMask",
+"depthRange",
+"detachShader",
+"disable",
+"disableVertexAttribArray",
+"drawArrays",
+"drawElements",
+"enable",
+"enableVertexAttribArray",
+"finish",
+"flush",
+"framebufferRenderbuffer",
+"framebufferTexture2D",
+"frontFace",
+"genBuffers",
+"generateMipmap",
+"genFramebuffers",
+"genRenderbuffers",
+"genTextures",
+"getActiveAttrib",
+"getActiveUniform",
+"getAttachedShaders",
+"getAttribLocation",
+"getParameter",
+"getBufferParameter",
+"getError",
+"getFramebufferAttachmentParameter",
+"getProgramParameter",
+"getProgramInfoLog",
+"getRenderbufferParameter",
+"getShaderParameter",
+"getShaderInfoLog",
+"getShaderPrecisionFormat",
+"getShaderSource",
+"getTexParameter",
+"getUniform",
+"getUniformLocation",
+"getVertexAttrib",
+"hint",
+"isBuffer",
+"isEnabled",
+"isFramebuffer",
+"isProgram",
+"isRenderbuffer",
+"isShader",
+"isTexture",
+"lineWidth",
+"linkProgram",
+"pixelStorei",
+"polygonOffset",
+"readPixels",
+"releaseShaderCompiler",
+"renderbufferStorage",
+"sampleCoverage",
+"scissor",
+"shaderBinary",
+"shaderSource",
+"stencilFunc",
+"stencilFuncSeparate",
+"stencilMask",
+"stencilMaskSeparate",
+"stencilOp",
+"stencilOpSeparate",
+"texImage2D",
+"getTexParameter",
+"getTexParameter",
+"texSubImage2D",
+"uniformf",
+"uniformf",
+"uniformi",
+"uniformi",
+"uniformMatrix",
+"useProgram",
+"validateProgram",
+"vertexAttrib",
+"vertexAttrib",
+"vertexAttribPointer",
+"viewport",
+"texImage2DHTML",
+"texSubImage2DHTML"
 ]
 
-Tests.testOES20Methods = function() {
-  var canvas = document.createElement('canvas');
-  canvas.id = 'GLWeb20';
-  canvas.width = canvas.height = 1;
-  var gl;
-  assertOk(function(){gl = canvas.getContext(GL_CONTEXT_ID)});
+Tests.testOES20Methods = function(gl) {
   for (var i=0; i<methods.length; i++) {
     assertProperty(gl, methods[i]);
   }
@@ -165,7 +145,15 @@ Tests.testOES20Methods = function() {
     }
   }
 }
+  
+Tests.startUnit = function() {
+  var canvas = document.getElementById('gl');
+  var gl = canvas.getContext(GL_CONTEXT_ID);
+  return [gl];
+}
 
 </script>
+<style>canvas{ position:absolute; }</style>
 </head><body>
+  <canvas id="gl" width="1" height="1"></canvas>
 </body></html>
