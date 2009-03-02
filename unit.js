@@ -57,7 +57,7 @@ function checkTestSuccess() {
 
 function printTestStatus() {
   var status = document.getElementById('test-status');
-  document.body.style.backgroundColor = checkTestSuccess() ? '#0f0' : '#f00';
+  document.body.className = checkTestSuccess() ? 'ok' : 'fail';
   status.textContent = checkTestSuccess() ? "OK" : "FAIL";
 }
 
