@@ -9,6 +9,9 @@ var verts = [0.0, 0.0, 0.0,   1.0, 0.0, 0.0,   0.0, 1.0, 0.0];
 var normals = [0.0, 0.0, 1.0,   0.0, 0.0, 1.0,   0.0, 0.0, 1.0];
 var texcoords = [0.0,0.0,  1.0,0.0,  0.0,1.0];
 
+Tests.autorun = false;
+Tests.message = "Caution: if your implementation has a bug in drawArrays bounds checking, this will likely segfault your browser";
+
 Tests.startUnit = function () {
   var canvas = document.getElementById('gl');
   var gl = canvas.getContext(GL_CONTEXT_ID);
