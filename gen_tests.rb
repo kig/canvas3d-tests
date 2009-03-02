@@ -7,6 +7,8 @@ File.read("api_modifications.txt").strip.split("\n").each{|l|
     ret_type, fname, args = l[1..-1].split(/\s+/,3)
     api.push("GL_APICALL #{ret_type} GL_APIENTRY gl#{fname} #{args}")
   else
+    fname = nil
+    replacement = nil
     if l[0,1] == "-"
       fname = l[1..-1]
       replacement = ""
@@ -16,7 +18,7 @@ File.read("api_modifications.txt").strip.split("\n").each{|l|
       replacement = "GL_APICALL #{ret_type} GL_APIENTRY gl#{fname} #{args}"
     end
     api.map!{|a|
-      if a =~ /GL_APIENTRY\s+#{fname}/
+      if a =~ /GL_APIENTRY\s+gl#{fname}/i
         replacement
       else
         a
@@ -36,8 +38,27 @@ funcs = api.grep(/^GL_APICALL/).map{|l|
   _, ret_type, _, fname, args = l.strip.split(/\s+/,5)
   fname = fname[2..-1]
   fname[0,1] = fname[0,1].downcase
-  arg_arr = args.gsub(/[();]/, "").strip.split(/\s*,\s*/)
+  arg_arr = args.gsub(/[();]/, "").strip.sub(/^void$/,"").split(/\s*,\s*/)
   [ret_type, fname, arg_arr]
+}
+
+
+tests = {
+  "badArgsArityLessThanArgc" => funcs.map {|_,fn,args|
+    s = "Tests.test_#{fn} = function(gl) {\n"
+    (0...args.length).each{|i|
+      s << "  assertFail(function(){ gl.#{fn}(#{
+                (["0"] * i).join(",")}); });\n"
+    }
+    s << "}"
+  },
+
+  "badArgsArityMoreThanArgc" => funcs.map {|_,fn,args|
+    s = "Tests.test_#{fn} = function(gl) {\n"
+    s << "  assertFail(function(){ gl.#{fn}(#{
+              (["0"] * (args.length+1)).join(",")}); });\n"
+    s << "}"
+  }
 }
 
 test_header = <<EOF
@@ -51,6 +72,7 @@ test_header = <<EOF
 /*
   The following tests are generated from
   http://www.khronos.org/registry/gles/api/2.0/gl2.h
+  and api_modifications.txt
 */
 EOF
 
@@ -68,16 +90,10 @@ Tests.startUnit = function() {
 </body></html>
 EOF
 
-arity_less_than_argc_tests = funcs.map {|_,fn,args|
-  s = "Tests.test_#{fn} = function(gl) {\n"
-  (0...args.length).each{|i|
-    s << "  assertFail(function(gl){ gl.#{fn}(#{(["0"] * i).join(",")}); });\n"
+tests.each{|n,t|
+  File.open("conformance/#{n}.html", "w") {|f|
+    f.puts(test_header)
+    f.puts(t.join("\n"))
+    f.puts(test_footer)
   }
-  s << "}"
-}
-
-File.open("conformance/badArgsArityLessThanArgc.html", "w") {|f|
-  f.write(test_header)
-  f.write(arity_less_than_argc_tests.join("\n"))
-  f.write(test_footer)
 }
