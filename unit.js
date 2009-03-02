@@ -1,4 +1,12 @@
-Tests = {}
+Tests = {
+  autorun : true,
+  message : null,
+
+  startUnit : function(){ return []; },
+  setup : function() { return []; },
+  teardown : function() {},
+  endUnit : function() {}
+}
 
 var __testSuccess__ = true;
 var __testLog__;
@@ -222,6 +230,35 @@ function deleteShader(gl, sh) {
 
 GL_CONTEXT_ID = 'moz-glweb20'
 
+function initTests() {
+  if (Tests.message != null) {
+    var h = document.getElementById('test-message');
+    if (h == null) {
+      h = document.createElement('p');
+      h.id = 'test-message';
+      document.body.appendChild(h);
+    }
+    h.textContent = Tests.message;
+  }
+  if (Tests.autorun) {
+    runTests();
+  } else {
+    var h = document.getElementById('test-run');
+    if (h == null) {
+      h = document.createElement('input');
+      h.type = 'submit';
+      h.value = "Run tests";
+      h.addEventListener('click', function(ev){
+        runTests();
+        ev.preventDefault();
+      }, false);
+      h.id = 'test-run';
+      document.body.appendChild(h);
+    }
+    h.textContent = Tests.message;
+  }
+  
+}
 
 
-window.addEventListener('load', runTests, false);
+window.addEventListener('load', initTests, false);
