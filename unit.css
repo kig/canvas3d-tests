@@ -1,0 +1,31 @@
+#test-status {
+  color: black;
+  font-size: large;
+}
+
+#test-log {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  background: white;
+  color: black;
+}
+#test-log > div {
+  padding-bottom: 0.5em;
+}
+#test-log h2 {
+  font-size: 1em;
+  margin-bottom: 0em;
+  padding-top: 0.5em;
+}
+#test-log h3 {
+  font-size: small;
+  margin-left: 1.5em;
+  margin-bottom: 0em;
+  margin-top: 0.5em;
+}
+#test-log p {
+  margin-left: 4em;
+  font-size: small;
+  margin-top: 0em;
+  margin-bottom: 0.2em;
+}
