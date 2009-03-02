@@ -3,7 +3,7 @@ Tests = {
   message : null,
 
   startUnit : function(){ return []; },
-  setup : function() { return []; },
+  setup : function() { return arguments; },
   teardown : function() {},
   endUnit : function() {}
 }
