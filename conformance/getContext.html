@@ -6,7 +6,7 @@
 
 <script type="application/x-javascript">
 
-Tests.getGLWeb20 = function() {
+Tests.testGetGLWeb20 = function() {
   var canvas = document.getElementById('glweb20');
   var gl;
   assertOk(function(){gl = canvas.getContext(GL_CONTEXT_ID)});
@@ -14,7 +14,7 @@ Tests.getGLWeb20 = function() {
   assertOk(function(){canvas.getContext(GL_CONTEXT_ID)});
 }
 
-Tests.get2D = function() {
+Tests.testGet2D = function() {
   var canvas = document.getElementById('2d');
   var ctx;
   assertOk(function(){ctx = canvas.getContext('2d')});
