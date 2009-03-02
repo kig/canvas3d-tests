@@ -9,16 +9,16 @@
 Tests.getGLWeb20 = function() {
   var canvas = document.getElementById('glweb20');
   var gl;
-  assertOk(function(){gl = canvas.getContext('moz-glweb20')});
+  assertOk(function(){gl = canvas.getContext(GL_CONTEXT_ID)});
   assertFail(function(){canvas.getContext('2d')});
-  assertOk(function(){canvas.getContext('moz-glweb20')});
+  assertOk(function(){canvas.getContext(GL_CONTEXT_ID)});
 }
 
 Tests.get2D = function() {
   var canvas = document.getElementById('2d');
   var ctx;
   assertOk(function(){ctx = canvas.getContext('2d')});
-  assertFail(function(){canvas.getContext('moz-glweb20')});
+  assertFail(function(){canvas.getContext(GL_CONTEXT_ID)});
   assertOk(function(){canvas.getContext('2d')});
 }
 </script>

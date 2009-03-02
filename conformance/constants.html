@@ -425,7 +425,7 @@ Tests.oes20Constants = function() {
   canvas.id = 'GLWeb20';
   canvas.width = canvas.height = 1;
   var gl;
-  assertOk(function(){gl = canvas.getContext('moz-glweb20')});
+  assertOk(function(){gl = canvas.getContext(GL_CONTEXT_ID)});
   for (var i in constants) {
     assertProperty(gl, i) &&
     assertEquals(i, gl[i], constants[i]);

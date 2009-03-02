@@ -19,11 +19,35 @@ function runTests() {
   }
   while (log.childNodes.length > 0)
     log.removeChild(log.firstChild);
+
+  var setup_args = [];
+    
+  if (Tests.startUnit != null) {
+    __testLog__ = document.createElement('div');
+    try {
+      setup_args = Tests.startUnit();
+    } catch(e) {
+      testFailed("startUnit", e.toString());
+      log.appendChild(__testLog__);
+      printTestStatus();
+      return;
+    }
+  }
+  
+  
   for (var i in Tests) {
+    if (i.substring(0,4) != "test") continue;
     __testLog__ = document.createElement('div');
     __testSuccess__ = true;
-    try { Tests[i](); }
-    catch (e) { testFailed(i, e); }
+    try {
+      var args = setup_args;
+      if (Tests.setup != null)
+        args = Tests.setup.apply(Tests, setup_args);
+      Tests[i].apply(Tests, args);
+      if (Tests.teardown != null)
+        Tests.teardown.apply(Tests, args);
+    }
+    catch (e) { testFailed(i, e.toString()); }
     if (__testSuccess__ == false) {
       var h = document.createElement('h2');
       h.textContent = i;
@@ -31,13 +55,23 @@ function runTests() {
       log.appendChild(__testLog__);
     }
   }
+  
   printTestStatus();
+  if (Tests.endUnit != null) {
+    __testLog__ = document.createElement('div');
+    try {
+      Tests.endUnit.apply(Tests, setup_args);
+    } catch(e) {
+      testFailed("endUnit", e.toString());
+      log.appendChild(__testLog__);
+    }
+  }
 }
 
 function testFailed(assertName, name) {
   var d = document.createElement('div');
   var h = document.createElement('h3');
-  h.textContent = name==null ? assertName : name + " " + assertName;
+  h.textContent = name==null ? assertName : name + " (in " + assertName + ")";
   d.appendChild(h);
   for (var i=2; i<arguments.length; i++) {
     var a = arguments[i];
@@ -53,6 +87,12 @@ function testFailed(assertName, name) {
 function checkTestSuccess() {
   var log = document.getElementById('test-log');
   return (log.childNodes.length == 0)
+}
+
+function log(msg) {
+  var p = document.createElement('p');
+  p.textContent = msg;
+  __testLog__.appendChild(p);
 }
 
 function printTestStatus() {
@@ -115,5 +155,73 @@ function assertEquals(name, v, p) {
     return true;
   }
 }
+
+
+
+
+function getShader(gl, id) {
+  var shaderScript = document.getElementById(id);
+  if (!shaderScript) {
+    log("No shader element with id: "+id);
+    return null;
+  }
+
+  var str = "";
+  var k = shaderScript.firstChild;
+  while (k) {
+    if (k.nodeType == 3)
+      str += k.textContent;
+    k = k.nextSibling;
+  }
+
+  var shader;
+  if (shaderScript.type == "x-shader/x-fragment") {
+    shader = gl.createShader(gl.FRAGMENT_SHADER);
+  } else if (shaderScript.type == "x-shader/x-vertex") {
+    shader = gl.createShader(gl.VERTEX_SHADER);
+  } else {
+    log("Unknown shader type "+shaderScript.type);
+    return null;
+  }
+
+  gl.shaderSource(shader, str);
+  gl.compileShader(shader);
+
+  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) != 1) {
+    log("Failed to compile shader "+shaderScript.id);
+    log("Shader info log: " + gl.getShaderInfoLog(shader));
+  }
+  return shader;
+}
+
+function loadShader(gl) {
+    var id = gl.createProgram();
+    var shaderObjs = [];
+    for (var i=1; i<arguments.length; ++i) {
+      var sh = getShader(gl, arguments[i]);
+      shaderObjs.push(sh);
+      gl.attachShader(id, sh);
+    }
+    gl.linkProgram(id);
+    gl.validateProgram(id);
+    if (gl.getProgramParameter(id, gl.LINK_STATUS) != 1 ||
+        gl.getProgramParameter(id, gl.VALIDATE_STATUS) != 1) {
+      log("Failed to compile shader");
+    }
+    return {program: id, shaders: shaderObjs};
+}
+
+function deleteShader(gl, sh) {
+  gl.useProgram(0);
+  sh.shaders.forEach(function(s){
+    gl.detachShader(sh.program, s);
+    gl.deleteShader(s);
+  });
+  gl.deleteProgram(sh.program);
+}
+
+GL_CONTEXT_ID = 'moz-glweb20'
+
+
 
 window.addEventListener('load', runTests, false);
