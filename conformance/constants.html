@@ -5,6 +5,10 @@
 <script type="application/x-javascript" src="../unit.js"></script>
 <script type="application/x-javascript">
 
+/* The following list of constants is parsed from
+   http://www.khronos.org/registry/gles/api/2.0/gl2.h
+*/
+
 var constants = {
 /* ClearBufferMask */
 DEPTH_BUFFER_BIT               : 0x00000100,
@@ -429,6 +433,18 @@ Tests.testOES20Constants = function() {
   for (var i in constants) {
     assertProperty(gl, i) &&
     assertEquals(i, gl[i], constants[i]);
+  }
+  var extended = false;
+  for (var i in gl) {
+    if (i.match(/^[A-Z_]+$/) && constants[i] == null) {
+      if (!extended) {
+        extended = true;
+        var h = document.createElement('h3');
+        h.textContent = "Also found the following extra constants";
+        __testLog__.appendChild(h);
+      }
+      log(i);
+    }
   }
 }
 

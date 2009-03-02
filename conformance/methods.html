@@ -5,10 +5,13 @@
 <script type="application/x-javascript" src="../unit.js"></script>
 <script type="application/x-javascript">
 
+/* The following list of methods is parsed from
+   http://www.khronos.org/registry/gles/api/2.0/gl2.h
+*/
+
 var methods = [
   "activeTexture",
   "attachShader",
-
   "bindAttribLocation",
   "bindBuffer",
   "bindFramebuffer",
@@ -21,10 +24,10 @@ var methods = [
   "blendFuncSeparate",
   "bufferData",
   "bufferSubData",
-
   "checkFramebufferStatus",
   "clear",
   "clearColor",
+  // clearDepthf -> clearDepth
   "clearDepth",
   "clearStencil",
   "colorMask",
@@ -36,7 +39,6 @@ var methods = [
   "createProgram",
   "createShader",
   "cullFace",
-
   "deleteBuffers",
   "deleteFramebuffers",
   "deleteProgram",
@@ -45,51 +47,58 @@ var methods = [
   "deleteTextures",
   "depthFunc",
   "depthMask",
+  // depthRangef -> depthRange
   "depthRange",
   "detachShader",
   "disable",
   "disableVertexAttribArray",
   "drawArrays",
   "drawElements",
-
   "enable",
   "enableVertexAttribArray",
-
   "finish",
   "flush",
   "framebufferRenderbuffer",
   "framebufferTexture2D",
   "frontFace",
-
   "genBuffers",
+  "generateMipmap",
   "genFramebuffers",
   "genRenderbuffers",
   "genTextures",
-  "generateMipmap",
+
+  // getBooleanv, getFloatv, getIntegerv, getString -> getParameter
   "getParameter",
+
   "getActiveAttrib",
   "getActiveUniform",
   "getAttachedShaders",
   "getAttribLocation",
+  // getBufferParameteriv -> getBufferParameter
   "getBufferParameter",
   "getError",
+  // getFramebufferAttachmentParameteriv -> getFramebufferAttachmentParameter
   "getFramebufferAttachmentParameter",
-  "getProgramInfoLog",
+  // getProgramiv -> getProgram
   "getProgram",
+  "getProgramInfoLog",
+  // getRenderbufferParameteriv -> getRenderbufferParameter
   "getRenderbufferParameter",
+  // getShaderiv -> getShader
+  "getShader",
   "getShaderInfoLog",
   "getShaderPrecisionFormat",
   "getShaderSource",
-  "getShader",
-  "getString",
+  // getTexParameterif, getTexParameteriv -> getTexParameter
   "getTexParameter",
+  // getUniformfv, getUniformiv -> getUniform
   "getUniform",
   "getUniformLocation",
+  // getVertexAttribfv, getVertexAttribiv -> getVertexAttrib
   "getVertexAttrib",
+  // getVertexAttribPointerv -> getVertexAttribPointer
   "getVertexAttribPointer",
-
   "hint",
-
   "isBuffer",
   "isEnabled",
   "isFramebuffer",
@@ -97,17 +106,13 @@ var methods = [
   "isRenderbuffer",
   "isShader",
   "isTexture",
-
   "lineWidth",
   "linkProgram",
-
   "pixelStorei",
   "polygonOffset",
-
   "readPixels",
   "releaseShaderCompiler",
   "renderbufferStorage",
-
   "sampleCoverage",
   "scissor",
   "shaderBinary",
@@ -118,19 +123,22 @@ var methods = [
   "stencilMaskSeparate",
   "stencilOp",
   "stencilOpSeparate",
-
   "texImage2D",
+  // addition
   "texImage2DHTML",
+  // texParameter[fi]v? -> texParameter
   "texParameter",
-  "texSubImage2D",
+  // addition
   "texSubImage2DHTML",
-
+  // uniform[1234]fv? -> uniformf
   "uniformf",
+  // uniform[1234]fi? -> uniformi
   "uniformi",
+  // uniformMatrix2fv, uniformMatrix3fv, uniformMatrix4fv -> uniformMatrix
   "uniformMatrix",
   "useProgram",
-
   "validateProgram",
+  // vertexAttrib[1234]fv? -> vertexAttrib
   "vertexAttrib",
   "vertexAttribPointer",
   "viewport"
@@ -144,6 +152,18 @@ Tests.testOES20Methods = function() {
   assertOk(function(){gl = canvas.getContext(GL_CONTEXT_ID)});
   for (var i=0; i<methods.length; i++) {
     assertProperty(gl, methods[i]);
+  }
+  var extended = false;
+  for (var i in gl) {
+    if (i.match(/^[a-z_]+$/) && methods.indexOf(i) == -1) {
+      if (!extended) {
+        extended = true;
+        var h = document.createElement('h3');
+        h.textContent = "Also found the following extra methods";
+        __testLog__.appendChild(h);
+      }
+      log(i);
+    }
   }
 }
 
