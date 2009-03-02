@@ -48,6 +48,7 @@ function runTests() {
     __testLog__ = document.createElement('div');
     __testSuccess__ = true;
     try {
+      doTestNotify (i);
       var args = setup_args;
       if (Tests.setup != null)
         args = Tests.setup.apply(Tests, setup_args);
@@ -62,6 +63,7 @@ function runTests() {
       __testLog__.insertBefore(h, __testLog__.firstChild);
       log.appendChild(__testLog__);
     }
+    doTestNotify (i+"--"+(__testSuccess__?"OK":"FAIL"));
   }
   
   printTestStatus();
@@ -74,6 +76,12 @@ function runTests() {
       log.appendChild(__testLog__);
     }
   }
+}
+
+function doTestNotify(name) {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://localhost:8888/"+name, true);
+  xhr.send(null);
 }
 
 function testFailed(assertName, name) {
