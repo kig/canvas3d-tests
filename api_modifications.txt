@@ -1,9 +1,14 @@
+bindAttribLocation -> void bindAttribLocation (uint program, uint index, string name)
 bufferData -> void bufferData (uint target, Array data, uint elementType, uint usage)
 bufferSubData -> void bufferSubData (uint target, uint offset, Array data, uint elementType)
 
 clearDepthf -> void clearDepth (float depth)
+-compressedTexImage2D
+-compressedTexSubImage2D
 
 deleteBuffers -> void deleteBuffers (Array buffers)
+deleteFramebuffers -> void deleteFramebuffers (Array buffers)
+deleteRenderbuffers -> void deleteRenderbuffers (Array buffers)
 deleteTextures -> void deleteTextures (Array textures)
 depthRangef -> void depthRange (float value)
 drawElements -> void drawElements (uint mode, uint count, Array indices)
@@ -15,7 +20,7 @@ genTextures -> int genTextures (uint count)
 getActiveAttrib -> Object getActiveAttrib (uint program, uint index)
 getActiveUniform -> Object getActiveUniform (uint program, uint index)
 getAttachedShaders -> Array getAttachedShaders (uint program)
-getAttribLocation int -> int getAttribLocation (uint program, string name)
+getAttribLocation -> int getAttribLocation (uint program, string name)
 getBooleanv -> Object getParameter (uint pname)
 -getFloatv
 -getIntegerv
@@ -28,22 +33,29 @@ getProgramInfoLog -> string getProgramInfoLog (uint program)
 getRenderbufferParameteriv -> int getRenderbufferParameter (uint target, uint pname)
 getShaderiv -> string getShaderParameter (uint shader, uint pname)
 getShaderInfoLog -> string getShaderInfoLog (uint shader)
+getShaderPrecisionFormat -> Object getShaderPrecisionFormat (uint shaderType, uint precisionType)
+getShaderSource -> string getShaderSource (uint shader)
 getTexParameteriv -> Object getTexParameter (uint target, uint pname)
 -getTexParameterfv
 getUniformfv -> Object getUniform (uint program, uint pname)
 -getUniformiv
+getUniformLocation -> uint getUniformLocation (uint program, string name)
 getVertexAttribfv -> Object getVertexAttrib (uint index, uint pname)
 -getVertexAttribiv
 -getVertexAttribPointerv
 
 readPixels -> Object readPixels (int x, int y, uint width, uint height, uint format, uint type)
+-releaseShaderCompiler
 
+-shaderBinary
 shaderSource -> void shaderSource (uint shader, string source)
 
+texImage2D -> void texImage2D (GLuint target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, string data)
 texParameterf -> Object getTexParameter (uint target, uint pname)
 -texParameteri
 -texParameterfv
 -texParameteriv
+texSubImage2D -> void texSubImage2D (GLuint target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, string data)
 
 uniform1f -> void uniformf (int location, Array values)
 -uniform2f
@@ -73,6 +85,7 @@ vertexAttrib1f -> void vertexAttrib (uint idx, Array values)
 -vertexAttrib2fv
 -vertexAttrib3fv
 -vertexAttrib4fv
+-vertexAttribPointer
 
 
 +void texImage2DHTML (uint target, int level, DOMImageElement image)

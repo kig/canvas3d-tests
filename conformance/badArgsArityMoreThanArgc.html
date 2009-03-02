@@ -73,12 +73,6 @@ Tests.test_colorMask = function(gl) {
 Tests.test_compileShader = function(gl) {
   assertFail(function(){ gl.compileShader(0,0); });
 }
-Tests.test_compressedTexImage2D = function(gl) {
-  assertFail(function(){ gl.compressedTexImage2D(0,0,0,0,0,0,0,0,0); });
-}
-Tests.test_compressedTexSubImage2D = function(gl) {
-  assertFail(function(){ gl.compressedTexSubImage2D(0,0,0,0,0,0,0,0,0,0); });
-}
 Tests.test_copyTexImage2D = function(gl) {
   assertFail(function(){ gl.copyTexImage2D(0,0,0,0,0,0,0,0,0); });
 }
@@ -98,13 +92,13 @@ Tests.test_deleteBuffers = function(gl) {
   assertFail(function(){ gl.deleteBuffers(0,0); });
 }
 Tests.test_deleteFramebuffers = function(gl) {
-  assertFail(function(){ gl.deleteFramebuffers(0,0,0); });
+  assertFail(function(){ gl.deleteFramebuffers(0,0); });
 }
 Tests.test_deleteProgram = function(gl) {
   assertFail(function(){ gl.deleteProgram(0,0); });
 }
 Tests.test_deleteRenderbuffers = function(gl) {
-  assertFail(function(){ gl.deleteRenderbuffers(0,0,0); });
+  assertFail(function(){ gl.deleteRenderbuffers(0,0); });
 }
 Tests.test_deleteShader = function(gl) {
   assertFail(function(){ gl.deleteShader(0,0); });
@@ -212,10 +206,10 @@ Tests.test_getShaderInfoLog = function(gl) {
   assertFail(function(){ gl.getShaderInfoLog(0,0); });
 }
 Tests.test_getShaderPrecisionFormat = function(gl) {
-  assertFail(function(){ gl.getShaderPrecisionFormat(0,0,0,0,0); });
+  assertFail(function(){ gl.getShaderPrecisionFormat(0,0,0); });
 }
 Tests.test_getShaderSource = function(gl) {
-  assertFail(function(){ gl.getShaderSource(0,0,0,0,0); });
+  assertFail(function(){ gl.getShaderSource(0,0); });
 }
 Tests.test_getTexParameter = function(gl) {
   assertFail(function(){ gl.getTexParameter(0,0,0); });
@@ -268,9 +262,6 @@ Tests.test_polygonOffset = function(gl) {
 Tests.test_readPixels = function(gl) {
   assertFail(function(){ gl.readPixels(0,0,0,0,0,0,0); });
 }
-Tests.test_releaseShaderCompiler = function(gl) {
-  assertFail(function(){ gl.releaseShaderCompiler(0); });
-}
 Tests.test_renderbufferStorage = function(gl) {
   assertFail(function(){ gl.renderbufferStorage(0,0,0,0,0); });
 }
@@ -279,9 +270,6 @@ Tests.test_sampleCoverage = function(gl) {
 }
 Tests.test_scissor = function(gl) {
   assertFail(function(){ gl.scissor(0,0,0,0,0); });
-}
-Tests.test_shaderBinary = function(gl) {
-  assertFail(function(){ gl.shaderBinary(0,0,0,0,0,0); });
 }
 Tests.test_shaderSource = function(gl) {
   assertFail(function(){ gl.shaderSource(0,0,0); });
@@ -342,9 +330,6 @@ Tests.test_vertexAttrib = function(gl) {
 }
 Tests.test_vertexAttrib = function(gl) {
   assertFail(function(){ gl.vertexAttrib(0,0,0); });
-}
-Tests.test_vertexAttribPointer = function(gl) {
-  assertFail(function(){ gl.vertexAttribPointer(0,0,0,0,0,0,0); });
 }
 Tests.test_viewport = function(gl) {
   assertFail(function(){ gl.viewport(0,0,0,0,0); });

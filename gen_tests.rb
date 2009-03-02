@@ -40,9 +40,57 @@ funcs = api.grep(/^GL_APICALL/).map{|l|
   fname = fname[2..-1]
   fname[0,1] = fname[0,1].downcase
   arg_arr = args.gsub(/[();]/, "").strip.sub(/^void$/,"").split(/\s*,\s*/)
-  [ret_type, fname, arg_arr]
+  type_arr = arg_arr.map{|a|
+    t,n = a.reverse.split(/\s+/,2).reverse.map{|s|s.reverse}
+    t = t.gsub(/^GL/, "")
+    [t,n]
+  }
+  [ret_type, fname, type_arr]
 }
 
+$generators = {
+  "enum" => "0",
+  "uint" => "1",
+  "int" => "0",
+  "byte" => "1",
+  "float" => "4.8",
+  "string" => "'foo'",
+  "sizei" => "1",
+  "clampf" => "0.4",
+  "bitfield" => "gl.COLOR_BUFFER_BIT",
+  "Array" => "[]",
+  "boolean" => "true",
+  "DOMImageElement" => "new Image()"
+}
+
+$bad_generators = {
+  "enum" => "'foo'",
+  "uint" => "-20",
+  "int" => "null",
+  "byte" => "3889",
+  "float" => "'foo'",
+  "string" => "89",
+  "sizei" => "-10",
+  "clampf" => "null",
+  "bitfield" => "'no'",
+  "Array" => "'hello'",
+  "boolean" => "['s',2,3]",
+  "DOMImageElement" => "null"
+}
+
+def generate_bad_arg(arg)
+  t,_ = arg
+  $bad_generators[t] or raise "no bad generator for #{t}"
+end
+
+def generate_good_arg(arg)
+  t,_ = arg
+  $generators[t] or raise "no generator for #{t}"
+end
+
+def generate_good_args(args)
+  args.map{|a| generate_good_arg(a) }
+end
 
 tests = {
   "constants" =>
@@ -104,7 +152,24 @@ Tests.testOES20Methods = function(gl) {
     s << "  assertFail(function(){ gl.#{fn}(#{
               (["0"] * (args.length+1)).join(",")}); });\n"
     s << "}"
-  }.join("\n")
+  }.join("\n"),
+
+  "badArgsBadTypes" => funcs.map{|_,fn,args|
+    s = "Tests.autorun = false;\n"
+    s << "Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';\n";
+    s << "Tests.test_#{fn} = function(gl) {\n"
+    (0...args.length).each{|i|
+      begin
+      fargs = generate_good_args(args)
+      fargs[i] = generate_bad_arg(args[i])
+      s << "  assertFail(function(){ gl.#{fn}(#{fargs.join(", ")}); });\n"
+      rescue => e
+        puts fn, e
+        exit 1
+      end
+    }
+    s << "}"
+  }.join("\n"),
 }
 
 test_header = <<EOF
