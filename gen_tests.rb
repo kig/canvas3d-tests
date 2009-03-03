@@ -151,13 +151,6 @@ Tests.testOES20Methods = function(gl) {
     s << "}"
   }.join("\n"),
 
-  "badArgsArityMoreThanArgc" => funcs.map {|_,fn,args|
-    s = "Tests.test_#{fn} = function(gl) {\n"
-    s << "  assertFail(function(){ gl.#{fn}(#{
-              (["0"] * (args.length+1)).join(",")}); });\n"
-    s << "}"
-  }.join("\n"),
-
   "badArgsBadTypes" => funcs.map{|_,fn,args|
     s = "Tests.autorun = false;\n"
     s << "Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';\n";
