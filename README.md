@@ -13,8 +13,8 @@ Running the tests
 
   1. Install the latest version of the OpenGL Canvas 3D extension (or write your own if you're using WebKit/Opera/IE, you could try to modify gen_tests.rb to autogen it for you...)
   2. Run <code>ruby gen_tests.rb</code> if you have modified the tests.
-  3. Run <code>ruby test_server.rb</code> if you want to get test run output to test_server's stdout (especially useful for finding out which test crashed your browser)
-  4. Open all_tests.html in your browser
+  3. Run <code>ruby test_server.rb</code> if you want to get test run output to test_server's stdout (especially useful for finding out which test crashed your browser.)
+  4. Open all_tests.html in your browser.
 
 
 Want to contribute?
