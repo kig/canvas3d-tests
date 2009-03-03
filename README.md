@@ -9,6 +9,7 @@ These tests are intended to serve the following purposes:
 
 
 Running the tests
+-----------------
 
   1. Install the latest version of the OpenGL Canvas 3D extension (or write your own if you're using WebKit/Opera/IE, you could try to modify gen_tests.rb to autogen it for you...)
   2. Run <code>ruby gen_tests.rb</code> if you have modified the tests.
@@ -17,6 +18,7 @@ Running the tests
 
 
 Want to contribute?
+-------------------
 
   1. Fork this repo
   2. For each method (see list in <a href="raw/master/methods.txt">methods.txt</a> and <a href="http://hg.mozilla.org/users/vladimir_mozilla.com/canvas3d/raw-file/tip/doc/glweb20spec.html">glweb20spec.html</a>):
