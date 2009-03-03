@@ -21,7 +21,7 @@ Want to contribute?
 -------------------
 
   1. Fork this repo
-  2. For each method (see list in <a href="raw/master/methods.txt">methods.txt</a> and <a href="http://hg.mozilla.org/users/vladimir_mozilla.com/canvas3d/raw-file/tip/doc/glweb20spec.html">glweb20spec.html</a>):
+  2. For each method (see list in <a href="../../raw/master/methods.txt">methods.txt</a> and <a href="http://hg.mozilla.org/users/vladimir_mozilla.com/canvas3d/raw-file/tip/doc/glweb20spec.html">glweb20spec.html</a>):
     1. Write a functions/methodName.html that tests the results of valid inputs.
     2. Write a functions/methodNameBadArgs.html that tests the results of invalid inputs.
     3. If your test causes a segfault, add the following to the top of the script tag: <code>Tests.autorun = false; Tests.message = "Caution: this may crash your browser";</code>
