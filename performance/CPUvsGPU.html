@@ -1,0 +1,353 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../unit.css" />
+<script type="application/x-javascript" src="../unit.js"></script>
+<script type="application/x-javascript" src="../util.js"></script>
+<script type="application/x-javascript">
+
+Tests.autorun = false;
+Tests.message = "This might take a few seconds to run"
+
+Tests.startUnit = function() {
+  var gl = document.getElementById('gl').getContext(GL_CONTEXT_ID);
+  var ctx = document.getElementById('2d').getContext('2d');
+  return [gl, ctx];
+}
+
+var kernel = [0.006, 0.061, 0.242, 0.383, 0.242, 0.061, 0.006];
+
+Tests.testGPU = function(gl, ctx) {
+  var img = document.getElementById('logo');
+  if (img.complete) {
+    Tests.gpuGaussianBlur(gl);
+  } else {
+    img.addEventListener('load',
+      function(){ Tests.gpuGaussianBlur(gl); },
+    false);
+  }
+}
+
+Tests.testCPU = function(gl, ctx) {
+  var img = document.getElementById('logo');
+  if (img.complete) {
+    Tests.cpuGaussianBlur(ctx);
+  } else {
+    img.addEventListener('load',
+      function(){ Tests.cpuGaussianBlur(ctx); },
+    false);
+  }
+}
+
+function hblur(ctx,idata) {
+  var d = idata.data;
+  var res = ctx.createImageData(256,256);
+  var rd = res.data;
+  var sumR=0.0,sumG=0.0,sumB=0.0,sumA=0.0, kv=0.0;
+  var col_offset = 0, row_offset = 0, k4 = 0;
+  for (var y=0; y<idata.height; ++y) {
+    col_offset = y * idata.width * 4;
+    for (var x=3; x<idata.width-3; ++x) {
+      row_offset = col_offset+x*4;
+      sumR=sumG=sumB=sumA=0.0;
+      for (var k=-3; k<4; ++k) {
+        k4 = k * 4;
+        kv = kernel[k+3];
+        sumR += d[row_offset+k4+0] * kv;
+        sumG += d[row_offset+k4+1] * kv;
+        sumB += d[row_offset+k4+2] * kv;
+        sumA += d[row_offset+k4+3] * kv;
+      }
+      rd[row_offset+0] = Math.floor(sumR);
+      rd[row_offset+1] = Math.floor(sumG);
+      rd[row_offset+2] = Math.floor(sumB);
+      rd[row_offset+3] = Math.floor(sumA);
+    }
+  }
+  var xr = 3;
+  for (var y=0; y<idata.height; ++y) {
+    col_offset = y * idata.width * 4;
+    for (var x=0; x<xr; ++x) {
+      row_offset = col_offset+x*4;
+      sumR=sumG=sumB=sumA=0.0;
+      for (var k=-3; k<4; ++k) {
+        if (k+x < 0) 
+          k4 = 0;
+        else
+          k4 = k * 4;
+        kv = kernel[k+3];
+        sumR += d[row_offset+k4+0] * kv;
+        sumG += d[row_offset+k4+1] * kv;
+        sumB += d[row_offset+k4+2] * kv;
+        sumA += d[row_offset+k4+3] * kv;
+      }
+      rd[row_offset+0] = Math.floor(sumR);
+      rd[row_offset+1] = Math.floor(sumG);
+      rd[row_offset+2] = Math.floor(sumB);
+      rd[row_offset+3] = Math.floor(sumA);
+    }
+  }
+  var xr = idata.width-3;
+  for (var y=0; y<idata.height; ++y) {
+    col_offset = y * idata.width * 4;
+    for (var x=xr; x<idata.width; ++x) {
+      row_offset = col_offset+x*4;
+      sumR=sumG=sumB=sumA=0.0;
+      for (var k=-3; k<4; ++k) {
+        if (k+x >= idata.width) 
+          k4 = (idata.width-x-1)*4;
+        else
+          k4 = k * 4;
+        kv = kernel[k+3];
+        sumR += d[row_offset+k4+0] * kv;
+        sumG += d[row_offset+k4+1] * kv;
+        sumB += d[row_offset+k4+2] * kv;
+        sumA += d[row_offset+k4+3] * kv;
+      }
+      rd[row_offset+0] = Math.floor(sumR);
+      rd[row_offset+1] = Math.floor(sumG);
+      rd[row_offset+2] = Math.floor(sumB);
+      rd[row_offset+3] = Math.floor(sumA);
+    }
+  }
+  return res;
+}
+
+function vblur(ctx,idata) {
+  var d = idata.data;
+  var res = ctx.createImageData(256,256);
+  var rd = res.data;
+  var sumR=0.0,sumG=0.0,sumB=0.0,sumA=0.0, kv=0.0;
+  var col_offset = 0, row_offset = 0, kfac = idata.width*4;
+  for (var y=3; y<idata.height-3; ++y) {
+    col_offset = y * idata.width * 4;
+    for (var x=0; x<idata.width; ++x) {
+      row_offset = col_offset+x*4;
+      sumR=sumG=sumB=sumA=0.0;
+      for (var k=-3; k<4; ++k) {
+        k4 = k * kfac;
+        kv = kernel[k+3];
+        sumR += d[row_offset+k4+0] * kv;
+        sumG += d[row_offset+k4+1] * kv;
+        sumB += d[row_offset+k4+2] * kv;
+        sumA += d[row_offset+k4+3] * kv;
+      }
+      rd[row_offset+0] = Math.floor(sumR);
+      rd[row_offset+1] = Math.floor(sumG);
+      rd[row_offset+2] = Math.floor(sumB);
+      rd[row_offset+3] = Math.floor(sumA);
+    }
+  }
+  var yr = 3;
+  for (var y=0; y<yr; ++y) {
+    col_offset = y * idata.width * 4;
+    for (var x=0; x<idata.width; ++x) {
+      row_offset = col_offset+x*4;
+      sumR=sumG=sumB=sumA=0.0;
+      for (var k=-3; k<4; ++k) {
+        if (k+y < 0) 
+          k4 = 0;
+        else
+          k4 = k * kfac;
+        kv = kernel[k+3];
+        sumR += d[row_offset+k4+0] * kv;
+        sumG += d[row_offset+k4+1] * kv;
+        sumB += d[row_offset+k4+2] * kv;
+        sumA += d[row_offset+k4+3] * kv;
+      }
+      rd[row_offset+0] = Math.floor(sumR);
+      rd[row_offset+1] = Math.floor(sumG);
+      rd[row_offset+2] = Math.floor(sumB);
+      rd[row_offset+3] = Math.floor(sumA);
+    }
+  }
+  var yr = idata.height-3;
+  for (var y=yr; y<idata.height; ++y) {
+    col_offset = y * idata.width * 4;
+    for (var x=0; x<idata.width; ++x) {
+      row_offset = col_offset+x*4;
+      sumR=sumG=sumB=sumA=0.0;
+      for (var k=-3; k<4; ++k) {
+        if (k+y >= idata.height) 
+          k4 = (idata.height-y-1)*kfac;
+        else
+          k4 = k * kfac;
+        kv = kernel[k+3];
+        sumR += d[row_offset+k4+0] * kv;
+        sumG += d[row_offset+k4+1] * kv;
+        sumB += d[row_offset+k4+2] * kv;
+        sumA += d[row_offset+k4+3] * kv;
+      }
+      rd[row_offset+0] = Math.floor(sumR);
+      rd[row_offset+1] = Math.floor(sumG);
+      rd[row_offset+2] = Math.floor(sumB);
+      rd[row_offset+3] = Math.floor(sumA);
+    }
+  }
+  return res;
+}
+
+Tests.cpuGaussianBlur = function(ctx) {
+  var s = document.getElementById('cpustat');
+  var t0 = new Date().getTime();
+  ctx.drawImage(document.getElementById('logo'),0,0);
+  var idata = ctx.getImageData(0,0,256,256);
+  for (var i=0; i<5; i++){
+    idata = hblur(ctx,idata);
+    idata = vblur(ctx,idata);
+  }
+  ctx.putImageData(idata, 0, 0);
+  var t1 = new Date().getTime();
+  s.textContent = 'Done! Time: '+(t1-t0)+'ms';
+}
+
+Tests.gpuGaussianBlur = function(gl) {
+  var s = document.getElementById('gpustat');
+  var t0 = new Date().getTime();
+
+  var fbo1 = new FBO(gl, 256, 256);
+  var hblur = new Filter(gl, 'identity-vert', 'hblur-frag');
+  var vblur = new Filter(gl, 'identity-vert', 'vblur-frag');
+  var identity = new Filter(gl, 'identity-vert', 'identity-frag');
+  var identityFlip = new Filter(gl, 'identity-flip-vert', 'identity-frag');
+
+  gl.viewport(0,0,256,256);
+  gl.clearColor(0,0,1,1);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  gl.disable(gl.DEPTH_TEST);
+  gl.activeTexture(gl.TEXTURE0);
+
+  gl.disable(gl.MULTISAMPLE);
+ 
+  fbo1.use();
+
+  var tex = loadTexture(gl, document.getElementById('logo'));
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  identityFlip.apply(); // draw image
+
+  gl.bindTexture(gl.TEXTURE_2D, fbo1.texture);
+  // gaussian blur
+  for (var i=0; i<1000; i++) {
+    hblur.apply(function(f){
+      f.uniformf('width', [256.0]);
+      f.uniformi('Texture', [0]);
+    });
+    vblur.apply(function(f){
+      f.uniformf('height', [256.0]);
+      f.uniformi('Texture', [0]);
+    });
+  }
+
+  gl.bindFramebuffer(gl.FRAMEBUFFER, 0);
+  identity.apply(); // draw blurred image on screen
+
+  gl.swapBuffers();
+
+  fbo1.destroy();
+  hblur.destroy();
+  vblur.destroy();
+  identity.destroy();
+  identityFlip.destroy();
+  gl.deleteTextures([tex]);
+  checkError(gl, "end");
+  var t1 = new Date().getTime();
+  s.textContent = 'Done! Time: '+(t1-t0)+'ms';
+}
+
+
+</script>
+<script id="identity-vert" type="x-shader/x-vertex">
+  #version 120
+  attribute vec3 Vertex;
+  attribute vec2 Tex;
+
+  varying vec4 texCoord0;
+  void main()
+  {
+    texCoord0 = vec4(Tex, 0.0, 0.0);
+    gl_Position = vec4(Vertex, 1.0);
+  }
+</script>
+<script id="identity-flip-vert" type="x-shader/x-vertex">
+  #version 120
+  attribute vec3 Vertex;
+  attribute vec2 Tex;
+
+  varying vec4 texCoord0;
+  void main()
+  {
+    texCoord0 = vec4(Tex.s, 1.0-Tex.t, 0.0, 0.0);
+    gl_Position = vec4(Vertex, 1.0);
+  }
+</script>
+<script id="identity-frag" type="x-shader/x-fragment">
+  #version 120
+  uniform sampler2D Texture;
+
+  varying vec4 texCoord0;
+  void main()
+  {
+    gl_FragColor = texture2D(Texture, texCoord0.st);
+  }
+</script>
+<script id="hblur-frag" type="x-shader/x-fragment">
+  #version 120
+  uniform sampler2D Texture;
+  uniform float width;
+
+  varying vec4 texCoord0;
+  void main()
+  {
+    float kernel[7];
+    kernel[0] = 0.006;
+    kernel[1] = 0.061;
+    kernel[2] = 0.242;
+    kernel[3] = 0.383;
+    kernel[4] = 0.242;
+    kernel[5] = 0.061;
+    kernel[6] = 0.006;
+    int i;
+    float step = 1.0 / width;
+    vec4 sum = vec4(0.0);
+    for (i=-3; i<=3; i++) {
+      vec4 tmp = texture2D(Texture, texCoord0.st + vec2(float(i)*step, 0.0));
+      sum = (tmp * kernel[i+3]) + sum;
+    }
+    gl_FragColor = sum;
+  }
+</script>
+<script id="vblur-frag" type="x-shader/x-fragment">
+  #version 120
+  uniform sampler2D Texture;
+  uniform float height;
+
+  varying vec4 texCoord0;
+  void main()
+  {
+    float kernel[7];
+    kernel[0] = 0.006;
+    kernel[1] = 0.061;
+    kernel[2] = 0.242;
+    kernel[3] = 0.383;
+    kernel[4] = 0.242;
+    kernel[5] = 0.061;
+    kernel[6] = 0.006;
+    int i;
+    float step = 1.0 / height;
+    vec4 sum = vec4(0.0);
+    for (i=-3; i<=3; i++) {
+      vec4 tmp = texture2D(Texture, texCoord0.st + vec2(0.0, float(i)*step));
+      sum = (tmp * kernel[i+3]) + sum;
+    }
+    gl_FragColor = sum;
+  }
+</script>
+</head><body>
+<img id="logo" src="firefoxlogo.png" width="256" height="256"><br>
+<div id="cpu">CPU 5x Gaussian blur</div>
+<div id="cpustat"></div>
+<canvas id="2d" width="256" height="256"></canvas>
+<div id="gpu">GPU 1000x Gaussian blur</div>
+<div id="gpustat"></div>
+<canvas id="gl" width="256" height="256"></canvas><br>
+</body></html>

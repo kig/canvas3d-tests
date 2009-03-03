@@ -175,67 +175,6 @@ function assertEquals(name, v, p) {
 
 
 
-function getShader(gl, id) {
-  var shaderScript = document.getElementById(id);
-  if (!shaderScript) {
-    log("No shader element with id: "+id);
-    return null;
-  }
-
-  var str = "";
-  var k = shaderScript.firstChild;
-  while (k) {
-    if (k.nodeType == 3)
-      str += k.textContent;
-    k = k.nextSibling;
-  }
-
-  var shader;
-  if (shaderScript.type == "x-shader/x-fragment") {
-    shader = gl.createShader(gl.FRAGMENT_SHADER);
-  } else if (shaderScript.type == "x-shader/x-vertex") {
-    shader = gl.createShader(gl.VERTEX_SHADER);
-  } else {
-    log("Unknown shader type "+shaderScript.type);
-    return null;
-  }
-
-  gl.shaderSource(shader, str);
-  gl.compileShader(shader);
-
-  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) != 1) {
-    log("Failed to compile shader "+shaderScript.id);
-    log("Shader info log: " + gl.getShaderInfoLog(shader));
-  }
-  return shader;
-}
-
-function loadShader(gl) {
-    var id = gl.createProgram();
-    var shaderObjs = [];
-    for (var i=1; i<arguments.length; ++i) {
-      var sh = getShader(gl, arguments[i]);
-      shaderObjs.push(sh);
-      gl.attachShader(id, sh);
-    }
-    gl.linkProgram(id);
-    gl.validateProgram(id);
-    if (gl.getProgramParameter(id, gl.LINK_STATUS) != 1 ||
-        gl.getProgramParameter(id, gl.VALIDATE_STATUS) != 1) {
-      log("Failed to compile shader");
-    }
-    return {program: id, shaders: shaderObjs};
-}
-
-function deleteShader(gl, sh) {
-  gl.useProgram(0);
-  sh.shaders.forEach(function(s){
-    gl.detachShader(sh.program, s);
-    gl.deleteShader(s);
-  });
-  gl.deleteProgram(sh.program);
-}
-
 GL_CONTEXT_ID = 'moz-glweb20'
 
 function initTests() {
@@ -244,7 +183,7 @@ function initTests() {
     if (h == null) {
       h = document.createElement('p');
       h.id = 'test-message';
-      document.body.appendChild(h);
+      document.body.insertBefore(h, document.body.firstChild);
     }
     h.textContent = Tests.message;
   }
@@ -261,12 +200,12 @@ function initTests() {
         ev.preventDefault();
       }, false);
       h.id = 'test-run';
-      document.body.appendChild(h);
+      document.body.insertBefore(h, document.body.firstChild);
     }
     h.textContent = Tests.message;
   }
   
 }
 
-
 window.addEventListener('load', initTests, false);
+

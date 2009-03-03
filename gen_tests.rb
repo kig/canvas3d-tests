@@ -175,6 +175,7 @@ test_header = <<EOF
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="../unit.css" />
 <script type="application/x-javascript" src="../unit.js"></script>
+<script type="application/x-javascript" src="../util.js"></script>
 <script type="application/x-javascript">
 
 /*
