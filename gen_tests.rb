@@ -1,3 +1,6 @@
+require 'cgi'
+require 'uri'
+
 api = File.read("gl2.h").strip.split("\n")
 mods = {}
 File.read("api_modifications.txt").strip.split("\n").each{|l|
@@ -42,9 +45,10 @@ funcs = api.grep(/^GL_APICALL/).map{|l|
   arg_arr = args.gsub(/[();]/, "").strip.sub(/^void$/,"").split(/\s*,\s*/)
   type_arr = arg_arr.map{|a|
     t,n = a.reverse.split(/\s+/,2).reverse.map{|s|s.reverse}
-    t = t.gsub(/^GL/, "")
+    t = t.sub(/^GL/, "")
     [t,n]
   }
+  ret_type = ret_type.sub(/^GL/, "")
   [ret_type, fname, type_arr]
 }
 
@@ -201,6 +205,20 @@ Tests.startUnit = function() {
 </body></html>
 EOF
 
+puts "Generating constants.txt"
+File.open("constants.txt", "w") {|f|
+  constants.each{|name, value|
+    f.puts("#{name} #{value}")
+  }
+}
+
+puts "Generating methods.txt"
+File.open("methods.txt", "w") {|f|
+  funcs.each{|ret_type, name, args|
+    f.puts("#{ret_type} #{name} (#{args.map{|a| a.join(" ")}.join(", ")})")
+  }
+}
+
 tests.each{|n,t|
   puts "Generating conformance/#{n}.html"
   File.open("conformance/#{n}.html", "w") {|f|
@@ -208,4 +226,37 @@ tests.each{|n,t|
     f.puts(t)
     f.puts(test_footer)
   }
+}
+
+puts "Generating all_tests.html"
+
+all_tests = []
+all_tests += Dir["conformance/*.html"].sort
+all_tests += Dir["functions/*.html"].sort
+all_tests += Dir["performance/*.html"].sort
+
+all_tests_header = <<EOF
+<html>
+<head>
+  <title>OpenGL ES 2.0 &lt;canvas&gt; context tests</title>
+  <style type="text/css">
+    h2 { font-size: 1em; margin-bottom: 0.2em; }
+  </style>
+</head>
+<body>
+EOF
+all_tests_footer = <<EOF
+</body>
+</html>
+EOF
+
+File.open("all_tests.html", "w") {|f|
+  f.puts all_tests_header
+  all_tests.each{|t|
+    f.puts(%Q(
+      <h2>#{CGI.escapeHTML(t)}</h2>
+      <iframe src="#{URI.escape(t)}" width="700" height="100"></iframe>
+    ))
+  }
+  f.puts all_tests_footer
 }
