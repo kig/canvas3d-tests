@@ -19,7 +19,7 @@ File.read("api_modifications.txt").strip.split("\n").each{|l|
     end
 #     puts fname + ": " + replacement
     api.map!{|a|
-      if a =~ /GL_APIENTRY\s+gl#{fname}/i
+      if a =~ /GL_APIENTRY\s+gl#{fname}\s/i
         replacement
       else
         a

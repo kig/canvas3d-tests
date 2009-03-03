@@ -267,14 +267,6 @@ Tests.test_enableVertexAttribArray = function(gl) {
 }
 Tests.autorun = false;
 Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
-Tests.test_finish = function(gl) {
-}
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
-Tests.test_flush = function(gl) {
-}
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_framebufferRenderbuffer = function(gl) {
   assertFail(function(){ gl.framebufferRenderbuffer('foo', 0, 0, 1); });
   assertFail(function(){ gl.framebufferRenderbuffer(0, 'foo', 0, 1); });
@@ -591,12 +583,6 @@ Tests.test_getTexParameter = function(gl) {
 }
 Tests.autorun = false;
 Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
-Tests.test_getTexParameter = function(gl) {
-  assertFail(function(){ gl.getTexParameter(-20, 1); });
-  assertFail(function(){ gl.getTexParameter(1, -20); });
-}
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_texSubImage2D = function(gl) {
   assertFail(function(){ gl.texSubImage2D(-20, 0, 0, 0, 1, 1, 0, 0, 'foo'); });
   assertFail(function(){ gl.texSubImage2D(1, null, 0, 0, 1, 1, 0, 0, 'foo'); });
@@ -613,18 +599,6 @@ Tests.message = 'Caution: if your implementation is flaky, this likely segfaults
 Tests.test_uniformf = function(gl) {
   assertFail(function(){ gl.uniformf(null, []); });
   assertFail(function(){ gl.uniformf(0, 'hello'); });
-}
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
-Tests.test_uniformf = function(gl) {
-  assertFail(function(){ gl.uniformf(null, []); });
-  assertFail(function(){ gl.uniformf(0, 'hello'); });
-}
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
-Tests.test_uniformi = function(gl) {
-  assertFail(function(){ gl.uniformi(null, []); });
-  assertFail(function(){ gl.uniformi(0, 'hello'); });
 }
 Tests.autorun = false;
 Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
@@ -647,12 +621,6 @@ Tests.autorun = false;
 Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_validateProgram = function(gl) {
   assertFail(function(){ gl.validateProgram(-20); });
-}
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
-Tests.test_vertexAttrib = function(gl) {
-  assertFail(function(){ gl.vertexAttrib(-20, []); });
-  assertFail(function(){ gl.vertexAttrib(1, 'hello'); });
 }
 Tests.autorun = false;
 Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';

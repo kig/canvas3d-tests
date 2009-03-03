@@ -181,10 +181,6 @@ Tests.test_enable = function(gl) {
 Tests.test_enableVertexAttribArray = function(gl) {
   assertFail(function(){ gl.enableVertexAttribArray(); });
 }
-Tests.test_finish = function(gl) {
-}
-Tests.test_flush = function(gl) {
-}
 Tests.test_framebufferRenderbuffer = function(gl) {
   assertFail(function(){ gl.framebufferRenderbuffer(); });
   assertFail(function(){ gl.framebufferRenderbuffer(0); });
@@ -397,10 +393,6 @@ Tests.test_getTexParameter = function(gl) {
   assertFail(function(){ gl.getTexParameter(); });
   assertFail(function(){ gl.getTexParameter(0); });
 }
-Tests.test_getTexParameter = function(gl) {
-  assertFail(function(){ gl.getTexParameter(); });
-  assertFail(function(){ gl.getTexParameter(0); });
-}
 Tests.test_texSubImage2D = function(gl) {
   assertFail(function(){ gl.texSubImage2D(); });
   assertFail(function(){ gl.texSubImage2D(0); });
@@ -416,14 +408,6 @@ Tests.test_uniformf = function(gl) {
   assertFail(function(){ gl.uniformf(); });
   assertFail(function(){ gl.uniformf(0); });
 }
-Tests.test_uniformf = function(gl) {
-  assertFail(function(){ gl.uniformf(); });
-  assertFail(function(){ gl.uniformf(0); });
-}
-Tests.test_uniformi = function(gl) {
-  assertFail(function(){ gl.uniformi(); });
-  assertFail(function(){ gl.uniformi(0); });
-}
 Tests.test_uniformi = function(gl) {
   assertFail(function(){ gl.uniformi(); });
   assertFail(function(){ gl.uniformi(0); });
@@ -437,10 +421,6 @@ Tests.test_useProgram = function(gl) {
 }
 Tests.test_validateProgram = function(gl) {
   assertFail(function(){ gl.validateProgram(); });
-}
-Tests.test_vertexAttrib = function(gl) {
-  assertFail(function(){ gl.vertexAttrib(); });
-  assertFail(function(){ gl.vertexAttrib(0); });
 }
 Tests.test_vertexAttrib = function(gl) {
   assertFail(function(){ gl.vertexAttrib(); });
