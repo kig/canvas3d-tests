@@ -1,3 +1,6 @@
+-FALSE
+-TRUE
+
 bindAttribLocation -> void bindAttribLocation (uint program, uint index, string name)
 bufferData -> void bufferData (uint target, Array data, uint elementType, uint usage)
 bufferSubData -> void bufferSubData (uint target, uint offset, Array data, uint elementType)
@@ -36,7 +39,9 @@ getProgramInfoLog -> string getProgramInfoLog (uint program)
 getRenderbufferParameteriv -> int getRenderbufferParameter (uint target, uint pname)
 getShaderiv -> string getShaderParameter (uint shader, uint pname)
 getShaderInfoLog -> string getShaderInfoLog (uint shader)
-getShaderPrecisionFormat -> Object getShaderPrecisionFormat (uint shaderType, uint precisionType)
+# not supported by desktop drivers
+# getShaderPrecisionFormat -> Object getShaderPrecisionFormat (uint shaderType, uint precisionType)
+-getShaderPrecisionFormat
 getShaderSource -> string getShaderSource (uint shader)
 getTexParameteriv -> Object getTexParameter (uint target, uint pname)
 -getTexParameterfv
@@ -46,6 +51,8 @@ getUniformLocation -> uint getUniformLocation (uint program, string name)
 getVertexAttribfv -> Object getVertexAttrib (uint index, uint pname)
 -getVertexAttribiv
 -getVertexAttribPointerv
+
+-pixelStorei
 
 readPixels -> Object readPixels (int x, int y, uint width, uint height, uint format, uint type)
 -releaseShaderCompiler
@@ -93,3 +100,4 @@ vertexAttrib1f -> void vertexAttrib (uint idx, Array values)
 
 +void texImage2DHTML (uint target, int level, DOMImageElement image)
 +void texSubImage2DHTML (uint target, int level, DOMImageElement image, int xoff, int yoff, int width, int height)
+
