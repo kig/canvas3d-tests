@@ -3,6 +3,11 @@ require 'uri'
 
 api = File.read("gl2.h").strip.split("\n")
 mods = {}
+raw_funcs = api.grep(/^GL_APICALL/).map{|l|
+  _, ret_type, name_args = l.strip.split(/\s*GL_[A-Z]+\s*/)
+  name,args = name_args.split(/\s+/,2)
+  [ret_type, name, args]
+}
 File.read("api_modifications.txt").strip.split("\n").each{|l|
   l = l.strip
   next if l.empty? or l =~ /^#/
@@ -39,8 +44,9 @@ constants = api.grep(/^#define GL_/).map{|l|
 }
 
 funcs = api.grep(/^GL_APICALL/).map{|l|
-  _, ret_type, _, fname, args = l.strip.split(/\s+/,5)
-  fname = fname[2..-1]
+  _, ret_type, name_args = l.strip.split(/\s*GL_[A-Z]+\s*/)
+  name,args = name_args.split(/\s+/,2)
+  fname = name[2..-1]
   fname[0,1] = fname[0,1].downcase
   arg_arr = args.gsub(/[();]/, "").strip.sub(/^void$/,"").split(/\s*,\s*/)
   type_arr = arg_arr.map{|a|
@@ -151,10 +157,11 @@ Tests.testOES20Methods = function(gl) {
     s << "}"
   }.join("\n"),
 
-  "badArgsBadTypes" => funcs.map{|_,fn,args|
-    s = "Tests.autorun = false;\n"
-    s << "Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';\n";
-    s << "Tests.test_#{fn} = function(gl) {\n"
+  "badArgsBadTypes" => %Q(
+    Tests.autorun = false;
+    Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
+  ) + funcs.map{|_,fn,args|
+    s = "Tests.test_#{fn} = function(gl) {\n"
     (0...args.length).each{|i|
       begin
       fargs = generate_good_args(args)
@@ -206,10 +213,31 @@ File.open("constants.txt", "w") {|f|
   }
 }
 
+puts "Generating nsICanvasRenderingContextGL.idl.constants"
+File.open("nsICanvasRenderingContextGL.idl.constants", "w") {|f|
+  constants.each{|name, value|
+    f.puts("const PRUint32 #{name}".ljust(40) +" = #{value};")
+  }
+}
+
 puts "Generating methods.txt"
 File.open("methods.txt", "w") {|f|
   funcs.each{|ret_type, name, args|
     f.puts("#{ret_type} #{name} (#{args.map{|a| a.join(" ")}.join(", ")})")
+  }
+}
+
+puts "Generating glwrap.h.functions"
+File.open("glwrap.h.functions", "w") {|f|
+  raw_funcs.each{|ret_type, name, args|
+    f.puts("typedef #{ret_type} (GLAPIENTRY * PFN#{name.upcase}) #{args}")
+    f.puts("PFN#{name.upcase} #{name.sub(/^gl/,"f")};")
+  }
+}
+puts "Generating glwrap.cpp.InitWithPrefix"
+File.open("glwrap.cpp.InitWithPrefix", "w") {|f|
+  raw_funcs.each{|ret_type, name, args|
+    f.puts(%Q({ (PRFuncPtr*) &#{name.sub(/^gl/,"f")}, { "#{name[2..-1]}", NULL } },))
   }
 }
 
