@@ -6,33 +6,50 @@ mods = {}
 raw_funcs = api.grep(/^GL_APICALL/).map{|l|
   _, ret_type, name_args = l.strip.split(/\s*GL_[A-Z]+\s*/)
   name,args = name_args.split(/\s+/,2)
+  name = "glClearDepth" if name == "glClearDepthf"
+  name = "glDepthRange" if name == "glDepthRangef"
+  next if ["glGetShaderPrecisionFormat", "glReleaseShaderCompiler", "glShaderBinary"].include?(name)
   [ret_type, name, args]
-}
+}.compact
 File.read("api_modifications.txt").strip.split("\n").each{|l|
   l = l.strip
   next if l.empty? or l =~ /^#/
-  if l[0,1] == "+"
-    ret_type, fname, args = l[1..-1].split(/\s+/,3)
-    api.push("GL_APICALL #{ret_type} GL_APIENTRY gl#{fname} #{args}")
-  else
-    fname = nil
-    replacement = nil
-    if l[0,1] == "-"
-      fname = l[1..-1]
-      replacement = ""
-    else
-      fname, replacement = l.split(/\s*->\s*/,2)
-      ret_type, nfname, args = replacement.split(/\s+/,3)
-      replacement = "GL_APICALL #{ret_type} GL_APIENTRY gl#{nfname} #{args}"
-    end
-#     puts fname + ": " + replacement
-    api.map!{|a|
-      if a =~ /GL_APIENTRY\s+gl#{fname}\s/i
-        replacement
+  if l =~ /^[-+]?[A-Z0-9_]+([\s-]|$)/ # constant
+      if l[0,1] == "+"
+        api.push("#define #{l[1..-1]}")
       else
-        a
+        if l[0,1] == "-"
+          fname = l[1..-1]
+          api.each{|s| s.gsub!(/^\s*#define\s+GL_#{fname}\s.*$/, "") }
+        else
+          fname, replacement = l.split(/\s*->\s*/,2)
+          api.each{|s| s.gsub!(" GL_#{fname} ", " GL_#{replacement} ") }
+        end
       end
-    }
+  else
+      if l[0,1] == "+"
+        ret_type, fname, args = l[1..-1].split(/\s+/,3)
+        api.push("GL_APICALL #{ret_type} GL_APIENTRY gl#{fname} #{args}")
+      else
+        fname = nil
+        replacement = nil
+        if l[0,1] == "-"
+          fname = l[1..-1]
+          replacement = ""
+        else
+          fname, replacement = l.split(/\s*->\s*/,2)
+          ret_type, nfname, args = replacement.split(/\s+/,3)
+          replacement = "GL_APICALL #{ret_type} GL_APIENTRY gl#{nfname} #{args}"
+        end
+    #     puts fname + ": " + replacement
+        api.map!{|a|
+          if a =~ /GL_APIENTRY\s+gl#{fname}\s/i
+            replacement
+          else
+            a
+          end
+        }
+      end
   end
 }
 
@@ -41,7 +58,7 @@ constants = api.grep(/^#define GL_/).map{|l|
   _, name, val = l.strip.split(/\s+/)
   name = name.sub(/^GL_/, "")
   [name, val]
-}
+}.compact
 
 funcs = api.grep(/^GL_APICALL/).map{|l|
   _, ret_type, name_args = l.strip.split(/\s*GL_[A-Z]+\s*/)
@@ -127,7 +144,7 @@ Tests.testOES20Constants = function(gl) {
   ),
   
   "methods" =>
-  "var methods = [\n" +
+  "var methods = ['canvas',\n" +
   funcs.map{|_,fn,args| fn.dump }.join(",\n") + "\n]\n" + %Q(
 Tests.testOES20Methods = function(gl) {
   for (var i=0; i<methods.length; i++) {
