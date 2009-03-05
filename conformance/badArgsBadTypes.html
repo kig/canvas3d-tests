@@ -263,10 +263,6 @@ Tests.test_getShaderParameter = function(gl) {
 Tests.test_getShaderInfoLog = function(gl) {
   assertFail(function(){ gl.getShaderInfoLog(-20); });
 }
-Tests.test_getShaderPrecisionFormat = function(gl) {
-  assertFail(function(){ gl.getShaderPrecisionFormat(-20, 1); });
-  assertFail(function(){ gl.getShaderPrecisionFormat(1, -20); });
-}
 Tests.test_getShaderSource = function(gl) {
   assertFail(function(){ gl.getShaderSource(-20); });
 }
@@ -316,10 +312,6 @@ Tests.test_lineWidth = function(gl) {
 }
 Tests.test_linkProgram = function(gl) {
   assertFail(function(){ gl.linkProgram(-20); });
-}
-Tests.test_pixelStorei = function(gl) {
-  assertFail(function(){ gl.pixelStorei('foo', 0); });
-  assertFail(function(){ gl.pixelStorei(0, null); });
 }
 Tests.test_polygonOffset = function(gl) {
   assertFail(function(){ gl.polygonOffset('foo', 4.8); });
