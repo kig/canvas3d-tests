@@ -114,7 +114,7 @@ function log(msg) {
 function printTestStatus() {
   var status = document.getElementById('test-status');
   document.body.className = checkTestSuccess() ? 'ok' : 'fail';
-  status.textContent = checkTestSuccess() ? "OK" : "FAIL";
+  document.title = status.textContent = checkTestSuccess() ? "OK" : "FAIL";
 }
 
 function assertFail(name, f) {
@@ -162,9 +162,17 @@ function assertProperty(name, v, p) {
   }
 }
 
+function compare(a,b) {
+  if (typeof a == 'number' && typeof b == 'number') {
+    return a == b;
+  } else {
+    return a.toSource() == b.toSource();
+  }
+}
+
 function assertEquals(name, v, p) {
   if (p == null) { p = v; v = name; name = null; }
-  if (v != p) {
+  if (!compare(v, p)) {
     testFailed("assertEquals", name, v, p)
     return false;
   } else {
@@ -172,6 +180,15 @@ function assertEquals(name, v, p) {
   }
 }
 
+function assertNotEquals(name, v, p) {
+  if (p == null) { p = v; v = name; name = null; }
+  if (compare(v, p)) {
+    testFailed("assertNotEquals", name, v, p)
+    return false;
+  } else {
+    return true;
+  }
+}
 
 
 
