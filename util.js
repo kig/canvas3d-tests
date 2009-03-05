@@ -398,11 +398,13 @@ FBO.prototype = {
     var rb;
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+    checkError(gl, "FBO.init bindFramebuffer");
     if (this.useDepth) {
       rb = this.rbo != null ? this.rbo : gl.genRenderbuffers(1)[0];
       gl.bindRenderbuffer(gl.RENDERBUFFER, rb);
-      gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, w, h);
-      checkError(gl, "FBO.init depth buffer");
+      checkError(gl, "FBO.init bindRenderbuffer");
+      gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT, w, h);
+      checkError(gl, "FBO.init renderbufferStorage");
     }
 
     var tex = this.texture != null ? this.texture : gl.genTextures(1)[0];
