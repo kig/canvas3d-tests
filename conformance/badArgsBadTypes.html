@@ -11,140 +11,99 @@
   http://www.khronos.org/registry/gles/api/2.0/gl2.h
   and api_modifications.txt
 */
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
-Tests.test_activeTexture = function(gl) {
+
+    Tests.autorun = false;
+    Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
+  Tests.test_activeTexture = function(gl) {
   assertFail(function(){ gl.activeTexture('foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_attachShader = function(gl) {
   assertFail(function(){ gl.attachShader(-20, 1); });
   assertFail(function(){ gl.attachShader(1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_bindAttribLocation = function(gl) {
   assertFail(function(){ gl.bindAttribLocation(-20, 1, 'foo'); });
   assertFail(function(){ gl.bindAttribLocation(1, -20, 'foo'); });
   assertFail(function(){ gl.bindAttribLocation(1, 1, 89); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_bindBuffer = function(gl) {
   assertFail(function(){ gl.bindBuffer('foo', 1); });
   assertFail(function(){ gl.bindBuffer(0, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_bindFramebuffer = function(gl) {
   assertFail(function(){ gl.bindFramebuffer('foo', 1); });
   assertFail(function(){ gl.bindFramebuffer(0, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_bindRenderbuffer = function(gl) {
   assertFail(function(){ gl.bindRenderbuffer('foo', 1); });
   assertFail(function(){ gl.bindRenderbuffer(0, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_bindTexture = function(gl) {
   assertFail(function(){ gl.bindTexture('foo', 1); });
   assertFail(function(){ gl.bindTexture(0, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_blendColor = function(gl) {
   assertFail(function(){ gl.blendColor(null, 0.4, 0.4, 0.4); });
   assertFail(function(){ gl.blendColor(0.4, null, 0.4, 0.4); });
   assertFail(function(){ gl.blendColor(0.4, 0.4, null, 0.4); });
   assertFail(function(){ gl.blendColor(0.4, 0.4, 0.4, null); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_blendEquation = function(gl) {
   assertFail(function(){ gl.blendEquation('foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_blendEquationSeparate = function(gl) {
   assertFail(function(){ gl.blendEquationSeparate('foo', 0); });
   assertFail(function(){ gl.blendEquationSeparate(0, 'foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_blendFunc = function(gl) {
   assertFail(function(){ gl.blendFunc('foo', 0); });
   assertFail(function(){ gl.blendFunc(0, 'foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_blendFuncSeparate = function(gl) {
   assertFail(function(){ gl.blendFuncSeparate('foo', 0, 0, 0); });
   assertFail(function(){ gl.blendFuncSeparate(0, 'foo', 0, 0); });
   assertFail(function(){ gl.blendFuncSeparate(0, 0, 'foo', 0); });
   assertFail(function(){ gl.blendFuncSeparate(0, 0, 0, 'foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_bufferData = function(gl) {
   assertFail(function(){ gl.bufferData(-20, [], 1, 1); });
   assertFail(function(){ gl.bufferData(1, 'hello', 1, 1); });
   assertFail(function(){ gl.bufferData(1, [], -20, 1); });
   assertFail(function(){ gl.bufferData(1, [], 1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_bufferSubData = function(gl) {
   assertFail(function(){ gl.bufferSubData(-20, 1, [], 1); });
   assertFail(function(){ gl.bufferSubData(1, -20, [], 1); });
   assertFail(function(){ gl.bufferSubData(1, 1, 'hello', 1); });
   assertFail(function(){ gl.bufferSubData(1, 1, [], -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_checkFramebufferStatus = function(gl) {
   assertFail(function(){ gl.checkFramebufferStatus('foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_clear = function(gl) {
   assertFail(function(){ gl.clear('no'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_clearColor = function(gl) {
   assertFail(function(){ gl.clearColor(null, 0.4, 0.4, 0.4); });
   assertFail(function(){ gl.clearColor(0.4, null, 0.4, 0.4); });
   assertFail(function(){ gl.clearColor(0.4, 0.4, null, 0.4); });
   assertFail(function(){ gl.clearColor(0.4, 0.4, 0.4, null); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_clearDepth = function(gl) {
   assertFail(function(){ gl.clearDepth('foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_clearStencil = function(gl) {
   assertFail(function(){ gl.clearStencil(null); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_colorMask = function(gl) {
   assertFail(function(){ gl.colorMask(['s',2,3], true, true, true); });
   assertFail(function(){ gl.colorMask(true, ['s',2,3], true, true); });
   assertFail(function(){ gl.colorMask(true, true, ['s',2,3], true); });
   assertFail(function(){ gl.colorMask(true, true, true, ['s',2,3]); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_compileShader = function(gl) {
   assertFail(function(){ gl.compileShader(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_copyTexImage2D = function(gl) {
   assertFail(function(){ gl.copyTexImage2D('foo', 0, 0, 0, 0, 1, 1, 0); });
   assertFail(function(){ gl.copyTexImage2D(0, null, 0, 0, 0, 1, 1, 0); });
@@ -155,8 +114,6 @@ Tests.test_copyTexImage2D = function(gl) {
   assertFail(function(){ gl.copyTexImage2D(0, 0, 0, 0, 0, 1, -10, 0); });
   assertFail(function(){ gl.copyTexImage2D(0, 0, 0, 0, 0, 1, 1, null); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_copyTexSubImage2D = function(gl) {
   assertFail(function(){ gl.copyTexSubImage2D('foo', 0, 0, 0, 0, 0, 1, 1); });
   assertFail(function(){ gl.copyTexSubImage2D(0, null, 0, 0, 0, 0, 1, 1); });
@@ -167,115 +124,73 @@ Tests.test_copyTexSubImage2D = function(gl) {
   assertFail(function(){ gl.copyTexSubImage2D(0, 0, 0, 0, 0, 0, -10, 1); });
   assertFail(function(){ gl.copyTexSubImage2D(0, 0, 0, 0, 0, 0, 1, -10); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_createProgram = function(gl) {
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_createShader = function(gl) {
   assertFail(function(){ gl.createShader('foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_cullFace = function(gl) {
   assertFail(function(){ gl.cullFace('foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_deleteBuffers = function(gl) {
   assertFail(function(){ gl.deleteBuffers('hello'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_deleteFramebuffers = function(gl) {
   assertFail(function(){ gl.deleteFramebuffers('hello'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_deleteProgram = function(gl) {
   assertFail(function(){ gl.deleteProgram(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_deleteRenderbuffers = function(gl) {
   assertFail(function(){ gl.deleteRenderbuffers('hello'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_deleteShader = function(gl) {
   assertFail(function(){ gl.deleteShader(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_deleteTextures = function(gl) {
   assertFail(function(){ gl.deleteTextures('hello'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_depthFunc = function(gl) {
   assertFail(function(){ gl.depthFunc('foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_depthMask = function(gl) {
   assertFail(function(){ gl.depthMask(['s',2,3]); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_depthRange = function(gl) {
   assertFail(function(){ gl.depthRange('foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_detachShader = function(gl) {
   assertFail(function(){ gl.detachShader(-20, 1); });
   assertFail(function(){ gl.detachShader(1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_disable = function(gl) {
   assertFail(function(){ gl.disable('foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_disableVertexAttribArray = function(gl) {
   assertFail(function(){ gl.disableVertexAttribArray(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_drawArrays = function(gl) {
   assertFail(function(){ gl.drawArrays('foo', 0, 1); });
   assertFail(function(){ gl.drawArrays(0, null, 1); });
   assertFail(function(){ gl.drawArrays(0, 0, -10); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_drawElements = function(gl) {
   assertFail(function(){ gl.drawElements(-20, 1, []); });
   assertFail(function(){ gl.drawElements(1, -20, []); });
   assertFail(function(){ gl.drawElements(1, 1, 'hello'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_enable = function(gl) {
   assertFail(function(){ gl.enable('foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_enableVertexAttribArray = function(gl) {
   assertFail(function(){ gl.enableVertexAttribArray(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_framebufferRenderbuffer = function(gl) {
   assertFail(function(){ gl.framebufferRenderbuffer('foo', 0, 0, 1); });
   assertFail(function(){ gl.framebufferRenderbuffer(0, 'foo', 0, 1); });
   assertFail(function(){ gl.framebufferRenderbuffer(0, 0, 'foo', 1); });
   assertFail(function(){ gl.framebufferRenderbuffer(0, 0, 0, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_framebufferTexture2D = function(gl) {
   assertFail(function(){ gl.framebufferTexture2D('foo', 0, 0, 1, 0); });
   assertFail(function(){ gl.framebufferTexture2D(0, 'foo', 0, 1, 0); });
@@ -283,209 +198,133 @@ Tests.test_framebufferTexture2D = function(gl) {
   assertFail(function(){ gl.framebufferTexture2D(0, 0, 0, -20, 0); });
   assertFail(function(){ gl.framebufferTexture2D(0, 0, 0, 1, null); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_frontFace = function(gl) {
   assertFail(function(){ gl.frontFace('foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_genBuffers = function(gl) {
   assertFail(function(){ gl.genBuffers(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_generateMipmap = function(gl) {
   assertFail(function(){ gl.generateMipmap('foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_genFramebuffers = function(gl) {
   assertFail(function(){ gl.genFramebuffers(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_genRenderbuffers = function(gl) {
   assertFail(function(){ gl.genRenderbuffers(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_genTextures = function(gl) {
   assertFail(function(){ gl.genTextures(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getActiveAttrib = function(gl) {
   assertFail(function(){ gl.getActiveAttrib(-20, 1); });
   assertFail(function(){ gl.getActiveAttrib(1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getActiveUniform = function(gl) {
   assertFail(function(){ gl.getActiveUniform(-20, 1); });
   assertFail(function(){ gl.getActiveUniform(1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getAttachedShaders = function(gl) {
   assertFail(function(){ gl.getAttachedShaders(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getAttribLocation = function(gl) {
   assertFail(function(){ gl.getAttribLocation(-20, 'foo'); });
   assertFail(function(){ gl.getAttribLocation(1, 89); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getParameter = function(gl) {
   assertFail(function(){ gl.getParameter(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getBufferParameter = function(gl) {
   assertFail(function(){ gl.getBufferParameter(-20, 1); });
   assertFail(function(){ gl.getBufferParameter(1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getError = function(gl) {
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getFramebufferAttachmentParameter = function(gl) {
   assertFail(function(){ gl.getFramebufferAttachmentParameter(-20, 1, 1); });
   assertFail(function(){ gl.getFramebufferAttachmentParameter(1, -20, 1); });
   assertFail(function(){ gl.getFramebufferAttachmentParameter(1, 1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getProgramParameter = function(gl) {
   assertFail(function(){ gl.getProgramParameter(-20, 1); });
   assertFail(function(){ gl.getProgramParameter(1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getProgramInfoLog = function(gl) {
   assertFail(function(){ gl.getProgramInfoLog(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getRenderbufferParameter = function(gl) {
   assertFail(function(){ gl.getRenderbufferParameter(-20, 1); });
   assertFail(function(){ gl.getRenderbufferParameter(1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getShaderParameter = function(gl) {
   assertFail(function(){ gl.getShaderParameter(-20, 1); });
   assertFail(function(){ gl.getShaderParameter(1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getShaderInfoLog = function(gl) {
   assertFail(function(){ gl.getShaderInfoLog(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getShaderPrecisionFormat = function(gl) {
   assertFail(function(){ gl.getShaderPrecisionFormat(-20, 1); });
   assertFail(function(){ gl.getShaderPrecisionFormat(1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getShaderSource = function(gl) {
   assertFail(function(){ gl.getShaderSource(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getTexParameter = function(gl) {
   assertFail(function(){ gl.getTexParameter(-20, 1); });
   assertFail(function(){ gl.getTexParameter(1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getUniform = function(gl) {
   assertFail(function(){ gl.getUniform(-20, 1); });
   assertFail(function(){ gl.getUniform(1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getUniformLocation = function(gl) {
   assertFail(function(){ gl.getUniformLocation(-20, 'foo'); });
   assertFail(function(){ gl.getUniformLocation(1, 89); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getVertexAttrib = function(gl) {
   assertFail(function(){ gl.getVertexAttrib(-20, 1); });
   assertFail(function(){ gl.getVertexAttrib(1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_hint = function(gl) {
   assertFail(function(){ gl.hint('foo', 0); });
   assertFail(function(){ gl.hint(0, 'foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_isBuffer = function(gl) {
   assertFail(function(){ gl.isBuffer(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_isEnabled = function(gl) {
   assertFail(function(){ gl.isEnabled('foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_isFramebuffer = function(gl) {
   assertFail(function(){ gl.isFramebuffer(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_isProgram = function(gl) {
   assertFail(function(){ gl.isProgram(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_isRenderbuffer = function(gl) {
   assertFail(function(){ gl.isRenderbuffer(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_isShader = function(gl) {
   assertFail(function(){ gl.isShader(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_isTexture = function(gl) {
   assertFail(function(){ gl.isTexture(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_lineWidth = function(gl) {
   assertFail(function(){ gl.lineWidth('foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_linkProgram = function(gl) {
   assertFail(function(){ gl.linkProgram(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_pixelStorei = function(gl) {
   assertFail(function(){ gl.pixelStorei('foo', 0); });
   assertFail(function(){ gl.pixelStorei(0, null); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_polygonOffset = function(gl) {
   assertFail(function(){ gl.polygonOffset('foo', 4.8); });
   assertFail(function(){ gl.polygonOffset(4.8, 'foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_readPixels = function(gl) {
   assertFail(function(){ gl.readPixels(null, 0, 1, 1, 1, 1); });
   assertFail(function(){ gl.readPixels(0, null, 1, 1, 1, 1); });
@@ -494,77 +333,55 @@ Tests.test_readPixels = function(gl) {
   assertFail(function(){ gl.readPixels(0, 0, 1, 1, -20, 1); });
   assertFail(function(){ gl.readPixels(0, 0, 1, 1, 1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_renderbufferStorage = function(gl) {
   assertFail(function(){ gl.renderbufferStorage('foo', 0, 1, 1); });
   assertFail(function(){ gl.renderbufferStorage(0, 'foo', 1, 1); });
   assertFail(function(){ gl.renderbufferStorage(0, 0, -10, 1); });
   assertFail(function(){ gl.renderbufferStorage(0, 0, 1, -10); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_sampleCoverage = function(gl) {
   assertFail(function(){ gl.sampleCoverage(null, true); });
   assertFail(function(){ gl.sampleCoverage(0.4, ['s',2,3]); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_scissor = function(gl) {
   assertFail(function(){ gl.scissor(null, 0, 1, 1); });
   assertFail(function(){ gl.scissor(0, null, 1, 1); });
   assertFail(function(){ gl.scissor(0, 0, -10, 1); });
   assertFail(function(){ gl.scissor(0, 0, 1, -10); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_shaderSource = function(gl) {
   assertFail(function(){ gl.shaderSource(-20, 'foo'); });
   assertFail(function(){ gl.shaderSource(1, 89); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_stencilFunc = function(gl) {
   assertFail(function(){ gl.stencilFunc('foo', 0, 1); });
   assertFail(function(){ gl.stencilFunc(0, null, 1); });
   assertFail(function(){ gl.stencilFunc(0, 0, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_stencilFuncSeparate = function(gl) {
   assertFail(function(){ gl.stencilFuncSeparate('foo', 0, 0, 1); });
   assertFail(function(){ gl.stencilFuncSeparate(0, 'foo', 0, 1); });
   assertFail(function(){ gl.stencilFuncSeparate(0, 0, null, 1); });
   assertFail(function(){ gl.stencilFuncSeparate(0, 0, 0, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_stencilMask = function(gl) {
   assertFail(function(){ gl.stencilMask(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_stencilMaskSeparate = function(gl) {
   assertFail(function(){ gl.stencilMaskSeparate('foo', 1); });
   assertFail(function(){ gl.stencilMaskSeparate(0, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_stencilOp = function(gl) {
   assertFail(function(){ gl.stencilOp('foo', 0, 0); });
   assertFail(function(){ gl.stencilOp(0, 'foo', 0); });
   assertFail(function(){ gl.stencilOp(0, 0, 'foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_stencilOpSeparate = function(gl) {
   assertFail(function(){ gl.stencilOpSeparate('foo', 0, 0, 0); });
   assertFail(function(){ gl.stencilOpSeparate(0, 'foo', 0, 0); });
   assertFail(function(){ gl.stencilOpSeparate(0, 0, 'foo', 0); });
   assertFail(function(){ gl.stencilOpSeparate(0, 0, 0, 'foo'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_texImage2D = function(gl) {
   assertFail(function(){ gl.texImage2D(-20, 0, 0, 1, 1, 0, 0, 0, 'foo'); });
   assertFail(function(){ gl.texImage2D(1, null, 0, 1, 1, 0, 0, 0, 'foo'); });
@@ -576,14 +393,10 @@ Tests.test_texImage2D = function(gl) {
   assertFail(function(){ gl.texImage2D(1, 0, 0, 1, 1, 0, 0, 'foo', 'foo'); });
   assertFail(function(){ gl.texImage2D(1, 0, 0, 1, 1, 0, 0, 0, 89); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_getTexParameter = function(gl) {
   assertFail(function(){ gl.getTexParameter(-20, 1); });
   assertFail(function(){ gl.getTexParameter(1, -20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_texSubImage2D = function(gl) {
   assertFail(function(){ gl.texSubImage2D(-20, 0, 0, 0, 1, 1, 0, 0, 'foo'); });
   assertFail(function(){ gl.texSubImage2D(1, null, 0, 0, 1, 1, 0, 0, 'foo'); });
@@ -595,57 +408,39 @@ Tests.test_texSubImage2D = function(gl) {
   assertFail(function(){ gl.texSubImage2D(1, 0, 0, 0, 1, 1, 0, 'foo', 'foo'); });
   assertFail(function(){ gl.texSubImage2D(1, 0, 0, 0, 1, 1, 0, 0, 89); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_uniformf = function(gl) {
   assertFail(function(){ gl.uniformf(null, []); });
   assertFail(function(){ gl.uniformf(0, 'hello'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_uniformi = function(gl) {
   assertFail(function(){ gl.uniformi(null, []); });
   assertFail(function(){ gl.uniformi(0, 'hello'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_uniformMatrix = function(gl) {
   assertFail(function(){ gl.uniformMatrix(null, []); });
   assertFail(function(){ gl.uniformMatrix(0, 'hello'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_useProgram = function(gl) {
   assertFail(function(){ gl.useProgram(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_validateProgram = function(gl) {
   assertFail(function(){ gl.validateProgram(-20); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_vertexAttrib = function(gl) {
   assertFail(function(){ gl.vertexAttrib(-20, []); });
   assertFail(function(){ gl.vertexAttrib(1, 'hello'); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_viewport = function(gl) {
   assertFail(function(){ gl.viewport(null, 0, 1, 1); });
   assertFail(function(){ gl.viewport(0, null, 1, 1); });
   assertFail(function(){ gl.viewport(0, 0, -10, 1); });
   assertFail(function(){ gl.viewport(0, 0, 1, -10); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_texImage2DHTML = function(gl) {
   assertFail(function(){ gl.texImage2DHTML(-20, 0, new Image()); });
   assertFail(function(){ gl.texImage2DHTML(1, null, new Image()); });
   assertFail(function(){ gl.texImage2DHTML(1, 0, null); });
 }
-Tests.autorun = false;
-Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
 Tests.test_texSubImage2DHTML = function(gl) {
   assertFail(function(){ gl.texSubImage2DHTML(-20, 0, new Image(), 0, 0, 0, 0); });
   assertFail(function(){ gl.texSubImage2DHTML(1, null, new Image(), 0, 0, 0, 0); });
