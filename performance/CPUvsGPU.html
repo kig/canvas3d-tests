@@ -192,7 +192,7 @@ Tests.cpuGaussianBlur = function(ctx) {
   var t0 = new Date().getTime();
   ctx.drawImage(document.getElementById('logo'),0,0);
   var idata = ctx.getImageData(0,0,256,256);
-  for (var i=0; i<5; i++){
+  for (var i=0; i<1; i++){
     idata = hblur(ctx,idata);
     idata = vblur(ctx,idata);
   }
@@ -344,7 +344,7 @@ Tests.gpuGaussianBlur = function(gl) {
 </script>
 </head><body>
 <img id="logo" src="firefoxlogo.png" width="256" height="256"><br>
-<div id="cpu">CPU 5x Gaussian blur</div>
+<div id="cpu">CPU 1x Gaussian blur</div>
 <div id="cpustat"></div>
 <canvas id="2d" width="256" height="256"></canvas>
 <div id="gpu">GPU 1000x Gaussian blur</div>
