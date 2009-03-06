@@ -13,8 +13,7 @@ function loadTexture(gl, elem) {
 function getShader(gl, id) {
   var shaderScript = document.getElementById(id);
   if (!shaderScript) {
-    log("No shader element with id: "+id);
-    return null;
+    throw("No shader element with id: "+id);
   }
 
   var str = "";
@@ -31,16 +30,16 @@ function getShader(gl, id) {
   } else if (shaderScript.type == "x-shader/x-vertex") {
     shader = gl.createShader(gl.VERTEX_SHADER);
   } else {
-    log("Unknown shader type "+shaderScript.type);
-    return null;
+    throw("Unknown shader type "+shaderScript.type);
   }
 
   gl.shaderSource(shader, str);
   gl.compileShader(shader);
 
   if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) != 1) {
-    log("Failed to compile shader "+shaderScript.id);
-    log("Shader info log: " + gl.getShaderInfoLog(shader));
+    var ilog = gl.getShaderInfoLog(shader);
+    gl.deleteShader(shader);
+    throw("Failed to compile shader "+shaderScript.id + ", Shader info log: " + ilog);
   }
   return shader;
 }
@@ -49,17 +48,28 @@ function loadShaderArray(gl, shaders) {
   var id = gl.createProgram();
   var shaderObjs = [];
   for (var i=0; i<shaders.length; ++i) {
-    var sh = getShader(gl, shaders[i]);
-    shaderObjs.push(sh);
-    gl.attachShader(id, sh);
+    try {
+      var sh = getShader(gl, shaders[i]);
+      shaderObjs.push(sh);
+      gl.attachShader(id, sh);
+    } catch (e) {
+      var pr = {program: id, shaders: shaderObjs};
+      deleteShader(pr);
+      throw (e);
+    }
   }
+  var prog = {program: id, shaders: shaderObjs};
   gl.linkProgram(id);
   gl.validateProgram(id);
-  if (gl.getProgramParameter(id, gl.LINK_STATUS) != 1 ||
-      gl.getProgramParameter(id, gl.VALIDATE_STATUS) != 1) {
-    log("Failed to compile shader");
+  if (gl.getProgramParameter(id, gl.LINK_STATUS) != 1) {
+    deleteShader(prog);
+    throw("Failed to link shader");
   }
-  return {program: id, shaders: shaderObjs};
+  if (gl.getProgramParameter(id, gl.VALIDATE_STATUS) != 1) {
+    deleteShader(prog);
+    throw("Failed to validate shader");
+  }
+  return prog;
 }
 function loadShader(gl) {
   var sh = [];
@@ -82,6 +92,7 @@ function checkError(gl, msg) {
   if (e != 0) {
     log("Error " + e + " at " + msg);
   }
+  return e;
 }
 
 Math.cot = function(z) { return 1.0 / Math.tan(z); }
@@ -369,6 +380,71 @@ Filter.prototype.apply = function(init) {
   this.gl.enableVertexAttribArray(ta);
   if (init) init(this);
   this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
+}
+
+
+VBO = function(gl) {
+  this.gl = gl;
+  this.data = [];
+  for (var i=1; i<arguments.length; i++)
+    this.data.push(arguments[i]);
+}
+VBO.prototype = {
+  initialized : false,
+  length : 0,
+  vbos : null,
+
+  setData : function() {
+    this.destroy();
+    this.data = arguments;
+  },
+
+  destroy : function() {
+    if (this.vbos != null)
+      this.gl.deleteBuffers(this.vbos);
+    this.initialized = false;
+  },
+
+  init : function() {
+    var length = 0;
+    var gl = this.gl;
+
+    var vbos = gl.genBuffers(this.data.length);
+    for (var i = 0; i<this.data.length; i++) {
+      var d = this.data[i];
+      var dlen = Math.floor(d.data.length / d.size);
+      if (i == 0 || dlen < length)
+        length = dlen;
+      gl.bindBuffer(gl.ARRAY_BUFFER, vbos[i]);
+      gl.bufferData(gl.ARRAY_BUFFER, d.data, gl.FLOAT, gl.STATIC_DRAW);
+    }
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, 0);
+
+    this.length = length;
+    this.vbos = vbos;
+  
+    this.initialized = true;
+  },
+
+  use : function() {
+    if (!this.initialized) this.init();
+    var gl = this.gl;
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo);
+    for (var i=0; i<arguments.length; i++) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.vbos[i]);
+      gl.vertexAttribPointer(arguments[i], this.length, gl.FLOAT, 0);
+      gl.enableVertexAttribArray(arguments[i]);
+    }
+  },
+
+  draw : function(type) {
+    var args = [];
+    for (var i=1; i<arguments.length; i++) args.push(arguments[i]);
+    this.use.apply(this, args);
+    var gl = this.gl;
+    gl.drawArrays(type, 0, this.length);
+  }
 }
 
 FBO = function(gl, width, height, use_depth) {

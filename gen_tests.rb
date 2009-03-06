@@ -1,5 +1,6 @@
 require 'cgi'
 require 'uri'
+require 'fileutils'
 
 api = File.read("gl2.h").strip.split("\n")
 mods = {}
@@ -243,6 +244,15 @@ File.open("methods.txt", "w") {|f|
     f.puts("#{ret_type} #{name} (#{args.map{|a| a.join(" ")}.join(", ")})")
   }
 }
+FileUtils.mkdir_p("templates")
+funcs.each{|ret_type, name, args|
+  unless File.exist?("templates/#{name}.html")
+    FileUtils.cp("template.html", "templates/#{name}.html")
+  end
+  unless File.exist?("templates/#{name}BadArgs.html")
+    FileUtils.cp("template.html", "templates/#{name}BadArgs.html")
+  end
+}
 
 puts "Generating glwrap.h.functions"
 File.open("glwrap.h.functions", "w") {|f|
@@ -273,6 +283,7 @@ all_tests = []
 all_tests += Dir["conformance/*.html"].sort
 all_tests += Dir["functions/*.html"].sort
 all_tests += Dir["performance/*.html"].sort
+all_tests += Dir["glsl/*.html"].sort
 
 all_tests_header = <<EOF
 <html>
@@ -293,7 +304,7 @@ File.open("all_tests.html", "w") {|f|
   f.puts all_tests_header
   all_tests.each{|t|
     f.puts(%Q(
-      <h2>#{CGI.escapeHTML(t)}</h2>
+      <h2><a href="#{URI.escape(t)}">#{CGI.escapeHTML(t)}</a></h2>
       <iframe src="#{URI.escape(t)}" width="700" height="100"></iframe>
     ))
   }

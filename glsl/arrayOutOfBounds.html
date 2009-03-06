@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../unit.css" />
+<script type="application/x-javascript" src="../unit.js"></script>
+<script type="application/x-javascript" src="../util.js"></script>
+<script type="application/x-javascript">
+
+Tests.startUnit = function () {
+  var canvas = document.getElementById('gl');
+  var gl = canvas.getContext(GL_CONTEXT_ID);
+  return [gl];
+}
+
+Tests.arrayOutOfBounds = function(gl){
+  var arr = ['cr', 'cw', 'ar', 'aw'];
+  arr.forEach(function(e){
+    var sh = new Shader(gl, e, 'frag');
+    assertFail(function(){sh.compile();});
+    sh.destroy();
+    var sh = new Shader(gl, 'vert', e);
+    assertFail(function(){sh.compile();});
+    sh.destroy();
+  });
+}
+
+</script>
+<script id="crvert" type="x-shader/x-vertex">
+  #version 130
+  in vec3 Vertex;
+  void main()
+  {
+    float x[3](1.0, 2.0, 3.0);
+    gl_Position = vec4(Vertex, x[4]);
+  }
+</script>
+<script id="cwvert" type="x-shader/x-vertex">
+  #version 130
+  in vec3 Vertex;
+  void main()
+  {
+    float x[3](1.0, 2.0, 3.0);
+    x[4] = Vertex.z;
+    gl_Position = vec4(Vertex, x[4]);
+  }
+</script>
+<script id="vrvert" type="x-shader/x-vertex">
+  #version 130
+  in vec3 Vertex;
+  void main()
+  {
+    float x[3](1.0, 2.0, 3.0);
+    int idx = 2 * max(1, int(Vertex.x)*20);
+    gl_Position = vec4(Vertex, x[idx]);
+  }
+</script>
+<script id="vwvert" type="x-shader/x-vertex">
+  #version 130
+  in vec3 Vertex;
+  void main()
+  {
+    float x[3](1.0, 2.0, 3.0);
+    int idx = 2 * max(1, int(Vertex.x)*20);
+    x[idx] = Vertex.z;
+    gl_Position = vec4(Vertex, x[idx]);
+  }
+</script>
+<script id="vert" type="x-shader/x-vertex">
+  #version 130
+  in vec3 Vertex;
+  void main()
+  {
+    gl_Position = vec4(Vertex, 0.0);
+  }
+</script>
+
+<script id="crfrag" type="x-shader/x-fragment">
+  #version 130
+  void main()
+  {
+    float x[3](1.0, 2.0, 3.0);
+    fragColor = vec4(1.0, 0.0, 0.0, x[4]);
+  }
+</script>
+<script id="cwfrag" type="x-shader/x-fragment">
+  #version 130
+  void main()
+  {
+    float x[3](1.0, 2.0, 3.0);
+    x[4] = 6.0;
+    fragColor = vec4(1.0, 0.0, 0.0, x[4]);
+  }
+</script>
+<script id="vrfrag" type="x-shader/x-fragment">
+  #version 130
+  void main()
+  {
+    float x[3](1.0, 2.0, 3.0);
+    int idx = 2 * max(1, int(Vertex.x)*20);
+    fragColor = vec4(1.0, 0.0, 0.0, x[idx]);
+  }
+</script>
+<script id="vwfrag" type="x-shader/x-fragment">
+  #version 130
+  void main()
+  {
+    float x[3](1.0, 2.0, 3.0);
+    int idx = 2 * max(1, int(Vertex.x)*20);
+    x[idx] = 6.0;
+    fragColor = vec4(1.0, 0.0, 0.0, x[idx]);
+  }
+</script>
+<script id="frag" type="x-shader/x-fragment">
+  #version 130
+  void main()
+  {
+    fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+  }
+</script>
+
+
+<style>canvas{ position:absolute; }</style>
+</head><body>
+  <canvas id="gl" width="1" height="1"></canvas>
+</body></html>

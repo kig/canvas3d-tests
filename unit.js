@@ -34,6 +34,8 @@ function runTests() {
     __testLog__ = document.createElement('div');
     try {
       setup_args = Tests.startUnit();
+      if (__testLog__.childNodes.length > 0)
+        log.appendChild(__testLog__);
     } catch(e) {
       testFailed("startUnit", e.toString());
       log.appendChild(__testLog__);
@@ -71,6 +73,8 @@ function runTests() {
     __testLog__ = document.createElement('div');
     try {
       Tests.endUnit.apply(Tests, setup_args);
+      if (__testLog__.childNodes.length > 0)
+        log.appendChild(__testLog__);
     } catch(e) {
       testFailed("endUnit", e.toString());
       log.appendChild(__testLog__);
