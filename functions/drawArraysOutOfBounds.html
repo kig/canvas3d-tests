@@ -38,6 +38,9 @@ Tests.endUnit = function(gl, prog, v,n,t) {
   deleteShader(gl, prog);
 }
 
+Tests.testDrawArraysEmpty = function(gl, prog, v,n,t) {
+  assertFail(function(){gl.vertexAttribPointer(v, 3, gl.FLOAT, []);});
+}
 
 Tests.testDrawArraysOutOfBounds = function(gl, v,n,t) {
   gl.vertexAttribPointer(v, 3, gl.FLOAT, []);
@@ -93,6 +96,24 @@ Tests.testDrawArraysMultiOutOfBounds = function(gl, v,n,t) {
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 3);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 1, 2);});
 }
+
+
+Tests.testDrawArraysVBOOutOfBounds = function(gl, prog, v,n,t) {
+  var vbo = new VBO(gl, {size:3, data:Quad.vertices});
+  vbo.destroy();
+}
+
+Tests.testDrawArraysVBOMulti = function(gl, prog, v,n,t) {
+  // creates VBOs for the quad arrays, binds them with
+  // vertexAttribPointer and calls drawArrays
+  var vbo = new VBO(gl,
+    {size:3, data:Quad.vertices},
+    {size:3, data:Quad.normals},
+    {size:2, data:Quad.texcoords});
+  vbo.use(v, n, t);
+  vbo.destroy();
+}
+
 
 </script>
 <script id="vert" type="x-shader/x-vertex">

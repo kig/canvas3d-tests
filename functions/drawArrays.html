@@ -15,6 +15,7 @@ Tests.startUnit = function () {
   var gl = canvas.getContext(GL_CONTEXT_ID);
   var prog = loadShader(gl, 'vert', 'frag');
   var sh = prog.program;
+//   log(gl.getShaderInfoLog(prog.shaders[1]));
   gl.useProgram(sh);
   var v = gl.getAttribLocation(sh, 'Vertex');
   var n = gl.getAttribLocation(sh, 'Normal');
@@ -23,6 +24,7 @@ Tests.startUnit = function () {
 }
 
 Tests.setup = function(gl, prog, v,n,t) {
+  assert(0 == gl.getError());
   return [gl, prog, v,n,t];
 }
 Tests.teardown = function(gl, prog, v,n,t) {
@@ -36,55 +38,83 @@ Tests.endUnit = function(gl, prog, v,n,t) {
 }
 
 
-Tests.testDrawArrays = function(gl, v,n,t) {
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, []);
-  gl.enableVertexAttribArray(v);
-  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 0);});
-}
-
-Tests.testDrawArraysWithData = function(gl, v,n,t) {
+Tests.testDrawArraysWithData = function(gl, prog, v,n,t) {
   gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
+  assert(0 == checkError(gl, "vertexAttribPointer"));
   gl.enableVertexAttribArray(v);
+  assert(0 == checkError(gl, "enableVertexAttribArray"));
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 0);});
+  assert(0 == checkError(gl, "drawArrays 1"));
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
+  assert(0 == checkError(gl, "drawArrays 2"));
 }
 
-Tests.testDrawArraysMulti = function(gl, v,n,t) {
+Tests.testDrawArraysMulti = function(gl, prog, v,n,t) {
   gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
+  assert(0 == checkError(gl, "vertexAttribPointer v"));
   gl.vertexAttribPointer(n, 3, gl.FLOAT, normals);
+  assert(0 == checkError(gl, "vertexAttribPointer n"));
   gl.vertexAttribPointer(t, 2, gl.FLOAT, texcoords);
+  assert(0 == checkError(gl, "vertexAttribPointer t"));
   gl.enableVertexAttribArray(v);
   gl.enableVertexAttribArray(n);
   gl.enableVertexAttribArray(t);
+  assert(0 == checkError(gl, "enableVertexAttribArray"));
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 0);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
+  assert(0 == checkError(gl, "drawArrays 1"));
   gl.vertexAttribPointer(v, 3, gl.FLOAT, verts.concat(verts));
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 0);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
+  assert(0 == checkError(gl, "drawArrays 2"));
   gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
   gl.vertexAttribPointer(n, 3, gl.FLOAT, normals.concat(normals));
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
+  assert(0 == checkError(gl, "drawArrays 3"));
   gl.vertexAttribPointer(n, 3, gl.FLOAT, normals);
   gl.vertexAttribPointer(t, 2, gl.FLOAT, texcoords.concat(texcoords));
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
+  assert(0 == checkError(gl, "drawArrays 4"));
   gl.vertexAttribPointer(v, 3, gl.FLOAT, verts.concat(verts));
   gl.vertexAttribPointer(n, 3, gl.FLOAT, normals.concat(normals));
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 1, 0);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 1, 1);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 1, 2);});
+  assert(0 == checkError(gl, "drawArrays 5"));
+}
+
+Tests.testDrawArraysVBO = function(gl, prog, v,n,t) {
+  var vbo = new VBO(gl, {size:3, data:Quad.vertices});
+  vbo.draw(gl.TRIANGLES, v);
+  assert(0 == checkError(gl, "vbo.draw"));
+  vbo.destroy();
+  assert(0 == checkError(gl, "vbo.destroy"));
+}
+
+Tests.testDrawArraysVBOMulti = function(gl, prog, v,n,t) {
+  // creates VBOs for the quad arrays, binds them with
+  // vertexAttribPointer and calls drawArrays
+  var vbo = new VBO(gl,
+    {size:3, data:Quad.vertices},
+    {size:3, data:Quad.normals},
+    {size:2, data:Quad.texcoords});
+  vbo.draw(gl.TRIANGLES, v, n, t);
+  assert(0 == checkError(gl, "vbo.draw"));
+  vbo.destroy();
+  assert(0 == checkError(gl, "vbo.destroy"));
 }
 
 
 </script>
 <script id="vert" type="x-shader/x-vertex">
-  #version 120
+  #version 130
   
-  attribute vec3 Vertex;
-  attribute vec3 Normal;
-  attribute vec2 Tex;
+  in vec3 Vertex;
+  in vec3 Normal;
+  in vec2 Tex;
 
-  varying vec4 texCoord0;
+  out vec4 texCoord0;
   void main()
   {
     gl_Position = vec4(Vertex * Normal, 1.0);
@@ -92,12 +122,14 @@ Tests.testDrawArraysMulti = function(gl, v,n,t) {
   }
 </script>
 <script id="frag" type="x-shader/x-fragment">
-  #version 120
+  #version 130
   
-  varying vec4 texCoord0;
+  in vec4 texCoord0;
+  out vec4 fragColor;
   void main()
   {
-    gl_FragColor = texCoord0;
+    vec4 c = texCoord0;
+    fragColor = c;
   }
 </script>
 
