@@ -95,6 +95,13 @@ function checkError(gl, msg) {
   return e;
 }
 
+function throwError(gl, msg) {
+  var e = gl.getError();
+  if (e != 0) {
+    throw("Error " + e + " at " + msg);
+  }
+}
+
 Math.cot = function(z) { return 1.0 / Math.tan(z); }
 
 
@@ -416,10 +423,13 @@ VBO.prototype = {
       if (i == 0 || dlen < length)
         length = dlen;
       gl.bindBuffer(gl.ARRAY_BUFFER, vbos[i]);
+      checkError(gl, "bindBuffer");
       gl.bufferData(gl.ARRAY_BUFFER, d.data, gl.FLOAT, gl.STATIC_DRAW);
+      checkError(gl, "bufferData");
     }
 
     gl.bindBuffer(gl.ARRAY_BUFFER, 0);
+    checkError(gl, "bindBuffer");
 
     this.length = length;
     this.vbos = vbos;
@@ -433,8 +443,11 @@ VBO.prototype = {
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo);
     for (var i=0; i<arguments.length; i++) {
       gl.bindBuffer(gl.ARRAY_BUFFER, this.vbos[i]);
+      throwError(gl, "bindBuffer");
       gl.vertexAttribPointer(arguments[i], this.length, gl.FLOAT, 0);
+      throwError(gl, "vertexAttribPointer");
       gl.enableVertexAttribArray(arguments[i]);
+      throwError(gl, "enableVertexAttribArray");
     }
   },
 
