@@ -13,10 +13,10 @@ var texcoords = [0.0,0.0,  1.0,0.0,  0.0,1.0];
 Tests.startUnit = function () {
   var canvas = document.getElementById('gl');
   var gl = canvas.getContext(GL_CONTEXT_ID);
-  var prog = loadShader(gl, 'vert', 'frag');
-  var sh = prog.program;
+  var prog = new Shader(gl, 'vert', 'frag');
+  prog.use();
+  var sh = prog.shader.program;
 //   log(gl.getShaderInfoLog(prog.shaders[1]));
-  gl.useProgram(sh);
   var v = gl.getAttribLocation(sh, 'Vertex');
   var n = gl.getAttribLocation(sh, 'Normal');
   var t = gl.getAttribLocation(sh, 'Tex');
@@ -52,10 +52,10 @@ Tests.testDrawArraysWithData = function(gl, prog, v,n,t) {
 Tests.testDrawArraysMulti = function(gl, prog, v,n,t) {
   gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
   assert(0 == checkError(gl, "vertexAttribPointer v"));
-  gl.vertexAttribPointer(n, 3, gl.FLOAT, normals);
-  assert(0 == checkError(gl, "vertexAttribPointer n"));
   gl.vertexAttribPointer(t, 2, gl.FLOAT, texcoords);
   assert(0 == checkError(gl, "vertexAttribPointer t"));
+  gl.vertexAttribPointer(n, 3, gl.FLOAT, normals);
+  assert(0 == checkError(gl, "vertexAttribPointer n"));
   gl.enableVertexAttribArray(v);
   gl.enableVertexAttribArray(n);
   gl.enableVertexAttribArray(t);
@@ -109,6 +109,16 @@ Tests.testDrawArraysVBOMulti = function(gl, prog, v,n,t) {
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 6);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 1, 5);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 1, 6);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 6, 1);});
+  //gl.bindBuffer(gl.ARRAY_BUFFER, 0); // this should be automatically disabled
+  gl.vertexAttribPointer(n, 3, gl.FLOAT, Quad.normals);
+  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 5, 1);});
+  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
+  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 6);});
+  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 1, 5);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 1, 6);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 6, 1);});
   vbo.destroy();
   assert(0 == checkError(gl, "vbo.destroy"));
 }
