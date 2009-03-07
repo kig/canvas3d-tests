@@ -86,8 +86,12 @@ Tests.testDrawArraysMulti = function(gl, prog, v,n,t) {
 
 Tests.testDrawArraysVBO = function(gl, prog, v,n,t) {
   var vbo = new VBO(gl, {size:3, data:Quad.vertices});
-  vbo.draw(gl.TRIANGLES, v);
+  vbo.draw(v);
   assert(0 == checkError(gl, "vbo.draw"));
+  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 5, 1);});
+  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
+  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 6);});
+  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 1, 5);});
   vbo.destroy();
   assert(0 == checkError(gl, "vbo.destroy"));
 }
@@ -99,8 +103,12 @@ Tests.testDrawArraysVBOMulti = function(gl, prog, v,n,t) {
     {size:3, data:Quad.vertices},
     {size:3, data:Quad.normals},
     {size:2, data:Quad.texcoords});
-  vbo.draw(gl.TRIANGLES, v, n, t);
+  vbo.draw(v, n, t);
   assert(0 == checkError(gl, "vbo.draw"));
+  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 5, 1);});
+  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
+  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 6);});
+  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 1, 5);});
   vbo.destroy();
   assert(0 == checkError(gl, "vbo.destroy"));
 }

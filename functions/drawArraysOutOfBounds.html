@@ -39,7 +39,11 @@ Tests.endUnit = function(gl, prog, v,n,t) {
 }
 
 Tests.testDrawArraysEmpty = function(gl, prog, v,n,t) {
-  assertFail(function(){gl.vertexAttribPointer(v, 3, gl.FLOAT, []);});
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, []);
+  assertFail(function(){throwError(gl, "vertexAttribPointer")});
+  gl.enableVertexAttribArray(v);
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
+  assertOk(function(){throwError(gl, "drawArrays")});
 }
 
 Tests.testDrawArraysOutOfBounds = function(gl, v,n,t) {
@@ -59,12 +63,12 @@ Tests.testDrawArraysOutOfBounds = function(gl, v,n,t) {
 Tests.testDrawArraysWithDataOutOfBounds = function(gl, v,n,t) {
   gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
   gl.enableVertexAttribArray(v);
-  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 3, 2);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 10000);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 10000000000000);});
-  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 1.6);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 3, 1.6);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, -1);});
-  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 2, 0);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 4, 0);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, -1, 0);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 2, -1);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, -1, 1);});
@@ -77,33 +81,55 @@ Tests.testDrawArraysMultiOutOfBounds = function(gl, v,n,t) {
   gl.enableVertexAttribArray(v);
   gl.enableVertexAttribArray(n);
   gl.enableVertexAttribArray(t);
-  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 3, 2);});
   gl.vertexAttribPointer(v, 3, gl.FLOAT, verts.concat(verts));
-  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
-  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 1, 2);});
+  gl.vertexAttribPointer(n, 3, gl.FLOAT, normals);
+  gl.vertexAttribPointer(t, 2, gl.FLOAT, texcoords);
+  gl.enableVertexAttribArray(v);
+  gl.enableVertexAttribArray(n);
+  gl.enableVertexAttribArray(t);
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 3, 2);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 4, 2);});
   gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
   gl.vertexAttribPointer(n, 3, gl.FLOAT, normals.concat(normals));
-  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
-  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 1, 2);});
+  gl.vertexAttribPointer(t, 2, gl.FLOAT, texcoords);
+  gl.enableVertexAttribArray(v);
+  gl.enableVertexAttribArray(n);
+  gl.enableVertexAttribArray(t);
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 3, 2);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 4, 2);});
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
   gl.vertexAttribPointer(n, 3, gl.FLOAT, normals);
   gl.vertexAttribPointer(t, 2, gl.FLOAT, texcoords.concat(texcoords));
-  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
-  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 1, 2);});
+  gl.enableVertexAttribArray(v);
+  gl.enableVertexAttribArray(n);
+  gl.enableVertexAttribArray(t);
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 3, 2);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 3, 2);});
   gl.vertexAttribPointer(v, 3, gl.FLOAT, verts.concat(verts));
   gl.vertexAttribPointer(n, 3, gl.FLOAT, normals.concat(normals));
-  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 2, 1);});
+  gl.vertexAttribPointer(t, 2, gl.FLOAT, texcoords);
+  gl.enableVertexAttribArray(v);
+  gl.enableVertexAttribArray(n);
+  gl.enableVertexAttribArray(t);
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 4, 1);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, -1, 2);});
-  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 3);});
-  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 1, 2);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 4);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 1, 4);});
 }
 
 
 Tests.testDrawArraysVBOOutOfBounds = function(gl, prog, v,n,t) {
   var vbo = new VBO(gl, {size:3, data:Quad.vertices});
+  vbo.use(v);
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 6, 1);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, -1, 2);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 7);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 1, 6);});
   vbo.destroy();
 }
 
-Tests.testDrawArraysVBOMulti = function(gl, prog, v,n,t) {
+Tests.testDrawArraysVBOMultiOutOfBounds = function(gl, prog, v,n,t) {
   // creates VBOs for the quad arrays, binds them with
   // vertexAttribPointer and calls drawArrays
   var vbo = new VBO(gl,
@@ -111,6 +137,10 @@ Tests.testDrawArraysVBOMulti = function(gl, prog, v,n,t) {
     {size:3, data:Quad.normals},
     {size:2, data:Quad.texcoords});
   vbo.use(v, n, t);
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 6, 1);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, -1, 2);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 7);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 1, 6);});
   vbo.destroy();
 }
 

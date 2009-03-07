@@ -393,43 +393,78 @@ Filter.prototype.apply = function(init) {
 VBO = function(gl) {
   this.gl = gl;
   this.data = [];
-  for (var i=1; i<arguments.length; i++)
-    this.data.push(arguments[i]);
+  for (var i=1; i<arguments.length; i++) {
+    if (arguments[i].elements)
+      this.elements = arguments[i];
+    else
+      this.data.push(arguments[i]);
+  }
 }
+
 VBO.prototype = {
   initialized : false,
   length : 0,
   vbos : null,
+  type : 'TRIANGLES',
+  elementsVBO : null,
+  elements : null,
 
   setData : function() {
     this.destroy();
-    this.data = arguments;
+    this.data = [];
+    for (var i=0; i<arguments.length; i++) {
+      if (arguments[i].elements)
+        this.elements = arguments[i];
+      else
+        this.data.push(arguments[i]);
+    }
   },
 
   destroy : function() {
     if (this.vbos != null)
       this.gl.deleteBuffers(this.vbos);
+    if (this.elementsVBO != null)
+      this.gl.deleteBuffers([this.elementsVBO]);
+    this.length = this.elementsLength = 0;
+    this.vbos = this.elementsVBO = null;
     this.initialized = false;
   },
 
   init : function() {
-    var length = 0;
+    this.destroy();
     var gl = this.gl;
-
+   
+    gl.getError();
     var vbos = gl.genBuffers(this.data.length);
-    for (var i = 0; i<this.data.length; i++) {
-      var d = this.data[i];
-      var dlen = Math.floor(d.data.length / d.size);
-      if (i == 0 || dlen < length)
-        length = dlen;
-      gl.bindBuffer(gl.ARRAY_BUFFER, vbos[i]);
-      checkError(gl, "bindBuffer");
-      gl.bufferData(gl.ARRAY_BUFFER, d.data, gl.FLOAT, gl.STATIC_DRAW);
-      checkError(gl, "bufferData");
+    if (this.elements != null)
+      this.elementsVBO = gl.genBuffers(1)[0];
+    try {
+      throwError(gl, "genBuffers");
+      for (var i = 0; i<this.data.length; i++) {
+        var d = this.data[i];
+        var dlen = Math.floor(d.data.length / d.size);
+        if (i == 0 || dlen < length)
+            length = dlen;
+        gl.bindBuffer(gl.ARRAY_BUFFER, vbos[i]);
+        throwError(gl, "bindBuffer");
+        gl.bufferData(gl.ARRAY_BUFFER, d.data, gl.FLOAT, gl.STATIC_DRAW);
+        throwError(gl, "bufferData");
+      }
+      if (this.elementsVBO != null) {
+        var d = this.elements;
+        this.elementsLength = d.data.length;
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.elementsVBO);
+        throwError(gl, "bindBuffer ELEMENT_ARRAY_BUFFER");
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, d.data, gl.SHORT, gl.STATIC_DRAW);
+        throwError(gl, "bufferData ELEMENT_ARRAY_BUFFER");
+      }
+    } catch(e) {
+      gl.deleteBuffers(vbos);
+      throw(e);
     }
 
     gl.bindBuffer(gl.ARRAY_BUFFER, 0);
-    checkError(gl, "bindBuffer");
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, 0);
 
     this.length = length;
     this.vbos = vbos;
@@ -440,23 +475,30 @@ VBO.prototype = {
   use : function() {
     if (!this.initialized) this.init();
     var gl = this.gl;
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo);
     for (var i=0; i<arguments.length; i++) {
+      if (arguments[i] == null) continue;
       gl.bindBuffer(gl.ARRAY_BUFFER, this.vbos[i]);
       throwError(gl, "bindBuffer");
-      gl.vertexAttribPointer(arguments[i], this.length, gl.FLOAT, 0);
+      gl.vertexAttribPointer(arguments[i], this.data[i].size, gl.FLOAT, 0);
       throwError(gl, "vertexAttribPointer");
       gl.enableVertexAttribArray(arguments[i]);
       throwError(gl, "enableVertexAttribArray");
     }
+    if (this.elementsVBO != null) {
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.elementsVBO);
+      throwError(gl, "bindBuffer ELEMENT_ARRAY_BUFFER");
+    }
   },
 
-  draw : function(type) {
+  draw : function() {
     var args = [];
-    for (var i=1; i<arguments.length; i++) args.push(arguments[i]);
-    this.use.apply(this, args);
+    this.use.apply(this, arguments);
     var gl = this.gl;
-    gl.drawArrays(type, 0, this.length);
+    if (this.elementsVBO != null) {
+      gl.drawElements(gl[this.type], this.elementsLength, 0);
+    } else {
+      gl.drawArrays(gl[this.type], 0, this.length);
+    }
   }
 }
 
@@ -538,9 +580,8 @@ Quad = {
     -1,-1,0,
     1,-1,0,
     -1,1,0,
-
     1,-1,0,
-    1,1,1,
+    1,1,0,
     -1,1,0
   ],
   normals : [
@@ -559,7 +600,20 @@ Quad = {
     1,1,
     0,1
   ],
-  indices : [0,1,2,3,4,5]
+  indices : [0,1,2,1,5,2],
+  makeVBO : function(gl) {
+    return new VBO(gl,
+        {size:3, data: Quad.vertices},
+        {size:3, data: Quad.normals},
+        {size:2, data: Quad.texcoords}
+    )
+  },
+  cache: {},
+  getCachedVBO : function(gl) {
+    if (!this.cache[gl])
+      this.cache[gl] = this.makeVBO(gl);
+    return this.cache[gl];
+  }
 }
 Cube = {
   vertices : [  0.5, -0.5,  0.5, // +X
@@ -634,6 +688,14 @@ Cube = {
       Cube.indices.push(i*4 + 2);
       Cube.indices.push(i*4 + 3);
     }
+  },
+
+  makeVBO : function(gl) {
+    return new VBO(gl,
+        {size:3, data: Cube.vertices},
+        {size:3, data: Cube.normals},
+        {elements: true, data: Cube.indices}
+    )
   }
 }
 Cube.create();
