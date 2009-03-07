@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 require 'socket'
 
 s = TCPServer.new(nil, 8888)

@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 require 'cgi'
 require 'uri'
 require 'fileutils'
