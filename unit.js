@@ -93,15 +93,18 @@ function testFailed(assertName, name) {
   var h = document.createElement('h3');
   h.textContent = name==null ? assertName : name + " (in " + assertName + ")";
   d.appendChild(h);
+  var args = []
   for (var i=2; i<arguments.length; i++) {
     var a = arguments[i];
     var p = document.createElement('p');
     p.textContent = (a == null) ? "null" :
                     (typeof a == 'boolean') ? a : a.toSource();
+    args.push(p.textContent);
     d.appendChild(p);
   }
   __testLog__.appendChild(d);
   __testSuccess__ = false;
+  doTestNotify([assertName, name].concat(args).join("--"));
 }
 
 function checkTestSuccess() {
