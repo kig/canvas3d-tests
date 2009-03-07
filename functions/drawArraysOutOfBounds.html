@@ -16,12 +16,11 @@ Tests.message = "Caution: if your implementation has a bug in drawArrays bounds 
 Tests.startUnit = function () {
   var canvas = document.getElementById('gl');
   var gl = canvas.getContext(GL_CONTEXT_ID);
-  var prog = loadShader(gl, 'vert', 'frag');
-  var sh = prog.program;
-  gl.useProgram(sh);
-  var v = gl.getAttribLocation(sh, 'Vertex');
-  var n = gl.getAttribLocation(sh, 'Normal');
-  var t = gl.getAttribLocation(sh, 'Tex');
+  var prog = new Shader(gl, 'vert', 'frag');
+  prog.use();
+  var v = prog.attrib('Vertex');
+  var n = prog.attrib('Normal');
+  var t = prog.attrib('Tex');
   return [gl,prog,v,n,t];
 }
 
@@ -35,7 +34,7 @@ Tests.teardown = function(gl, prog, v,n,t) {
 }
 
 Tests.endUnit = function(gl, prog, v,n,t) {
-  deleteShader(gl, prog);
+  prog.destroy();
 }
 
 Tests.testDrawArraysEmpty = function(gl, prog, v,n,t) {
@@ -144,6 +143,21 @@ Tests.testDrawArraysVBOMultiOutOfBounds = function(gl, prog, v,n,t) {
   vbo.destroy();
 }
 
+Tests.testDrawArraysOOBShaderJuggle = function(gl, prog, v,n,t) {
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, [0,0,0]);
+  gl.enableVertexAttribArray(v);
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
+  var sh2 = new Shader(gl, 'vert', 'frag');
+  sh2.use();
+  gl.vertexAttribPointer(sh2.attrib('Vertex'), 3, gl.FLOAT, [0,0,0,0,0,0]);
+  gl.enableVertexAttribArray(v);
+  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 3);});
+  prog.use();
+  assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
+  assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 3);});
+  sh2.destroy();
+}
 
 </script>
 <script id="vert" type="x-shader/x-vertex">
