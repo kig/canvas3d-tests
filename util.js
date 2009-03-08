@@ -54,7 +54,7 @@ function loadShaderArray(gl, shaders) {
       gl.attachShader(id, sh);
     } catch (e) {
       var pr = {program: id, shaders: shaderObjs};
-      deleteShader(pr);
+      deleteShader(gl, pr);
       throw (e);
     }
   }
@@ -62,11 +62,11 @@ function loadShaderArray(gl, shaders) {
   gl.linkProgram(id);
   gl.validateProgram(id);
   if (gl.getProgramParameter(id, gl.LINK_STATUS) != 1) {
-    deleteShader(prog);
+    deleteShader(gl,prog);
     throw("Failed to link shader");
   }
   if (gl.getProgramParameter(id, gl.VALIDATE_STATUS) != 1) {
-    deleteShader(prog);
+    deleteShader(gl,prog);
     throw("Failed to validate shader");
   }
   return prog;
@@ -381,12 +381,9 @@ Filter.prototype.apply = function(init) {
   this.use();
   var va = this.attrib("Vertex");
   var ta = this.attrib("Tex");
-  this.gl.vertexAttribPointer(va, 3, this.gl.FLOAT, Quad.vertices);
-  this.gl.vertexAttribPointer(ta, 2, this.gl.FLOAT, Quad.texcoords);
-  this.gl.enableVertexAttribArray(va);
-  this.gl.enableVertexAttribArray(ta);
+  var vbo = Quad.getCachedVBO(this.gl);
   if (init) init(this);
-  this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
+  vbo.draw(va, null, ta);
 }
 
 
@@ -478,15 +475,15 @@ VBO.prototype = {
     for (var i=0; i<arguments.length; i++) {
       if (arguments[i] == null) continue;
       gl.bindBuffer(gl.ARRAY_BUFFER, this.vbos[i]);
-      throwError(gl, "bindBuffer");
+//       throwError(gl, "bindBuffer");
       gl.vertexAttribPointer(arguments[i], this.data[i].size, gl.FLOAT, 0);
-      throwError(gl, "vertexAttribPointer");
+//       throwError(gl, "vertexAttribPointer");
       gl.enableVertexAttribArray(arguments[i]);
-      throwError(gl, "enableVertexAttribArray");
+//       throwError(gl, "enableVertexAttribArray");
     }
     if (this.elementsVBO != null) {
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.elementsVBO);
-      throwError(gl, "bindBuffer ELEMENT_ARRAY_BUFFER");
+//       throwError(gl, "bindBuffer ELEMENT_ARRAY_BUFFER");
     }
   },
 
@@ -580,13 +577,9 @@ Quad = {
     -1,-1,0,
     1,-1,0,
     -1,1,0,
-    1,-1,0,
-    1,1,0,
-    -1,1,0
+    1,1,0
   ],
   normals : [
-    0,0,-1,
-    0,0,-1,
     0,0,-1,
     0,0,-1,
     0,0,-1,
@@ -596,16 +589,15 @@ Quad = {
     0,0,
     1,0,
     0,1,
-    1,0,
-    1,1,
-    0,1
+    1,1
   ],
-  indices : [0,1,2,1,5,2],
+  indices : [0,1,2,1,3,2],
   makeVBO : function(gl) {
     return new VBO(gl,
         {size:3, data: Quad.vertices},
         {size:3, data: Quad.normals},
-        {size:2, data: Quad.texcoords}
+        {size:2, data: Quad.texcoords},
+        {elements:true, data: Quad.indices}
     )
   },
   cache: {},
@@ -696,6 +688,12 @@ Cube = {
         {size:3, data: Cube.normals},
         {elements: true, data: Cube.indices}
     )
+  },
+  cache : {},
+  getCachedVBO : function(gl) {
+    if (!this.cache[gl])
+      this.cache[gl] = this.makeVBO(gl);
+    return this.cache[gl];
   }
 }
 Cube.create();
