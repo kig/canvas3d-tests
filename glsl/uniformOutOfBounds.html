@@ -12,17 +12,19 @@ Tests.startUnit = function () {
   return [gl];
 }
 
-Tests.arrayOutOfBounds = function(gl){
-  var arr = ['cr', 'cw', 'ar', 'aw'];
-  arr.forEach(function(e){
-    var sh = new Shader(gl, e, 'frag');
-    assertFail(function(){sh.compile();});
-    sh.destroy();
-    var sh = new Shader(gl, 'vert', e);
-    assertFail(function(){sh.compile();});
-    sh.destroy();
-  });
-}
+var arr = ['cr', 'cw', 'vr', 'vw'];
+arr.forEach(function(e){
+    Tests['test'+e+'vert'] = function(gl) {
+        var sh = new Shader(gl, e+'vert', 'frag');
+        assertFail(function(){sh.compile();});
+        sh.destroy();
+    }
+    Tests['test'+e+'frag'] = function(gl) {
+        var sh = new Shader(gl, 'vert', e+'frag');
+        assertFail(function(){sh.compile();});
+        sh.destroy();
+    }
+});
 
 </script>
 <script id="crvert" type="x-shader/x-vertex">
@@ -50,7 +52,7 @@ Tests.arrayOutOfBounds = function(gl){
   uniform float x[3];
   void main()
   {
-    int idx = 2 * max(1, int(Vertex.x)*20);
+    int idx = 2 * int(max(1.0, Vertex.x*20.0));
     gl_Position = vec4(Vertex, x[idx]);
   }
 </script>
@@ -60,7 +62,7 @@ Tests.arrayOutOfBounds = function(gl){
   uniform float x[3];
   void main()
   {
-    int idx = 2 * max(1, int(Vertex.x)*20);
+    int idx = 2 * int(max(1.0, Vertex.x*20.0));
     x[idx] = Vertex.z;
     gl_Position = vec4(Vertex, x[idx]);
   }
@@ -68,8 +70,10 @@ Tests.arrayOutOfBounds = function(gl){
 <script id="vert" type="x-shader/x-vertex">
   #version 130
   in vec3 Vertex;
+  out vec2 TexCoord;
   void main()
   {
+    TexCoord = Vertex.st;
     gl_Position = vec4(Vertex, 0.0);
   }
 </script>
@@ -77,6 +81,8 @@ Tests.arrayOutOfBounds = function(gl){
 <script id="crfrag" type="x-shader/x-fragment">
   #version 130
   uniform float x[3];
+  out vec4 fragColor;
+  in vec2 TexCoord;
   void main()
   {
     fragColor = vec4(1.0, 0.0, 0.0, x[4]);
@@ -85,6 +91,8 @@ Tests.arrayOutOfBounds = function(gl){
 <script id="cwfrag" type="x-shader/x-fragment">
   #version 130
   uniform float x[3];
+  out vec4 fragColor;
+  in vec2 TexCoord;
   void main()
   {
     x[4] = 6.0;
@@ -94,24 +102,29 @@ Tests.arrayOutOfBounds = function(gl){
 <script id="vrfrag" type="x-shader/x-fragment">
   #version 130
   uniform float x[3];
+  out vec4 fragColor;
+  in vec2 TexCoord;
   void main()
   {
-    int idx = 2 * max(1, int(Vertex.x)*20);
+    int idx = 2 * int(max(1.0, TexCoord.s*20.0));
     fragColor = vec4(1.0, 0.0, 0.0, x[idx]);
   }
 </script>
 <script id="vwfrag" type="x-shader/x-fragment">
   #version 130
   uniform float x[3];
+  out vec4 fragColor;
+  in vec2 TexCoord;
   void main()
   {
-    int idx = 2 * max(1, int(Vertex.x)*20);
+    int idx = 2 * int(max(1.0, TexCoord.s*20.0));
     x[idx] = 6.0;
     fragColor = vec4(1.0, 0.0, 0.0, x[idx]);
   }
 </script>
 <script id="frag" type="x-shader/x-fragment">
   #version 130
+  out vec4 fragColor;
   void main()
   {
     fragColor = vec4(1.0, 0.0, 0.0, 1.0);
