@@ -20,11 +20,22 @@ Tests.testSwapBuffers = function(gl) {
     gl.clear(gl.COLOR_BUFFER_BIT);
     var log = document.getElementById('swapBuffers-log');
     var t = new Date().getTime();
-    for (var i=0; i<100; i++)
+    for (var i=0; i<50; i++)
         gl.swapBuffers();
     var elapsed = new Date().getTime() - t;
-    log.textContent = "1000x1000 gl.swapBuffers() average time over 100 runs: "+ (elapsed / 100) + " ms"
+    log.textContent = "1000x1000, 0.5 opacity. gl.swapBuffers() average time over 30 runs: "+ (elapsed / 50) + " ms"
 }
+Tests.testSwapBuffersOpaque = function(gl) {
+    gl.clearColor(0.0, 0.0, 0.5, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    var log = document.getElementById('swapBuffersOpaque-log');
+    var t = new Date().getTime();
+    for (var i=0; i<50; i++)
+        gl.swapBuffers();
+    var elapsed = new Date().getTime() - t;
+    log.textContent = "1000x1000, 1.0 opacity. gl.swapBuffers() average time over 30 runs: "+ (elapsed / 50) + " ms"
+}
+
 
 Tests.endUnit = function(gl) {
 }
@@ -33,5 +44,6 @@ Tests.endUnit = function(gl) {
 <style>canvas{ position:absolute; }</style>
 </head><body>
 <p id="swapBuffers-log"></p>
+<p id="swapBuffersOpaque-log"></p>
 <canvas id="gl" width="1000" height="1000"></canvas>
 </body></html>
