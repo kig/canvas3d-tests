@@ -12,34 +12,46 @@ Tests.startUnit = function () {
   return [gl];
 }
 
+Tests.autorun = false;
+Tests.message = "Caution: might hang your GPU"
+
 var arr = ['whiletrue', 'loop100M', 'loopComp', 'variable'];
 arr.forEach(function(e){
     Tests['test'+e+'vert'] = function(gl) {
-        var sh = new Shader(gl, e+'vert', 'frag');
-        assertFail(function(){sh.compile();});
+        var sh = new Filter(gl, e+'vert', 'frag');
+        assertOk(function(){
+            sh.apply();
+        });
         sh.destroy();
+        gl.swapBuffers();
     }
     Tests['test'+e+'frag'] = function(gl) {
-        var sh = new Shader(gl, 'vert', e+'frag');
-        assertFail(function(){sh.compile();});
+        var sh = new Filter(gl, 'vert', e+'frag');
+        assertOk(function(){
+            sh.apply();
+        });
         sh.destroy();
+        gl.swapBuffers();
     }
 });
 
 </script>
 <script id="whiletruevert" type="x-shader/x-vertex">
     #version 130
-    in vec3 Vertex;
+    in vec3 Vertex; in vec2 Tex;
+    out vec2 TexCoord;
     void main()
     {
         float z = 1.0;
         while(true) { z += 0.1; z *= 0.995; }
+        TexCoord = Tex.st;
         gl_Position = vec4(Vertex, z);
     }
 </script>
 <script id="loop100Mvert" type="x-shader/x-vertex">
     #version 130
-    in vec3 Vertex;
+    in vec3 Vertex; in vec2 Tex;
+    out vec2 TexCoord;
     void main()
     {
         int i;
@@ -47,37 +59,42 @@ arr.forEach(function(e){
         for (i = 0; i<1000000000; i++) {
             z += 0.1; z *= 0.995;
         }
+        TexCoord = Tex.st;
         gl_Position = vec4(Vertex, z);
     }
 </script>
 <script id="loopCompvert" type="x-shader/x-vertex">
     #version 130
-    in vec3 Vertex;
+    in vec3 Vertex; in vec2 Tex;
+    out vec2 TexCoord;
     void main()
     {
         float z = 1.0;
         while(z > 0.0) { z += 0.1; z *= 0.995; }
+        TexCoord = Tex.st;
         gl_Position = vec4(Vertex, z);
     }
 </script>
 <script id="variablevert" type="x-shader/x-vertex">
     #version 130
-    in vec3 Vertex;
+    in vec3 Vertex; in vec2 Tex;
+    out vec2 TexCoord;
     
     void main()
     {
         float z = 1.0;
         while(z > Vertex.z) { z += 0.1; z *= 0.995; }
+        TexCoord = Tex.st;
         gl_Position = vec4(Vertex, z);
     }
 </script>
 <script id="vert" type="x-shader/x-vertex">
     #version 130
-    in vec3 Vertex;
+    in vec3 Vertex; in vec2 Tex;
     out vec2 TexCoord;
     void main()
     {
-        TexCoord = Vertex.st;
+        TexCoord = Tex.st;
         gl_Position = vec4(Vertex, 0.0);
     }
 </script>
@@ -90,7 +107,7 @@ arr.forEach(function(e){
     {
         float z = 1.0;
         while(true) { z += 0.1; z *= 0.995; }
-        fragColor = vec4(1.0, 0.0, 0.0, z);
+        fragColor = vec4(1.0, TexCoord.s, TexCoord.t, z);
     }
 </script>
 <script id="loop100Mfrag" type="x-shader/x-fragment">
@@ -104,7 +121,7 @@ arr.forEach(function(e){
         for (i = 0; i<1000000000; i++) {
             z += 0.1; z *= 0.995;
         }
-        fragColor = vec4(1.0, 0.0, 0.0, z);
+        fragColor = vec4(1.0, TexCoord.s, TexCoord.t, z);
     }
 </script>
 <script id="loopCompfrag" type="x-shader/x-fragment">
@@ -115,7 +132,7 @@ arr.forEach(function(e){
     {
         float z = TexCoord.s;
         while(z > 0.0) { z += 0.1; z *= 0.995; }
-        fragColor = vec4(1.0, 0.0, 0.0, z);
+        fragColor = vec4(1.0, TexCoord.s, TexCoord.t, z);
     }
 </script>
 <script id="variablefrag" type="x-shader/x-fragment">
@@ -126,20 +143,21 @@ arr.forEach(function(e){
     {
         float z = 1.0;
         while(z > TexCoord.s) { z += 0.1; z *= 0.995; }
-        fragColor = vec4(1.0, 0.0, 0.0, z);
+        fragColor = vec4(1.0, TexCoord.s, TexCoord.t, z);
     }
 </script>
 <script id="frag" type="x-shader/x-fragment">
   #version 130
   out vec4 fragColor;
+  in vec2 TexCoord;
   void main()
   {
-    fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    fragColor = vec4(1.0, TexCoord.s, TexCoord.t, 1.0);
   }
 </script>
 
 
 <style>canvas{ position:absolute; }</style>
 </head><body>
-  <canvas id="gl" width="1" height="1"></canvas>
+  <canvas id="gl" width="16" height="16"></canvas>
 </body></html>
