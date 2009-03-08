@@ -33,6 +33,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 <script type="application/x-javascript" src="../util.js"></script>
 <script type="application/x-javascript">
 
+Tests.autorun = false;
+Tests.message = "Caution: may crash the browser";
+
 Tests.startUnit = function () {
   var canvas = document.getElementById('gl');
   var gl = canvas.getContext(GL_CONTEXT_ID);
