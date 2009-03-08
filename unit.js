@@ -223,6 +223,13 @@ function assertNotEquals(name, v, p) {
   }
 }
 
+function time(elementId, f) {
+    var s = document.getElementById(elementId);
+    var t0 = new Date().getTime();
+    f();
+    var t1 = new Date().getTime();
+    s.textContent = 'Elapsed: '+(t1-t0)+' ms';
+}
 
 
 GL_CONTEXT_ID = 'moz-glweb20'
