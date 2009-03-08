@@ -42,13 +42,13 @@ Tests.startUnit = function () {
 var arr = ['cr', 'cw', 'vr', 'vw'];
 arr.forEach(function(e){
     Tests['test'+e+'vert'] = function(gl) {
-        var sh = new Shader(gl, e+'vert', 'frag');
-        assertFail(function(){sh.compile();});
+        var sh = new Filter(gl, e+'vert', 'frag');
+        assertFail(function(){sh.apply();});
         sh.destroy();
     }
     Tests['test'+e+'frag'] = function(gl) {
-        var sh = new Shader(gl, 'vert', e+'frag');
-        assertFail(function(){sh.compile();});
+        var sh = new Filter(gl, 'vert', e+'frag');
+        assertFail(function(){sh.apply();});
         sh.destroy();
     }
 });
@@ -80,7 +80,7 @@ arr.forEach(function(e){
   void main()
   {
     float x[3] = float[](1.0, 2.0, 3.0);
-    int idx = 2 * int(max(1.0, Vertex.x*20.0));
+    int idx = 4 * int(max(1.0, Vertex.x*20.0));
     gl_Position = vec4(Vertex, x[idx]);
   }
 </script>
@@ -90,7 +90,7 @@ arr.forEach(function(e){
   void main()
   {
     float x[3] = float[](1.0, 2.0, 3.0);
-    int idx = 2 * int(max(1.0, Vertex.x*20.0));
+    int idx = 4 * int(max(1.0, Vertex.x*20.0));
     x[idx] = Vertex.z;
     gl_Position = vec4(Vertex, x[idx]);
   }
@@ -136,7 +136,7 @@ arr.forEach(function(e){
   {
     float x[3] = float[](1.0, 2.0, 3.0);
 
-    int idx = 2 * int(max(1.0, TexCoord.x*20.0));
+    int idx = 4 * int(max(1.0, TexCoord.x*20.0));
     fragColor = vec4(1.0, 0.0, 0.0, x[idx]);
   }
 </script>
@@ -148,7 +148,7 @@ arr.forEach(function(e){
   {
     float x[3] = float[](1.0, 2.0, 3.0);
 
-    int idx = 2 * int(max(1.0, TexCoord.x*20.0));
+    int idx = 4 * int(max(1.0, TexCoord.x*20.0));
     x[idx] = 6.0;
     fragColor = vec4(1.0, 0.0, 0.0, x[idx]);
   }
@@ -165,5 +165,5 @@ arr.forEach(function(e){
 
 <style>canvas{ position:absolute; }</style>
 </head><body>
-  <canvas id="gl" width="1" height="1"></canvas>
+  <canvas id="gl" width="16" height="16"></canvas>
 </body></html>
