@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../unit.css" />
+<script type="application/x-javascript" src="../unit.js"></script>
+<script type="application/x-javascript" src="../util.js"></script>
+<script type="application/x-javascript">
+
+Tests.startUnit = function () {
+  var canvas = document.getElementById('gl');
+  var gl = canvas.getContext(GL_CONTEXT_ID);
+  return [gl];
+}
+
+var arr = ['whiletrue', 'loop100M', 'loopComp', 'variable'];
+arr.forEach(function(e){
+    Tests['test'+e+'vert'] = function(gl) {
+        var sh = new Shader(gl, e+'vert', 'frag');
+        assertFail(function(){sh.compile();});
+        sh.destroy();
+    }
+    Tests['test'+e+'frag'] = function(gl) {
+        var sh = new Shader(gl, 'vert', e+'frag');
+        assertFail(function(){sh.compile();});
+        sh.destroy();
+    }
+});
+
+</script>
+<script id="whiletruevert" type="x-shader/x-vertex">
+    #version 130
+    in vec3 Vertex;
+    void main()
+    {
+        float z = 1.0;
+        while(true) { z += 0.1; z *= 0.995; }
+        gl_Position = vec4(Vertex, z);
+    }
+</script>
+<script id="loop100Mvert" type="x-shader/x-vertex">
+    #version 130
+    in vec3 Vertex;
+    void main()
+    {
+        int i;
+        float z = 1.0;
+        for (i = 0; i<1000000000; i++) {
+            z += 0.1; z *= 0.995;
+        }
+        gl_Position = vec4(Vertex, z);
+    }
+</script>
+<script id="loopCompvert" type="x-shader/x-vertex">
+    #version 130
+    in vec3 Vertex;
+    void main()
+    {
+        float z = 1.0;
+        while(z > 0.0) { z += 0.1; z *= 0.995; }
+        gl_Position = vec4(Vertex, z);
+    }
+</script>
+<script id="variablevert" type="x-shader/x-vertex">
+    #version 130
+    in vec3 Vertex;
+    
+    void main()
+    {
+        float z = 1.0;
+        while(z > Vertex.z) { z += 0.1; z *= 0.995; }
+        gl_Position = vec4(Vertex, z);
+    }
+</script>
+<script id="vert" type="x-shader/x-vertex">
+    #version 130
+    in vec3 Vertex;
+    out vec2 TexCoord;
+    void main()
+    {
+        TexCoord = Vertex.st;
+        gl_Position = vec4(Vertex, 0.0);
+    }
+</script>
+
+<script id="whiletruefrag" type="x-shader/x-fragment">
+    #version 130
+    out vec4 fragColor;
+    in vec2 TexCoord;
+    void main()
+    {
+        float z = 1.0;
+        while(true) { z += 0.1; z *= 0.995; }
+        fragColor = vec4(1.0, 0.0, 0.0, z);
+    }
+</script>
+<script id="loop100Mfrag" type="x-shader/x-fragment">
+    #version 130
+    out vec4 fragColor;
+    in vec2 TexCoord;
+    void main()
+    {
+        int i;
+        float z = 1.0;
+        for (i = 0; i<1000000000; i++) {
+            z += 0.1; z *= 0.995;
+        }
+        fragColor = vec4(1.0, 0.0, 0.0, z);
+    }
+</script>
+<script id="loopCompfrag" type="x-shader/x-fragment">
+    #version 130
+    out vec4 fragColor;
+    in vec2 TexCoord;
+    void main()
+    {
+        float z = TexCoord.s;
+        while(z > 0.0) { z += 0.1; z *= 0.995; }
+        fragColor = vec4(1.0, 0.0, 0.0, z);
+    }
+</script>
+<script id="variablefrag" type="x-shader/x-fragment">
+    #version 130
+    out vec4 fragColor;
+    in vec2 TexCoord;
+    void main()
+    {
+        float z = 1.0;
+        while(z > TexCoord.s) { z += 0.1; z *= 0.995; }
+        fragColor = vec4(1.0, 0.0, 0.0, z);
+    }
+</script>
+<script id="frag" type="x-shader/x-fragment">
+  #version 130
+  out vec4 fragColor;
+  void main()
+  {
+    fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+  }
+</script>
+
+
+<style>canvas{ position:absolute; }</style>
+</head><body>
+  <canvas id="gl" width="1" height="1"></canvas>
+</body></html>
