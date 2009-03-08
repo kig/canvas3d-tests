@@ -1,0 +1,69 @@
+Top priority functions to test are functions that:
+  1. deal with array indexing
+    - may cause segfaults
+    - may read privileged data
+    - may write to process memory
+  2. read data from the OpenGL context
+    - require SOP checking
+
+List of functions:
+  [Legend: + = test exists, - = no test]
+
+drawArrays
+  + with vertex arrays
+  + with buffers
+  + with bad args
+  
+drawElements
+  + with vertex arrays
+  + with buffers
+  - with bad args (oob count & offset, oob indices)
+
+getImageData
+  - normal
+  - with GL canvas that has a non-SOP texture uploaded
+  - bad args (coords outside viewport, zero size)
+  
+readPixels
+  - normal
+  - with GL canvas that has a non-SOP texture uploaded
+  - bad args (coords outside viewport, zero size, bad type)
+  
+texImage2D
+  + with NULL
+  + with array of ints
+  - with bad args (bad dims, bad type, bad border, bad level)
+
+texSubImage2D
+  - with array of ints
+  - with bad args (bad offset, bad dims, bad type, bad level)
+  
+texImage2DHTML
+  - with canvas
+  - with img
+  - with bad args (bad level, non-image element)
+  - with non-SOP img
+  - with non-SOP canvas (i.e. canvas with non-SOP img)
+  
+texSubImage2DHTML
+  - with canvas
+  - with img
+  - with bad args (bad level, non-image element, bad offset)
+  - with non-SOP img
+  - with non-SOP canvas (i.e. canvas with non-SOP img)
+
+uniformf
+  - with OOB args
+  
+uniformi
+  - with OOB args
+
+vertexAttrib
+  - normal
+  - with oob args
+
+vertexAttribPointer
+  - with array
+  - with buffer offset
+  - with bad offset
+
