@@ -603,9 +603,13 @@ Quad = {
     -1,-1,0,
     1,-1,0,
     -1,1,0,
-    1,1,0
+    1,-1,0,
+    1,1,0,
+    -1,1,0
   ],
   normals : [
+    0,0,-1,
+    0,0,-1,
     0,0,-1,
     0,0,-1,
     0,0,-1,
@@ -615,15 +619,16 @@ Quad = {
     0,0,
     1,0,
     0,1,
-    1,1
+    1,0,
+    1,1,
+    0,1
   ],
-  indices : [0,1,2,1,3,2],
+  indices : [0,1,2,1,5,2],
   makeVBO : function(gl) {
     return new VBO(gl,
         {size:3, data: Quad.vertices},
         {size:3, data: Quad.normals},
-        {size:2, data: Quad.texcoords},
-        {elements:true, data: Quad.indices}
+        {size:2, data: Quad.texcoords}
     )
   },
   cache: {},
