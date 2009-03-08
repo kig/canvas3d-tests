@@ -246,12 +246,14 @@ File.open("methods.txt", "w") {|f|
     f.puts("#{ret_type} #{name} (#{args.map{|a| a.join(" ")}.join(", ")})")
   }
 }
+puts "Generating templates/"
+FileUtils.rm_r("templates") if File.exist?("templates")
 FileUtils.mkdir_p("templates")
 funcs.each{|ret_type, name, args|
-  unless File.exist?("templates/#{name}.html")
+  unless File.exist?("functions/#{name}.html")
     FileUtils.cp("template.html", "templates/#{name}.html")
   end
-  unless File.exist?("templates/#{name}BadArgs.html")
+  unless File.exist?("functions/#{name}BadArgs.html")
     FileUtils.cp("template.html", "templates/#{name}BadArgs.html")
   end
 }
