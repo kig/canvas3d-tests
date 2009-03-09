@@ -17,7 +17,7 @@ drawArrays
 drawElements
   + with vertex arrays
   + with buffers
-  - with bad args (oob count & offset, oob indices)
+  + with bad args (oob count & offset, oob indices)
 
 getImageData
   - normal
