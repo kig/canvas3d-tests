@@ -39,8 +39,21 @@ Tests.startUnit = function () {
   return [gl];
 }
 
+Tests.setup = function(gl) {
+  var tex = gl.genTextures(1)[0];
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  return [gl]
+}
+
+Tests.teardown = function(gl,tex) {
+  gl.bindTexture(gl.TEXTURE_2D, 0);
+  gl.deleteTextures([tex]);
+}
+
 Tests.testTexImage2D = function(gl) {
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1,1,0,gl.RGBA,gl.UNSIGNED_BYTE, [0,0,0,0]);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 2,1,0,gl.RGBA,gl.UNSIGNED_BYTE, [0,0,0,0,0,0,0,0]);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1,2,0,gl.RGBA,gl.UNSIGNED_BYTE, [0,0,0,0,0,0,0,0]);
 }
 
 Tests.testTexImage2DNull = function(gl) {
