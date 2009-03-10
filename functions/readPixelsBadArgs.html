@@ -57,11 +57,38 @@ Tests.testReadPixels = function(gl) {
   assertFail(function(){gl.readPixels(0,0,1,1, gl.ALPHA, gl.FLOAT);});
 }
 
+Tests.testReadPixelsSOPIMG = function(gl) {
+    var img = document.getElementById("i");
+    while (!img.complete) {}
+    var tex = gl.genTextures(1)[0];
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2DHTML(gl.TEXTURE_2D, img);
+    gl.bindTexture(gl.TEXTURE_2D, 0);
+    // SOP failure
+    assertFail(function(){gl.readPixels(0,0,1,1, gl.RGBA, gl.UNSIGNED_BYTE);});
+    gl.deleteTextures([tex]);
+}
+Tests.testReadPixelsSOPCanvas = function(gl) {
+    var img = document.getElementById("i");
+    while (!img.complete) {}
+    var c = document.getElementById("c");
+    c.getContext("2d").drawImage(img, 0, 0);
+    assertFail(function(){c.getContext("2d").getImageData(0,0,1,1);});
+    var tex = gl.genTextures(1)[0];
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2DHTML(gl.TEXTURE_2D, c);
+    gl.bindTexture(gl.TEXTURE_2D, 0);
+    // SOP failure
+    assertFail(function(){gl.readPixels(0,0,1,1, gl.RGBA, gl.UNSIGNED_BYTE);});
+    gl.deleteTextures([tex]);
+}
+
 Tests.endUnit = function(gl) {
 }
 
 </script>
-<style>canvas{ position:absolute; }</style>
 </head><body>
 <canvas id="gl" width="16" height="16"></canvas>
+<canvas id="c" width="128" height="128"></canvas>
+<img id="i" src="http://mashable.com/wp-content/uploads/2008/08/thunderbird-logo-64x64.png">
 </body></html>

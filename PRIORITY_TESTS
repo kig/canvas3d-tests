@@ -20,14 +20,14 @@ drawElements
   + with bad args (oob count & offset, oob indices)
 
 getImageData
-  - normal
-  - with GL canvas that has a non-SOP texture uploaded
-  - bad args (coords outside viewport, zero size)
+  + normal
+  + with GL canvas that has a non-SOP texture uploaded
+  + bad args (coords outside viewport, zero size)
   
 readPixels
-  - normal
-  - with GL canvas that has a non-SOP texture uploaded
-  - bad args (coords outside viewport, zero size, bad type)
+  + normal
+  + with GL canvas that has a non-SOP texture uploaded
+  + bad args (coords outside viewport, zero size, bad type)
   
 texImage2D
   + with NULL
