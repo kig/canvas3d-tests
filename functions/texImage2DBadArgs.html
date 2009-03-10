@@ -57,6 +57,33 @@ Tests.testTexImage2D = function(gl) {
     assertFail(function(){
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1,2,0,gl.RGBA,gl.UNSIGNED_BYTE, [0,0,0,0]);
     });
+    assertFail(function(){
+        gl.texImage2D(gl.FLOAT, 0, gl.RGBA, 1,1,0,gl.RGBA,gl.UNSIGNED_BYTE, [0,0,0,0]);
+    });
+    assertFail(function(){
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.FLOAT, 1,1,0,gl.RGBA,gl.UNSIGNED_BYTE, [0,0,0,0]);
+    });
+    assertFail(function(){
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1,1,48,gl.RGBA,gl.UNSIGNED_BYTE, [0,0,0,0]);
+    });
+    assertFail(function(){
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 0,0,0,gl.RGBA,gl.UNSIGNED_BYTE, [0,0,0,0]);
+    });
+    assertFail(function(){
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, -1,1,0,gl.RGBA,gl.UNSIGNED_BYTE, [0,0,0,0]);
+    });
+    assertFail(function(){
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1,-1,0,gl.RGBA,gl.UNSIGNED_BYTE, [0,0,0,0]);
+    });
+    assertFail(function(){
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1,1,0,gl.FLOAT,gl.UNSIGNED_BYTE, [0,0,0,0]);
+    });
+    assertFail(function(){
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1,1,0,gl.RGBA,gl.TEXTURE_2D, [0,0,0,0]);
+    });
+    assertFail(function(){
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1,1,0,gl.RGBA,gl.UNSIGNED_BYTE, [0,0,0]);
+    });
 }
 
 
