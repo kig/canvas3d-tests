@@ -75,6 +75,18 @@ Tests.testTexImage2DHTML = function(gl) {
     f.apply();
     f.destroy();
     gl.swapBuffers();
+    var valid_targets = [
+        gl.TEXTURE_2D,
+        gl.TEXTURE_CUBE_MAP_POSITIVE_X,
+        gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
+        gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
+        gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
+        gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
+        gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
+    ];
+    valid_targets.forEach(function(t) {
+        assertOk(function(){gl.texImage2DHTML(t, c);});
+    });
 }
 
 Tests.testTexImage2DHTMLNonSOP = function(gl) {
