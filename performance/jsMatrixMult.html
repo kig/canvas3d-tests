@@ -7,12 +7,12 @@
 <script type="application/x-javascript">
 
 Tests.autorun = false;
-Tests.message = "This might take a second or two";
+Tests.message = "This might take a second or two (or ten)";
 
 Tests.testMatrixMultiply = function() {
     time("testMatrixMultiply", function() {
         var mat = Matrix.identity;
-        for (var i=0; i<1000; i++)
+        for (var i=0; i<1000000; i++)
             Matrix.mul4x4(mat, mat);
     });
 }
@@ -42,7 +42,7 @@ Tests.testTransformStack = function() {
 </script>
 <style>canvas{ position:absolute; }</style>
 </head><body>
-<h3>1000x JavaScript Matrix.mul4x4</h3>
+<h3>1000000x JavaScript Matrix.mul4x4</h3>
 <p id="testMatrixMultiply"></p>
 <h3>1000x JavaScript transform stack</h3>
 <p id="testTransformStack"></p>
