@@ -245,8 +245,6 @@ Tests.gpuGaussianBlur = function(gl) {
   gl.disable(gl.DEPTH_TEST);
   gl.activeTexture(gl.TEXTURE0);
 
-  gl.disable(gl.MULTISAMPLE);
- 
   fbo1.use();
 
   var tex = loadTexture(gl, document.getElementById('logo'));
