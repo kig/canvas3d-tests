@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../unit.css" />
+<script type="application/x-javascript" src="../unit.js"></script>
+<script type="application/x-javascript" src="../util.js"></script>
+<script type="application/x-javascript">
+
+Tests.startUnit = function () {
+  var canvas = document.getElementById('gl');
+  var gl = canvas.getContext(GL_CONTEXT_ID);
+  var tex = gl.genTextures(1)[0];
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  return [gl, tex];
+}
+
+Tests.testTexImage2DHTML = function(gl) {
+    var b = document.createElement('b');
+    var div = document.createElement('div');
+    var c = document.getElementById('c');
+    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, b); });
+    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, div); });
+    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0); });
+    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, "foo"); });
+    assertOk(function() {gl.texImage2DHTML(gl.TEXTURE_2D, c); });
+    assertFail(function() {gl.texImage2DHTML(gl.FLOAT, c); });
+}
+
+Tests.endUnit = function(gl, tex) {
+    gl.bindTexture(gl.TEXTURE_2D, 0);
+    gl.deleteTextures([tex]);
+}
+
+</script>
+<style>canvas{ position:absolute; }</style>
+</head><body>
+<canvas id="gl" width="16" height="16"></canvas>
+<canvas id="c" width="16" height="16"></canvas>
+</body></html>
