@@ -9,14 +9,6 @@ Top priority functions to test are functions that:
 == List of methods ==
   [Legend: + = test exists, - = no test]
 
-bufferData
-  - with array
-  - with bad args
-  
-bufferSubData
-  - with array
-  - with bad args
-
 uniformf
   - with OOB args
   - with bad uniform id
@@ -38,6 +30,14 @@ vertexAttribPointer
 
 
 == Methods that have tests ==
+
+bufferData
+  + with array
+  + with bad args
+
+bufferSubData
+  + with array
+  + with bad args
 
 drawArrays
   + with vertex arrays
