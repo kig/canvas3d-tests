@@ -329,7 +329,8 @@ all_tests_header = <<EOF
 -->
   <title>OpenGL ES 2.0 &lt;canvas&gt; context tests</title>
   <style type="text/css">
-    h2 { font-size: 1em; margin-bottom: 0.2em; }
+    h2 { display: inline; font-size: 1em; margin-bottom: 0.2em; }
+    iframe { display: inline; border: 1px solid black; overflow: hidden;}
   </style>
 </head>
 <body>
@@ -343,8 +344,10 @@ File.open("all_tests.html", "w") {|f|
   f.puts all_tests_header
   all_tests.each{|t|
     f.puts(%Q(
+    <div>
+      <iframe src="#{URI.escape(t)}" width="110" height="42"></iframe>
       <h2><a href="#{URI.escape(t)}">#{CGI.escapeHTML(t)}</a></h2>
-      <iframe src="#{URI.escape(t)}" width="700" height="100"></iframe>
+    </div>
     ))
   }
   f.puts all_tests_footer
