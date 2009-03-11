@@ -99,5 +99,5 @@ vertexAttrib1f -> void vertexAttrib (uint idx, Array values)
 
 
 +void texImage2DHTML (uint target, int level, DOMImageElement image)
-+void texSubImage2DHTML (uint target, int level, DOMImageElement image, int xoff, int yoff, int width, int height)
++void texSubImage2DHTML (uint target, int level, int xoff, int yoff, DOMImageElement image)
 

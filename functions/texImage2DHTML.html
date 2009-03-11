@@ -60,7 +60,7 @@ Tests.testTexImage2DHTML = function(gl) {
     var c = document.getElementById('c');
     var ctx = c.getContext('2d');
     ctx.drawImage(img,0,0);
-    gl.texImage2DHTML(gl.TEXTURE_2D, img);
+    gl.texImage2DHTML(gl.TEXTURE_2D, 0, img);
     gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -69,7 +69,7 @@ Tests.testTexImage2DHTML = function(gl) {
     gl.blendFunc(gl.ONE, gl.ZERO);
     f.apply();
     f.destroy();
-    gl.texImage2DHTML(gl.TEXTURE_2D, c);
+    gl.texImage2DHTML(gl.TEXTURE_2D, 0, c);
     f = new Filter(gl, 'identity-hflip-vert', 'identity-frag');
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     f.apply();
@@ -85,7 +85,8 @@ Tests.testTexImage2DHTML = function(gl) {
         gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
     ];
     valid_targets.forEach(function(t) {
-        assertOk(function(){gl.texImage2DHTML(t, c);});
+        assertOk(function(){gl.texImage2DHTML(t, 0, c);});
+        assertOk(function(){gl.texImage2DHTML(t, 1, c);});
     });
 }
 
@@ -95,8 +96,8 @@ Tests.testTexImage2DHTMLNonSOP = function(gl) {
     var c = document.getElementById('c');
     var ctx = c.getContext('2d');
     ctx.drawImage(img,0,0);
-    gl.texImage2DHTML(gl.TEXTURE_2D, img);
-    gl.texImage2DHTML(gl.TEXTURE_2D, c);
+    gl.texImage2DHTML(gl.TEXTURE_2D, 0, img);
+    gl.texImage2DHTML(gl.TEXTURE_2D, 0, c);
 }
 
 Tests.endUnit = function(gl) {
