@@ -537,7 +537,7 @@ VBO.prototype = {
         this.elementsLength = d.data.length;
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.elementsVBO);
         throwError(gl, "bindBuffer ELEMENT_ARRAY_BUFFER");
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, d.data, gl.SHORT, gl.STATIC_DRAW);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, d.data, gl.UNSIGNED_SHORT, gl.STATIC_DRAW);
         throwError(gl, "bufferData ELEMENT_ARRAY_BUFFER");
       }
     } catch(e) {
