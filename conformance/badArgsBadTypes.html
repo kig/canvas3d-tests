@@ -39,10 +39,7 @@ OTHER DEALINGS IN THE SOFTWARE.
   http://www.khronos.org/registry/gles/api/2.0/gl2.h
   and api_modifications.txt
 */
-
-    Tests.autorun = false;
-    Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
-  Tests.test_activeTexture = function(gl) {
+Tests.test_activeTexture = function(gl) {
   assertFail(function(){ gl.activeTexture('foo'); });
 }
 Tests.test_attachShader = function(gl) {
@@ -449,6 +446,12 @@ Tests.test_validateProgram = function(gl) {
 Tests.test_vertexAttrib = function(gl) {
   assertFail(function(){ gl.vertexAttrib(-20, []); });
   assertFail(function(){ gl.vertexAttrib(1, 'hello'); });
+}
+Tests.test_vertexAttribPointer = function(gl) {
+  assertFail(function(){ gl.vertexAttribPointer(-20, 1, 1, 1); });
+  assertFail(function(){ gl.vertexAttribPointer(1, -20, 1, 1); });
+  assertFail(function(){ gl.vertexAttribPointer(1, 1, -20, 1); });
+  assertFail(function(){ gl.vertexAttribPointer(1, 1, 1, -20); });
 }
 Tests.test_viewport = function(gl) {
   assertFail(function(){ gl.viewport(null, 0, 1, 1); });

@@ -95,7 +95,8 @@ vertexAttrib1f -> void vertexAttrib (uint idx, Array values)
 -vertexAttrib2fv
 -vertexAttrib3fv
 -vertexAttrib4fv
--vertexAttribPointer
+vertexAttribPointer -> void vertexAttribPointer (uint id, uint count, uint type, uint offset)
+
 
 
 +void texImage2DHTML (uint target, int level, DOMImageElement image)

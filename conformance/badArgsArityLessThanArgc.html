@@ -447,6 +447,12 @@ Tests.test_vertexAttrib = function(gl) {
   assertFail(function(){ gl.vertexAttrib(); });
   assertFail(function(){ gl.vertexAttrib(0); });
 }
+Tests.test_vertexAttribPointer = function(gl) {
+  assertFail(function(){ gl.vertexAttribPointer(); });
+  assertFail(function(){ gl.vertexAttribPointer(0); });
+  assertFail(function(){ gl.vertexAttribPointer(0,0); });
+  assertFail(function(){ gl.vertexAttribPointer(0,0,0); });
+}
 Tests.test_viewport = function(gl) {
   assertFail(function(){ gl.viewport(); });
   assertFail(function(){ gl.viewport(0); });
