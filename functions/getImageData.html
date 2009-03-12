@@ -58,10 +58,18 @@ Tests.testGetImageDataRGBA = function(gl) {
   assertEquals(1, id.width);
   assertEquals(1, id.height);
   assertEquals(4, id.data.length);
-  assertEquals([128, 128, 128, 128], id.data);
+  if (id.data.join(",") == "128,128,128,128")
+    assertEquals([128, 128, 128, 128], id.data);
+  else
+    assertEquals([127, 127, 127, 128], id.data);
   gl.clearColor(0.5, 0.5, 0.5, 0.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
   gl.swapBuffers();
+  var id = gl.getImageData(1,2,1,1);
+  if (id.data.join(",") == "128,128,128,0")
+    assertEquals([128, 128, 128, 0], id.data);
+  else
+    assertEquals([0, 0, 0, 0], id.data);
 }
 
 Tests.endUnit = function(gl) {
