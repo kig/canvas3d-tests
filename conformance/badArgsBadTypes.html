@@ -39,6 +39,7 @@ OTHER DEALINGS IN THE SOFTWARE.
   http://www.khronos.org/registry/gles/api/2.0/gl2.h
   and api_modifications.txt
 */
+Tests.autorun=false;
 Tests.test_activeTexture = function(gl) {
   assertFail(function(){ gl.activeTexture('foo'); });
 }

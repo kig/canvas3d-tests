@@ -206,10 +206,7 @@ Tests.testOES20Methods = function(gl) {
     s << "}"
   }.join("\n"),
 
-  "badArgsBadTypes" => %Q(
-    Tests.autorun = false;
-    Tests.message = 'Caution: if your implementation is flaky, this likely segfaults your browser';
-  ) + funcs.map{|_,fn,args|
+  "badArgsBadTypes" => "Tests.autorun=false;\n"+ funcs.map{|_,fn,args|
     s = "Tests.test_#{fn} = function(gl) {\n"
     (0...args.length).each{|i|
       begin
