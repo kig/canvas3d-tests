@@ -25,12 +25,11 @@ Tests.testBufferData = function(gl) {
     assertFail(function(){gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, [1,2,3], gl.FLOAT, gl.STATIC_DRAW);});
     throwError(gl, 'bufferData');
     gl.bindBuffer(gl.ARRAY_BUFFER, 0);
-    gl.bufferData(gl.ARRAY_BUFFER, [1,2,3], gl.FLOAT, gl.STATIC_DRAW);
-    assertFail(function(){throwError(gl, "bufferData AB 0");});
+    assertFail(function(){gl.bufferData(gl.ARRAY_BUFFER, [1,2,3], gl.FLOAT, gl.STATIC_DRAW);});
     throwError(gl, 'bufferData');
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, 0);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, [1,2,3], gl.UNSIGNED_SHORT, gl.STATIC_DRAW);
-    assertFail(function(){throwError(gl, "bufferData EAB 0");});
+    assertFail(function(){gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, [1,2,3], gl.UNSIGNED_SHORT, gl.STATIC_DRAW);});
+    throwError(gl, 'bufferData');
 }
 
 Tests.endUnit = function(gl, buf, ebuf) {

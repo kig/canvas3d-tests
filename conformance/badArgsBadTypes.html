@@ -462,13 +462,11 @@ Tests.test_texImage2DHTML = function(gl) {
   assertFail(function(){ gl.texImage2DHTML(1, 0, null); });
 }
 Tests.test_texSubImage2DHTML = function(gl) {
-  assertFail(function(){ gl.texSubImage2DHTML(-20, 0, new Image(), 0, 0, 0, 0); });
-  assertFail(function(){ gl.texSubImage2DHTML(1, null, new Image(), 0, 0, 0, 0); });
-  assertFail(function(){ gl.texSubImage2DHTML(1, 0, null, 0, 0, 0, 0); });
-  assertFail(function(){ gl.texSubImage2DHTML(1, 0, new Image(), null, 0, 0, 0); });
-  assertFail(function(){ gl.texSubImage2DHTML(1, 0, new Image(), 0, null, 0, 0); });
-  assertFail(function(){ gl.texSubImage2DHTML(1, 0, new Image(), 0, 0, null, 0); });
-  assertFail(function(){ gl.texSubImage2DHTML(1, 0, new Image(), 0, 0, 0, null); });
+  assertFail(function(){ gl.texSubImage2DHTML(-20, 0, 0, 0, new Image()); });
+  assertFail(function(){ gl.texSubImage2DHTML(1, null, 0, 0, new Image()); });
+  assertFail(function(){ gl.texSubImage2DHTML(1, 0, null, 0, new Image()); });
+  assertFail(function(){ gl.texSubImage2DHTML(1, 0, 0, null, new Image()); });
+  assertFail(function(){ gl.texSubImage2DHTML(1, 0, 0, 0, null); });
 }
 Tests.startUnit = function() {
   var canvas = document.getElementById('gl');

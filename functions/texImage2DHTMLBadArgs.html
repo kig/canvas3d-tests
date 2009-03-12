@@ -18,12 +18,13 @@ Tests.testTexImage2DHTML = function(gl) {
     var b = document.createElement('b');
     var div = document.createElement('div');
     var c = document.getElementById('c');
-    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, b); });
-    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, div); });
-    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0); });
-    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, "foo"); });
-    assertOk(function() {gl.texImage2DHTML(gl.TEXTURE_2D, c); });
-    assertFail(function() {gl.texImage2DHTML(gl.FLOAT, c); });
+    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0, b); });
+    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0, div); });
+    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0, 0); });
+    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0, "foo"); });
+    assertOk(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0, c); });
+    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, "foo", c); });
+    assertFail(function() {gl.texImage2DHTML(gl.FLOAT, 0, c); });
 }
 
 Tests.endUnit = function(gl, tex) {
