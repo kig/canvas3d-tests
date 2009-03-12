@@ -23,7 +23,6 @@ Tests.testTexImage2DHTML = function(gl) {
     assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0, 0); });
     assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0, "foo"); });
     assertOk(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0, c); });
-    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, "foo", c); });
     assertFail(function() {gl.texImage2DHTML(gl.FLOAT, 0, c); });
 }
 
