@@ -9,11 +9,6 @@ Top priority functions to test are functions that:
 == List of methods ==
   [Legend: + = test exists, - = no test]
 
-uniformMatrix
-  - with 2x2, 3x3, 4x4 matrices
-  - with OOB args
-  - with bad uniform id 
-  
 vertexAttrib
   - normal
   - with oob args
@@ -79,6 +74,12 @@ uniformi
   + with scalar
   + with OOB args
   + with bad uniform id
+
+uniformMatrix
+  + with 2x2, 3x3, 4x4 matrices
+  + with OOB args
+  + with bad uniform id
+
 
 == Methods lacking implementations ==
 

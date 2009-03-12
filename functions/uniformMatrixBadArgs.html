@@ -12,13 +12,64 @@ Tests.startUnit = function () {
   return [gl];
 }
 
-Tests.testName = function(gl) {
-  assert(false);
+Tests.testUniformf = function(gl) {
+  var sh = new Filter(gl, 'foobar-vert', 'foobar-frag');
+  sh.apply(function(f){
+    var foo = f.uniform('foo');
+    var bar = f.uniform('bar');
+    var bar3 = f.uniform('bar3');
+    assertFail(function(){gl.uniformMatrix(-1, [1,0,0,0, 0,2,0,0, 0,0,3,0, 0,0,0,4]);});
+    assertFail(function(){gl.uniformMatrix(588939, [1,0,0,0, 0,2,0,0, 0,0,3,0, 0,0,0,4]);});
+    assertFail(function(){gl.uniformMatrix(-588939, [1,0,0,0, 0,2,0,0, 0,0,3,0, 0,0,0,4]);});
+    assertFail(function(){gl.uniformMatrix(foo, [0,1,0,0,0, 0,2,0,0, 0,0,3,0, 0,0,0,4]);});
+    assertFail(function(){gl.uniformMatrix(bar, [0,2,1, 2,2]);});
+    assertFail(function(){gl.uniformMatrix(bar3, [0,2,2,2, 2,2,2, 2,1,2]);});
+    assertFail(function(){gl.uniformMatrix(foo, [0,0,0, 0,2,0,0, 0,0,3,0, 0,0,0,4]);});
+    assertFail(function(){gl.uniformMatrix(bar, [1, 2,2]);});
+    assertFail(function(){gl.uniformMatrix(bar, []);});
+    assertFail(function(){gl.uniformMatrix(bar, "foo");});
+    assertFail(function(){gl.uniformMatrix(bar3, [2,2, 2,2,2, 2,1,2]);});
+    gl.uniformMatrix(foo, [1,0,0,0, 0,2,0,0, 0,0,3,0, 0,0,0,4]);
+    gl.uniformMatrix(bar, [2,1, 2,2]);
+    gl.uniformMatrix(bar3, [2,2,2, 2,2,2, 2,1,2]);
+    assertFail(function(){gl.uniformMatrix(foo, [1,0,0, 0,2,0, 0,0,3]);});
+    assertFail(function(){gl.uniformMatrix(bar, [0,2,1, 0,2,2, 0,0,0]);});
+    assertFail(function(){gl.uniformMatrix(bar3, [2,2, 2,2]);});
+  });
+  var d = gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
+  assertEquals([1,2,3,8], d.data);
+  sh.destroy();
 }
 
 Tests.endUnit = function(gl) {
 }
 
+</script>
+<script id="foobar-vert" type="x-shader/x-vertex">
+#version 120
+attribute vec3 Vertex;
+attribute vec2 Tex;
+
+uniform mat2 bar;
+uniform mat3 bar3;
+
+varying vec4 texCoord0;
+void main()
+{
+    texCoord0 = vec4(Tex.s, 1.0-Tex.t, bar[0][1]+bar3[2][1], 0.0);
+    gl_Position = vec4(Vertex, 1.0);
+}
+</script>
+<script id="foobar-frag" type="x-shader/x-fragment">
+#version 120
+
+uniform mat4 foo;
+
+varying vec4 texCoord0;
+void main()
+{
+    gl_FragColor = vec4(foo[0][0]/256.0, foo[1][1]/256.0, foo[2][2]/256.0, foo[3][3]*texCoord0.z/256.0);
+}
 </script>
 <style>canvas{ position:absolute; }</style>
 </head><body>
