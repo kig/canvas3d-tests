@@ -25,14 +25,16 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 */
 
-function loadTexture(gl, elem) {
+function loadTexture(gl, elem, mipmaps) {
   var tex = gl.genTextures(1)[0];
   gl.bindTexture(gl.TEXTURE_2D, tex);
-  gl.texImage2DHTML(gl.TEXTURE_2D, elem);
+  gl.texImage2DHTML(gl.TEXTURE_2D, 0, elem);
+  if (mipmaps != false)
+    gl.generateMipmap(gl.TEXTURE_2D);
   gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-  gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
   return tex;
 }
 
