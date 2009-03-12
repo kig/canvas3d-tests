@@ -14,12 +14,6 @@ vertexAttrib
   - with oob args
   - with bad attrib id
   
-vertexAttribPointer
-  - with array
-  - with buffer offset
-  - with bad offset
-  - with bad attrib id
-
 
 == Methods that have tests ==
 
@@ -79,6 +73,12 @@ uniformMatrix
   + with 2x2, 3x3, 4x4 matrices
   + with OOB args
   + with bad uniform id
+
+vertexAttribPointer
+  + with array
+  + with buffer offset
+  + with bad offset
+  + with bad attrib id
 
 
 == Methods lacking implementations ==
