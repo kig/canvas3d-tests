@@ -95,6 +95,12 @@ Tests.testVertexAttribPointerVBO = function(gl, prog, v,n,t) {
   assertFail(function(){gl.vertexAttribPointer(-8693948, 3, gl.FLOAT, 0);});
   assertFail(function(){gl.vertexAttribPointer(8693948, 3, gl.FLOAT, 0);});
   assertOk(function(){gl.vertexAttribPointer(v, 3, gl.FLOAT, [1,2,5]);});
+  for (var i=0; i<gl.getParameter(gl.MAX_VERTEX_ATTRIBS); i++)
+    gl.vertexAttribPointer(i, 3, gl.FLOAT, [1,2,5,1,2,3,1,2,3,1,2,3,1,2,3]);
+  for (var i=0; i<gl.getParameter(gl.MAX_VERTEX_ATTRIBS); i++)
+    gl.vertexAttribPointer(i, 3, gl.FLOAT, 0);
+  for (var i=0; i<gl.getParameter(gl.MAX_VERTEX_ATTRIBS); i++)
+    gl.vertexAttribPointer(i, 3, gl.FLOAT, [1,2,5,1,2,3,1,2,3,1,2,3,1,2,3]);
   gl.vertexAttribPointer(v, 3, gl.FLOAT, 0);
   gl.bindBuffer(gl.ARRAY_BUFFER, 0);
   gl.deleteBuffers([vbo]);
