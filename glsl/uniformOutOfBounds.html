@@ -39,7 +39,7 @@ Tests.startUnit = function () {
   return [gl];
 }
 
-var arr = ['cr', 'cw', 'vr', 'vw'];
+var arr = ['cr', 'cw', 'vr', 'vw', 'tvw'];
 arr.forEach(function(e){
     if (e == 'vr') {
         Tests['test'+e+'vert'] = function(gl) {
@@ -108,6 +108,17 @@ arr.forEach(function(e){
     gl_Position = vec4(Vertex.st, Tex.s, x[idx]);
   }
 </script>
+<script id="tvwvert" type="x-shader/x-vertex">
+  #version 130
+  in vec3 Vertex; in vec2 Tex;
+  uniform float x[3];
+  void main()
+  {
+    int idx = 4 * int(max(1.0, Vertex.x*20.0));
+    x[2] = Vertex[idx];
+    gl_Position = vec4(Vertex.st, Tex.s, x[2]);
+  }
+</script>
 <script id="vert" type="x-shader/x-vertex">
   #version 130
   in vec3 Vertex; in vec2 Tex;
@@ -161,6 +172,18 @@ arr.forEach(function(e){
     int idx = 4 * int(max(1.0, TexCoord.s*20.0));
     x[idx] = 6.0;
     fragColor = vec4(1.0, 0.0, 0.0, x[idx]);
+  }
+</script>
+<script id="tvwfrag" type="x-shader/x-fragment">
+  #version 130
+  uniform float x[3];
+  out vec4 fragColor;
+  in vec2 TexCoord;
+  void main()
+  {
+    int idx = 4 * int(max(1.0, TexCoord.s*20.0));
+    x[2] = TexCoord[idx];
+    fragColor = vec4(1.0, 0.0, 0.0, x[2]);
   }
 </script>
 <script id="frag" type="x-shader/x-fragment">
