@@ -47,6 +47,15 @@ Tests.testPassingTooManyVBOs = function(gl) {
     assertFail(function(){sh.apply();});
     sh.destroy();
 }
+Tests.testPassingTooManyUniforms = function(gl) {
+    var sh = new Filter(gl, 'vert2', 'frag2');
+    sh.apply(function(f){
+        assertFail(function(){f.uniformf('foo', 3.0);});
+        f.uniformf('bar', 1.0);
+        assertFail(function(){f.uniformf('baz', 1.0);});
+    });
+    sh.destroy();
+}
 
 </script>
 
@@ -67,6 +76,28 @@ Tests.testPassingTooManyVBOs = function(gl) {
   void main()
   {
     fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+  }
+</script>
+<script id="vert2" type="x-shader/x-vertex">
+  #version 130
+  uniform float foo, bar;
+  in vec3 Vertex; in vec2 Tex;
+  out vec2 TexCoord;
+  void main()
+  {
+    TexCoord = Tex.st;
+    gl_Position = vec4(Vertex, bar);
+  }
+</script>
+
+<script id="frag2" type="x-shader/x-fragment">
+  #version 130
+  uniform float baz;
+  out vec4 fragColor;
+  in vec2 TexCoord;
+  void main()
+  {
+    fragColor = vec4(1.0, TexCoord.s, 0.0, 1.0);
   }
 </script>
 
