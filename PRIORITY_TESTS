@@ -103,3 +103,10 @@ vertexAttribPointer
   + with bad offset
   + with bad attrib id
 
+GLSL
+  + OOB access to uniform
+  + OOB access to const array
+  + OOB access to attrib
+  + infinite loops
+  + unused attribs
+  + unused uniforms
