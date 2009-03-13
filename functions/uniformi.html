@@ -22,6 +22,14 @@ Tests.testUniformf = function(gl) {
   });
   var d = gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
   assertEquals([1,2,3,8], d.data);
+  sh.apply(function(f){
+    var foo = f.uniform('foo');
+    var bar = f.uniform('bar');
+    gl.uniformi(foo, 2,2,3,4);
+    gl.uniformi(bar, 3);
+  });
+  var d = gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
+  assertEquals([2,2,3,12], d.data);
   sh.destroy();
 }
 
