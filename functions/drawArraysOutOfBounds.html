@@ -65,15 +65,13 @@ Tests.endUnit = function(gl, prog, v,n,t) {
 }
 
 Tests.testDrawArraysEmpty = function(gl, prog, v,n,t) {
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, []);
-  assertFail(function(){throwError(gl, "vertexAttribPointer")});
+  assertFail(function(){gl.vertexAttribPointer(v, 3, gl.FLOAT, []);})
   gl.enableVertexAttribArray(v);
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
-  assertOk(function(){throwError(gl, "drawArrays")});
 }
 
 Tests.testDrawArraysOutOfBounds = function(gl, v,n,t) {
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, []);
+  assertFail(function(){gl.vertexAttribPointer(v, 3, gl.FLOAT, []);});
   gl.enableVertexAttribArray(v);
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 10000);});
