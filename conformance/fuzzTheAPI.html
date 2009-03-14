@@ -1,0 +1,444 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../unit.css" />
+<script type="application/x-javascript" src="../unit.js"></script>
+
+<script type="application/x-javascript">
+
+Tests.autorun = false;
+Tests.message = "This will fuzz the API with random inputs for a [long] while."
+
+function randomFloat () {
+    var fac = 1.0;
+    if (Math.random() < 0.4)
+        fac = 10;
+    else if (Math.random() < 0.6)
+        fac = 100;
+    else if (Math.random() < 0.7)
+        fac = 1000;
+    else if (Math.random() < 0.8)
+        fac = 100000;
+    else if (Math.random() < 0.9)
+        fac = 10000000;
+    return -0.5*fac + Math.random() * fac;
+}
+function randomInt () { return Math.floor(randomFloat); }
+function randomArray () {
+    var l = Math.floor(Math.random() * 256);
+    var s = new Array(l);
+    for (var i=0; i<l; i++)
+        s[i] = Math.floor(Math.random() * 256)-1;
+    return s;
+}
+function randomString () {
+    return String.fromCharCode.apply(String, randomArray());
+}
+function randomGLConstant () {
+    return constants[Math.floor(Math.random() * constants.length)];
+}
+
+function generateArg(pos, count) {
+    if (pos == 0 && Math.random() < 0.5)
+        return randomGLConstant();
+    if (pos == count-1 && Math.random() < 0.25)
+        if (Math.random() < 0.5)
+            return randomString();
+        else
+            return randomArray();
+    var r = Math.random();
+    if (r < 0.25) {
+        return randomFloat();
+    } else if (r < 0.6) {
+        return randomInt();
+    } else if (r < 0.7) {
+        return (r < 0.65);
+    } else if (r < 0.77) {
+        return randomString();
+    } else if (r < 0.84) {
+        return randomArray();
+    } else if (r < 0.98) {
+        return randomGLConstant();
+    } else {
+        return null;
+    }
+}
+
+function generateArgs(count) {
+    var arr = new Array(count);
+    for (var i=0; i<count; i++)
+        arr[i] = generateArg(i, count);
+    return arr;
+}
+
+Tests.testGetGLWeb20 = function() {
+    var testProgress = document.getElementById('testProgress');
+    var canvas = document.getElementById('glweb20');
+    var gl;
+    assertOk(function(){gl = canvas.getContext(GL_CONTEXT_ID)});
+    var funcs = [];
+    for (var m in gl) {
+        if (typeof gl[m] == 'function') {
+            funcs.push(m);
+        }
+    }
+    var idx = 0, count = 0;
+    var limit = 1000;
+    var iv1, iv2;
+    iv1 = setInterval(function(){
+        if (idx >= funcs.length) {
+            iv2 = setInterval(function(){
+                if (count >= limit) {
+                    clearInterval(iv2);
+                    return false;
+                }
+                count++;
+                var idx = Math.floor(Math.random() * funcs.length);
+                var m = funcs[idx];
+                testProgress.textContent += "1000 random calls on " + m + "... "
+                doTestNotify(m);
+                for (var i=0; i<100; i++) {
+                    for (var j=0; j<10; j++) {
+                        var args = generateArgs(j);
+                        doTestNotify(m + ": " + args.toSource());
+                        try {
+                            gl[m].apply(gl, args);
+                        } catch (e) {
+                        }
+                    }
+                }
+                doTestNotify(m+"--OK");
+                testProgress.textContent += "done\n"
+            }, 0);
+            clearInterval(iv1);
+            return false;
+        }
+        var m = funcs[idx];
+        idx++;
+        testProgress.textContent += "1000 random calls on " + m + "... "
+        doTestNotify(m);
+        for (var i=0; i<100; i++) {
+            for (var j=0; j<10; j++) {
+                var args = generateArgs(j);
+                doTestNotify(m + ": " + args.toSource());
+                try {
+                    gl[m].apply(gl, args);
+                } catch (e) {
+                }
+            }
+        }
+        doTestNotify(m+"--OK");
+        testProgress.textContent += "done\n"
+    }, 0);
+}
+
+constants = [
+1,
+0x00000100,
+0x00000400,
+0x00004000,
+0x0000,
+0x0001,
+0x0002,
+0x0003,
+0x0004,
+0x0005,
+0x0006,
+0,
+1,
+0x0300,
+0x0301,
+0x0302,
+0x0303,
+0x0304,
+0x0305,
+0x0306,
+0x0307,
+0x0308,
+0x8006,
+0x8009,
+0x8009,
+0x883D,
+0x800A,
+0x800B,
+0x80C8,
+0x80C9,
+0x80CA,
+0x80CB,
+0x8001,
+0x8002,
+0x8003,
+0x8004,
+0x8005,
+0x8892,
+0x8893,
+0x8894,
+0x8895,
+0x88E0,
+0x88E4,
+0x88E8,
+0x8764,
+0x8765,
+0x8626,
+0x0404,
+0x0405,
+0x0408,
+0x0DE1,
+0x0B44,
+0x0BE2,
+0x0BD0,
+0x0B90,
+0x0B71,
+0x0C11,
+0x8037,
+0x809E,
+0x80A0,
+0,
+0x0500,
+0x0501,
+0x0502,
+0x0505,
+0x0900,
+0x0901,
+0x0B21,
+0x846D,
+0x846E,
+0x0B45,
+0x0B46,
+0x0B70,
+0x0B72,
+0x0B73,
+0x0B74,
+0x0B91,
+0x0B92,
+0x0B94,
+0x0B95,
+0x0B96,
+0x0B97,
+0x0B93,
+0x0B98,
+0x8800,
+0x8801,
+0x8802,
+0x8803,
+0x8CA3,
+0x8CA4,
+0x8CA5,
+0x0BA2,
+0x0C10,
+0x0C22,
+0x0C23,
+0x0CF5,
+0x0D05,
+0x0D33,
+0x0D3A,
+0x0D50,
+0x0D52,
+0x0D53,
+0x0D54,
+0x0D55,
+0x0D56,
+0x0D57,
+0x2A00,
+0x8038,
+0x8069,
+0x80A8,
+0x80A9,
+0x80AA,
+0x80AB,
+0x86A2,
+0x86A3,
+0x1100,
+0x1101,
+0x1102,
+0x8192,
+0x1400,
+0x1401,
+0x1402,
+0x1403,
+0x1404,
+0x1405,
+0x1406,
+0x140C,
+0x1902,
+0x1906,
+0x1907,
+0x1908,
+0x1909,
+0x190A,
+0x8033,
+0x8034,
+0x8363,
+0x8B30,
+0x8B31,
+0x8869,
+0x8DFB,
+0x8DFC,
+0x8B4D,
+0x8B4C,
+0x8872,
+0x8DFD,
+0x8B4F,
+0x8B80,
+0x8B82,
+0x8B83,
+0x8B85,
+0x8B86,
+0x8B87,
+0x8B89,
+0x8B8A,
+0x8B8C,
+0x8B8D,
+0x0200,
+0x0201,
+0x0202,
+0x0203,
+0x0204,
+0x0205,
+0x0206,
+0x0207,
+0x1E00,
+0x1E01,
+0x1E02,
+0x1E03,
+0x150A,
+0x8507,
+0x8508,
+0x1F00,
+0x1F01,
+0x1F02,
+0x1F03,
+0x2600,
+0x2601,
+0x2700,
+0x2701,
+0x2702,
+0x2703,
+0x2800,
+0x2801,
+0x2802,
+0x2803,
+0x1702,
+0x8513,
+0x8514,
+0x8515,
+0x8516,
+0x8517,
+0x8518,
+0x8519,
+0x851A,
+0x851C,
+0x84C0,
+0x84C1,
+0x84C2,
+0x84C3,
+0x84C4,
+0x84C5,
+0x84C6,
+0x84C7,
+0x84C8,
+0x84C9,
+0x84CA,
+0x84CB,
+0x84CC,
+0x84CD,
+0x84CE,
+0x84CF,
+0x84D0,
+0x84D1,
+0x84D2,
+0x84D3,
+0x84D4,
+0x84D5,
+0x84D6,
+0x84D7,
+0x84D8,
+0x84D9,
+0x84DA,
+0x84DB,
+0x84DC,
+0x84DD,
+0x84DE,
+0x84DF,
+0x84E0,
+0x2901,
+0x812F,
+0x8370,
+0x8B50,
+0x8B51,
+0x8B52,
+0x8B53,
+0x8B54,
+0x8B55,
+0x8B56,
+0x8B57,
+0x8B58,
+0x8B59,
+0x8B5A,
+0x8B5B,
+0x8B5C,
+0x8B5E,
+0x8B60,
+0x8622,
+0x8623,
+0x8624,
+0x8625,
+0x886A,
+0x8645,
+0x889F,
+0x8B9A,
+0x8B9B,
+0x8B81,
+0x8B84,
+0x8B88,
+0x8DFA,
+0x8DF8,
+0x8DF9,
+0x8DF0,
+0x8DF1,
+0x8DF2,
+0x8DF3,
+0x8DF4,
+0x8DF5,
+0x8D40,
+0x8D41,
+0x8056,
+0x8057,
+0x8D62,
+0x81A5,
+0x1901,
+0x8D48,
+0x8D42,
+0x8D43,
+0x8D44,
+0x8D50,
+0x8D51,
+0x8D52,
+0x8D53,
+0x8D54,
+0x8D55,
+0x8CD0,
+0x8CD1,
+0x8CD2,
+0x8CD3,
+0x8CE0,
+0x8D00,
+0x8D20,
+0,
+0x8CD5,
+0x8CD6,
+0x8CD7,
+0x8CD9,
+0x8CDD,
+0x8CA6,
+0x8CA7,
+0x84E8,
+0x0506,
+0x809D
+];
+</script>
+<style>canvas{position:absolute;}</style>
+</head><body>
+  <canvas id="glweb20" width="16" height="16"></canvas>
+  <pre id="testProgress"></pre>
+</body></html>
