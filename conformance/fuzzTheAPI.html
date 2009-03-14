@@ -11,21 +11,26 @@ Tests.message = "This will fuzz the API with random inputs for a [long] while."
 
 function randomFloat () {
     var fac = 1.0;
-    if (Math.random() < 0.4)
+    var r = Math.random();
+    if (r < 0.25)
         fac = 10;
-    else if (Math.random() < 0.6)
+    else if (r < 0.4)
         fac = 100;
-    else if (Math.random() < 0.7)
+    else if (r < 0.5)
         fac = 1000;
-    else if (Math.random() < 0.8)
+    else if (r < 0.6)
         fac = 100000;
-    else if (Math.random() < 0.9)
+    else if (r < 0.7)
         fac = 10000000;
+    else if (r < 0.8)
+        fac = NaN;
     return -0.5*fac + Math.random() * fac;
 }
-function randomInt () { return Math.floor(randomFloat); }
+function randomInt () { return Math.floor(randomFloat()); }
 function randomArray () {
     var l = Math.floor(Math.random() * 256);
+    if (Math.random < 0.5) l = l / 10;
+    if (Math.random < 0.3) l = l / 10;
     var s = new Array(l);
     for (var i=0; i<l; i++)
         s[i] = Math.floor(Math.random() * 256)-1;
@@ -71,17 +76,32 @@ function generateArgs(count) {
     return arr;
 }
 
+function randomCall(testProgress, gl, m) {
+    testProgress.textContent += "1000 random calls on " + m + "... "
+    doTestNotify(m);
+    for (var i=0; i<100; i++) {
+        for (var j=0; j<10; j++) {
+            var args = generateArgs(j);
+            doTestNotify(m + ": " + args.toSource());
+            try {
+                gl[m].apply(gl, args);
+            } catch (e) {
+            }
+        }
+    }
+    doTestNotify(m+"--OK");
+    testProgress.textContent += "done\n"
+}
+
 Tests.testGetGLWeb20 = function() {
     var testProgress = document.getElementById('testProgress');
     var canvas = document.getElementById('glweb20');
     var gl;
     assertOk(function(){gl = canvas.getContext(GL_CONTEXT_ID)});
     var funcs = [];
-    for (var m in gl) {
-        if (typeof gl[m] == 'function') {
+    for (var m in gl)
+        if (typeof gl[m] == 'function')
             funcs.push(m);
-        }
-    }
     var idx = 0, count = 0;
     var limit = 1000;
     var iv1, iv2;
@@ -94,41 +114,14 @@ Tests.testGetGLWeb20 = function() {
                 }
                 count++;
                 var idx = Math.floor(Math.random() * funcs.length);
-                var m = funcs[idx];
-                testProgress.textContent += "1000 random calls on " + m + "... "
-                doTestNotify(m);
-                for (var i=0; i<100; i++) {
-                    for (var j=0; j<10; j++) {
-                        var args = generateArgs(j);
-                        doTestNotify(m + ": " + args.toSource());
-                        try {
-                            gl[m].apply(gl, args);
-                        } catch (e) {
-                        }
-                    }
-                }
-                doTestNotify(m+"--OK");
-                testProgress.textContent += "done\n"
+                randomCall(testProgress, gl, funcs[idx]);
             }, 0);
             clearInterval(iv1);
             return false;
         }
         var m = funcs[idx];
         idx++;
-        testProgress.textContent += "1000 random calls on " + m + "... "
-        doTestNotify(m);
-        for (var i=0; i<100; i++) {
-            for (var j=0; j<10; j++) {
-                var args = generateArgs(j);
-                doTestNotify(m + ": " + args.toSource());
-                try {
-                    gl[m].apply(gl, args);
-                } catch (e) {
-                }
-            }
-        }
-        doTestNotify(m+"--OK");
-        testProgress.textContent += "done\n"
+        randomCall(testProgress, gl, funcs[idx]);
     }, 0);
 }
 
