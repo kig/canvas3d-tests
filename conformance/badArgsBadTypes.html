@@ -183,7 +183,8 @@ Tests.test_depthMask = function(gl) {
   assertFail(function(){ gl.depthMask(['s',2,3]); });
 }
 Tests.test_depthRange = function(gl) {
-  assertFail(function(){ gl.depthRange('foo'); });
+  assertFail(function(){ gl.depthRange('foo', 4.8); });
+  assertFail(function(){ gl.depthRange(4.8, 'foo'); });
 }
 Tests.test_detachShader = function(gl) {
   assertFail(function(){ gl.detachShader('foo', 1); });
@@ -257,9 +258,6 @@ Tests.test_getAttribLocation = function(gl) {
   assertFail(function(){ gl.getAttribLocation('foo', 'foo'); });
   assertFail(function(){ gl.getAttribLocation(1, 89); });
 }
-Tests.test_getParameter = function(gl) {
-  assertFail(function(){ gl.getParameter('foo'); });
-}
 Tests.test_getBufferParameter = function(gl) {
   assertFail(function(){ gl.getBufferParameter('foo', 1); });
   assertFail(function(){ gl.getBufferParameter(1, 'foo'); });
@@ -292,21 +290,9 @@ Tests.test_getShaderInfoLog = function(gl) {
 Tests.test_getShaderSource = function(gl) {
   assertFail(function(){ gl.getShaderSource('foo'); });
 }
-Tests.test_getTexParameter = function(gl) {
-  assertFail(function(){ gl.getTexParameter('foo', 1); });
-  assertFail(function(){ gl.getTexParameter(1, 'foo'); });
-}
-Tests.test_getUniform = function(gl) {
-  assertFail(function(){ gl.getUniform('foo', 1); });
-  assertFail(function(){ gl.getUniform(1, 'foo'); });
-}
 Tests.test_getUniformLocation = function(gl) {
   assertFail(function(){ gl.getUniformLocation('foo', 'foo'); });
   assertFail(function(){ gl.getUniformLocation(1, 89); });
-}
-Tests.test_getVertexAttrib = function(gl) {
-  assertFail(function(){ gl.getVertexAttrib('foo', 1); });
-  assertFail(function(){ gl.getVertexAttrib(1, 'foo'); });
 }
 Tests.test_hint = function(gl) {
   assertFail(function(){ gl.hint('foo', 0); });
@@ -410,10 +396,6 @@ Tests.test_texImage2D = function(gl) {
   assertFail(function(){ gl.texImage2D(1, 0, 0, 1, 1, 0, 'foo', 0, []); });
   assertFail(function(){ gl.texImage2D(1, 0, 0, 1, 1, 0, 0, 'foo', []); });
   assertFail(function(){ gl.texImage2D(1, 0, 0, 1, 1, 0, 0, 0, 'hello'); });
-}
-Tests.test_getTexParameter = function(gl) {
-  assertFail(function(){ gl.getTexParameter('foo', 1); });
-  assertFail(function(){ gl.getTexParameter(1, 'foo'); });
 }
 Tests.test_texSubImage2D = function(gl) {
   assertFail(function(){ gl.texSubImage2D('foo', 0, 0, 0, 1, 1, 0, 0, []); });
@@ -570,21 +552,24 @@ Tests.test_viewport = function(gl) {
   assertFail(function(){ gl.viewport(0, 0, -10, 1); });
   assertFail(function(){ gl.viewport(0, 0, 1, -10); });
 }
-Tests.test_uniformf = function(gl) {
-  assertFail(function(){ gl.uniformf('foo', []); });
-  assertFail(function(){ gl.uniformf(0, 'hello'); });
+Tests.test_getParameter = function(gl) {
+  assertFail(function(){ gl.getParameter('foo'); });
 }
-Tests.test_uniformi = function(gl) {
-  assertFail(function(){ gl.uniformi('foo', []); });
-  assertFail(function(){ gl.uniformi(0, 'hello'); });
+Tests.test_getTexParameter = function(gl) {
+  assertFail(function(){ gl.getTexParameter('foo', 1); });
+  assertFail(function(){ gl.getTexParameter(1, 'foo'); });
 }
-Tests.test_uniformMatrix = function(gl) {
-  assertFail(function(){ gl.uniformMatrix('foo', []); });
-  assertFail(function(){ gl.uniformMatrix(0, 'hello'); });
+Tests.test_getUniform = function(gl) {
+  assertFail(function(){ gl.getUniform('foo', 1); });
+  assertFail(function(){ gl.getUniform(1, 'foo'); });
 }
-Tests.test_vertexAttrib = function(gl) {
-  assertFail(function(){ gl.vertexAttrib('foo', []); });
-  assertFail(function(){ gl.vertexAttrib(1, 'hello'); });
+Tests.test_getVertexAttrib = function(gl) {
+  assertFail(function(){ gl.getVertexAttrib('foo', 1); });
+  assertFail(function(){ gl.getVertexAttrib(1, 'foo'); });
+}
+Tests.test_getTexParameter = function(gl) {
+  assertFail(function(){ gl.getTexParameter('foo', 1); });
+  assertFail(function(){ gl.getTexParameter(1, 'foo'); });
 }
 Tests.test_texImage2DHTML = function(gl) {
   assertFail(function(){ gl.texImage2DHTML('foo', 0, new Image()); });

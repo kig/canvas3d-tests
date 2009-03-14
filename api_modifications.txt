@@ -14,7 +14,7 @@ deleteBuffers -> void deleteBuffers (Array buffers)
 deleteFramebuffers -> void deleteFramebuffers (Array buffers)
 deleteRenderbuffers -> void deleteRenderbuffers (Array buffers)
 deleteTextures -> void deleteTextures (Array textures)
-depthRangef -> void depthRange (float value)
+depthRangef -> void depthRange (float min, float max)
 drawElements -> void drawElements (uint mode, uint count, Array indices)
 
 -finish
@@ -28,7 +28,8 @@ getActiveAttrib -> Object getActiveAttrib (uint program, uint index)
 getActiveUniform -> Object getActiveUniform (uint program, uint index)
 getAttachedShaders -> Array getAttachedShaders (uint program)
 getAttribLocation -> int getAttribLocation (uint program, string name)
-getBooleanv -> Object getParameter (uint pname)
++Object getParameter (uint pname)
+-getBooleanv
 -getFloatv
 -getIntegerv
 -getPointerv
@@ -44,12 +45,15 @@ getShaderInfoLog -> string getShaderInfoLog (uint shader)
 # getShaderPrecisionFormat -> Object getShaderPrecisionFormat (uint shaderType, uint precisionType)
 -getShaderPrecisionFormat
 getShaderSource -> string getShaderSource (uint shader)
-getTexParameteriv -> Object getTexParameter (uint target, uint pname)
++Object getTexParameter (uint target, uint pname)
+-getTexParameteriv
 -getTexParameterfv
-getUniformfv -> Object getUniform (uint program, uint pname)
++Object getUniform (uint program, uint pname)
+-getUniformfv
 -getUniformiv
 getUniformLocation -> uint getUniformLocation (uint program, string name)
-getVertexAttribfv -> Object getVertexAttrib (uint index, uint pname)
++Object getVertexAttrib (uint index, uint pname)
+-getVertexAttribfv
 -getVertexAttribiv
 -getVertexAttribPointerv
 
@@ -62,30 +66,27 @@ readPixels -> Object readPixels (int x, int y, uint width, uint height, uint for
 shaderSource -> void shaderSource (uint shader, string source)
 
 texImage2D -> void texImage2D (GLuint target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, Array data)
-texParameterf -> Object getTexParameter (uint target, uint pname)
++Object getTexParameter (uint target, uint pname)
+-texParameterf
 -texParameteri
 -texParameterfv
 -texParameteriv
 texSubImage2D -> void texSubImage2D (GLuint target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, Array data)
 
-+void uniformf (int location, Array values)
 uniform1fv -> void uniform1fv (GLuint target, Array data)
 uniform2fv -> void uniform2fv (GLuint target, Array data)
 uniform3fv -> void uniform3fv (GLuint target, Array data)
 uniform4fv -> void uniform4fv (GLuint target, Array data)
 
-+void uniformi (int location, Array values)
 uniform1iv -> void uniform1iv (GLuint target, Array data)
 uniform2iv -> void uniform2iv (GLuint target, Array data)
 uniform3iv -> void uniform3iv (GLuint target, Array data)
 uniform4iv -> void uniform4iv (GLuint target, Array data)
 
-+void uniformMatrix (int location, Array values)
 uniformMatrix2fv -> void uniformMatrix2fv (GLuint target, Array data)
 uniformMatrix3fv -> void uniformMatrix3fv (GLuint target, Array data)
 uniformMatrix4fv -> void uniformMatrix4fv (GLuint target, Array data)
 
-+void vertexAttrib (uint idx, Array values)
 vertexAttrib1fv -> void vertexAttrib1fv (GLuint target, Array data)
 vertexAttrib2fv -> void vertexAttrib2fv (GLuint target, Array data)
 vertexAttrib3fv -> void vertexAttrib3fv (GLuint target, Array data)

@@ -206,6 +206,14 @@ Tests.testOES20Methods = function(gl) {
     s << "}"
   }.join("\n"),
 
+  "badArgsArityMoreThanArgc" => funcs.map {|_,fn,args|
+    s = "Tests.test_#{fn} = function(gl) {\n"
+    s << "  assertFail(function(){ gl.#{fn}(#{
+            (["0"] * (args.length+1)).join(",")}); });\n"
+    s << "}"
+  }.join("\n"),
+
+
   "badArgsBadTypes" => "Tests.autorun=false;\n"+ funcs.map{|_,fn,args|
     s = "Tests.test_#{fn} = function(gl) {\n"
     (0...args.length).each{|i|
