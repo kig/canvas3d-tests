@@ -70,7 +70,7 @@ Tests.testDrawArraysEmpty = function(gl, prog, v,n,t) {
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
 }
 
-Tests.testDrawArraysOutOfBounds = function(gl, v,n,t) {
+Tests.testDrawArraysOutOfBounds = function(gl, prog, v,n,t) {
   assertFail(function(){gl.vertexAttribPointer(v, 3, gl.FLOAT, []);});
   gl.enableVertexAttribArray(v);
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
@@ -84,7 +84,7 @@ Tests.testDrawArraysOutOfBounds = function(gl, v,n,t) {
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, -1, 1);});
 }
 
-Tests.testDrawArraysWithDataOutOfBounds = function(gl, v,n,t) {
+Tests.testDrawArraysWithDataOutOfBounds = function(gl, prog, v,n,t) {
   gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
   gl.enableVertexAttribArray(v);
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 3, 2);});
@@ -98,7 +98,7 @@ Tests.testDrawArraysWithDataOutOfBounds = function(gl, v,n,t) {
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, -1, 1);});
 }
 
-Tests.testDrawArraysMultiOutOfBounds = function(gl, v,n,t) {
+Tests.testDrawArraysMultiOutOfBounds = function(gl, prog, v,n,t) {
   gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
   gl.vertexAttribPointer(n, 3, gl.FLOAT, normals);
   gl.vertexAttribPointer(t, 2, gl.FLOAT, texcoords);
