@@ -48,7 +48,7 @@ File.read("api_modifications.txt").strip.split("\n").each{|l|
   next if l.empty? or l =~ /^#/
   if l =~ /^[-+]?[A-Z0-9_]+([\s-]|$)/ # constant
       if l[0,1] == "+"
-        api.push("#define #{l[1..-1]}")
+        api.push("#define GL_#{l[1..-1]}")
       else
         if l[0,1] == "-"
           fname = l[1..-1]
@@ -124,13 +124,13 @@ $generators = {
 
 $bad_generators = {
   "enum" => "'foo'",
-  "uint" => "-20",
-  "int" => "null",
+  "uint" => "'foo'",
+  "int" => "'foo'",
   "byte" => "3889",
   "float" => "'foo'",
   "string" => "89",
   "sizei" => "-10",
-  "clampf" => "null",
+  "clampf" => "'foo'",
   "bitfield" => "'no'",
   "Array" => "'hello'",
   "boolean" => "['s',2,3]",

@@ -1,5 +1,6 @@
 -FALSE
 -TRUE
++MULTISAMPLE 0x809D
 
 bindAttribLocation -> void bindAttribLocation (uint program, uint index, string name)
 bufferData -> void bufferData (uint target, Array data, uint elementType, uint usage)
@@ -60,41 +61,36 @@ readPixels -> Object readPixels (int x, int y, uint width, uint height, uint for
 -shaderBinary
 shaderSource -> void shaderSource (uint shader, string source)
 
-texImage2D -> void texImage2D (GLuint target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, string data)
+texImage2D -> void texImage2D (GLuint target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, Array data)
 texParameterf -> Object getTexParameter (uint target, uint pname)
 -texParameteri
 -texParameterfv
 -texParameteriv
-texSubImage2D -> void texSubImage2D (GLuint target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, string data)
+texSubImage2D -> void texSubImage2D (GLuint target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, Array data)
 
-uniform1f -> void uniformf (int location, Array values)
--uniform2f
--uniform3f
--uniform4f
--uniform1fv
--uniform2fv
--uniform3fv
--uniform4fv
-uniform1i -> void uniformi (int location, Array values)
--uniform2i
--uniform3i
--uniform4i
--uniform1iv
--uniform2iv
--uniform3iv
--uniform4iv
-uniformMatrix2fv -> void uniformMatrix (int location, Array values)
--uniformMatrix3fv
--uniformMatrix4fv
++void uniformf (int location, Array values)
+uniform1fv -> void uniform1fv (GLuint target, Array data)
+uniform2fv -> void uniform2fv (GLuint target, Array data)
+uniform3fv -> void uniform3fv (GLuint target, Array data)
+uniform4fv -> void uniform4fv (GLuint target, Array data)
 
-vertexAttrib1f -> void vertexAttrib (uint idx, Array values)
--vertexAttrib2f
--vertexAttrib3f
--vertexAttrib4f
--vertexAttrib1fv
--vertexAttrib2fv
--vertexAttrib3fv
--vertexAttrib4fv
++void uniformi (int location, Array values)
+uniform1iv -> void uniform1iv (GLuint target, Array data)
+uniform2iv -> void uniform2iv (GLuint target, Array data)
+uniform3iv -> void uniform3iv (GLuint target, Array data)
+uniform4iv -> void uniform4iv (GLuint target, Array data)
+
++void uniformMatrix (int location, Array values)
+uniformMatrix2fv -> void uniformMatrix2fv (GLuint target, Array data)
+uniformMatrix3fv -> void uniformMatrix3fv (GLuint target, Array data)
+uniformMatrix4fv -> void uniformMatrix4fv (GLuint target, Array data)
+
++void vertexAttrib (uint idx, Array values)
+vertexAttrib1fv -> void vertexAttrib1fv (GLuint target, Array data)
+vertexAttrib2fv -> void vertexAttrib2fv (GLuint target, Array data)
+vertexAttrib3fv -> void vertexAttrib3fv (GLuint target, Array data)
+vertexAttrib4fv -> void vertexAttrib4fv (GLuint target, Array data)
+
 vertexAttribPointer -> void vertexAttribPointer (uint id, uint count, uint type, uint offset)
 
 
