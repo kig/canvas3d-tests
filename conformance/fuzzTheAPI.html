@@ -129,32 +129,47 @@ function generateArgs(count) {
     return arr;
 }
 
-function randomCall(testProgress, gl, m) {
+function randomCall(testProgress, gl, m, arities) {
     doTestNotify(m);
     var argcs = {};
     var foundArity = false;
-    testProgress.textContent += "            500 random arity calls on " + m + "\n";
-    for (var i=0; i<50; i++) {
-        for (var j=0; j<10; j++) {
-            var args = generateArgs(j);
-            doTestNotify(m + ": " + args.toSource());
-            try {
-                gl[m].apply(gl, args);
-                argcs[j] = true;
-                foundArity = true;
-            } catch (e) {
+    if (arities == null) {
+        testProgress.textContent += "            500 random arity calls on " + m + "\n";
+        for (var i=0; i<50; i++) {
+            for (var j=0; j<10; j++) {
+                var args = generateArgs(j);
+                doTestNotify(m + ": " + args.toSource());
+                try {
+                    gl[m].apply(gl, args);
+                    argcs[j] = true;
+                    foundArity = true;
+                } catch (e) {
+                }
             }
         }
-    }
-    for (var j in argcs) {
-        testProgress.textContent += "200 arity " + j + " calls on " + m + "\n";
-        for (var i=0; i<200; i++) {
-            var args = generateArgs(j);
-            doTestNotify(m + ": " + args.toSource());
-            try {
-                gl[m].apply(gl, args);
-                argcs[j] = true;
-            } catch (e) {
+        for (var j in argcs) {
+            testProgress.textContent += "200 arity " + j + " calls on " + m + "\n";
+            for (var i=0; i<200; i++) {
+                var args = generateArgs(j);
+                doTestNotify(m + ": " + args.toSource());
+                try {
+                    gl[m].apply(gl, args);
+                    argcs[j] = true;
+                } catch (e) {
+                }
+            }
+        }
+    } else {
+        for (var k=0; k<arities.length; k++) {
+            var j = arities[k];
+            testProgress.textContent += "500 arity " + j + " calls on " + m + "\n";
+            for (var i=0; i<500; i++) {
+                var args = generateArgs(j);
+                doTestNotify(m + ": " + args.toSource());
+                try {
+                    gl[m].apply(gl, args);
+                } catch (e) {
+                }
             }
         }
     }
