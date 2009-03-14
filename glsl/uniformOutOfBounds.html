@@ -41,22 +41,12 @@ Tests.startUnit = function () {
 
 var arr = ['cr', 'cw', 'vr', 'vw', 'tvw'];
 arr.forEach(function(e){
-    if (e == 'vr') {
-        Tests['test'+e+'vert'] = function(gl) {
-            var sh = new Filter(gl, e+'vert', 'frag');
-            assertOk(function(){sh.apply(function(f){
-                f.uniformf('x', [0.0, 1.0, 2.0]);
-            });});
-            sh.destroy();
-        }
-    } else {
-        Tests['test'+e+'vert'] = function(gl) {
-            var sh = new Filter(gl, e+'vert', 'frag');
-            assertFail(function(){sh.apply(function(f){
-                f.uniformf('x', [0.0, 1.0, 2.0]);
-            });});
-            sh.destroy();
-        }
+    Tests['test'+e+'vert'] = function(gl) {
+        var sh = new Filter(gl, e+'vert', 'frag');
+        assertFail(function(){sh.apply(function(f){
+            f.uniformf('x', [0.0, 1.0, 2.0]);
+        });});
+        sh.destroy();
     }
     Tests['test'+e+'frag'] = function(gl) {
         var sh = new Filter(gl, 'vert', e+'frag');
