@@ -21,23 +21,59 @@ function randomFloat () {
     else if (r < 0.6)
         fac = 100000;
     else if (r < 0.7)
-        fac = 10000000;
+        fac = 10000000000;
     else if (r < 0.8)
         fac = NaN;
     return -0.5*fac + Math.random() * fac;
 }
 function randomInt () { return Math.floor(randomFloat()); }
-function randomArray () {
+function randomLength () {
     var l = Math.floor(Math.random() * 256);
     if (Math.random < 0.5) l = l / 10;
     if (Math.random < 0.3) l = l / 10;
+    return l;
+}
+function randomSmallIntArray () {
+    var l = randomLength();
     var s = new Array(l);
     for (var i=0; i<l; i++)
         s[i] = Math.floor(Math.random() * 256)-1;
     return s;
 }
+function randomFloatArray () {
+    var l = randomLength();
+    var s = new Array(l);
+    for (var i=0; i<l; i++)
+        s[i] = randomFloat();
+    return s;
+}
+function randomIntArray () {
+    var l = randomLength();
+    var s = new Array(l);
+    for (var i=0; i<l; i++)
+        s[i] = randomFloat();
+    return s;
+}
+function randomMixedArray () {
+    var l = randomLength();
+    var s = new Array(l);
+    for (var i=0; i<l; i++)
+        s[i] = randomNonArray();
+    return s;
+}
+function randomArray () {
+    var r = Math.random();
+    if (r < 0.3)
+        return randomFloatArray();
+    else if (r < 0.6)
+        return randomIntArray();
+    else if (r < 0.8)
+        return randomSmallIntArray();
+    else
+        return randomMixedArray();
+}
 function randomString () {
-    return String.fromCharCode.apply(String, randomArray());
+    return String.fromCharCode.apply(String, randomSmallIntArray());
 }
 function randomGLConstant () {
     return constants[Math.floor(Math.random() * constants.length)];
@@ -69,6 +105,23 @@ function generateArg(pos, count) {
     }
 }
 
+function randomNonArray() {
+    var r = Math.random();
+    if (r < 0.25) {
+        return randomFloat();
+    } else if (r < 0.6) {
+        return randomInt();
+    } else if (r < 0.7) {
+        return (r < 0.65);
+    } else if (r < 0.87) {
+        return randomString();
+    } else if (r < 0.98) {
+        return randomGLConstant();
+    } else {
+        return null;
+    }
+}
+
 function generateArgs(count) {
     var arr = new Array(count);
     for (var i=0; i<count; i++)
@@ -77,34 +130,51 @@ function generateArgs(count) {
 }
 
 function randomCall(testProgress, gl, m) {
-    testProgress.textContent += "1000 random calls on " + m + "... "
     doTestNotify(m);
-    for (var i=0; i<100; i++) {
+    var argcs = {};
+    var foundArity = false;
+    testProgress.textContent += "            500 random arity calls on " + m + "\n";
+    for (var i=0; i<50; i++) {
         for (var j=0; j<10; j++) {
             var args = generateArgs(j);
             doTestNotify(m + ": " + args.toSource());
             try {
                 gl[m].apply(gl, args);
+                argcs[j] = true;
+                foundArity = true;
+            } catch (e) {
+            }
+        }
+    }
+    for (var j in argcs) {
+        testProgress.textContent += "200 arity " + j + " calls on " + m + "\n";
+        for (var i=0; i<200; i++) {
+            var args = generateArgs(j);
+            doTestNotify(m + ": " + args.toSource());
+            try {
+                gl[m].apply(gl, args);
+                argcs[j] = true;
             } catch (e) {
             }
         }
     }
     doTestNotify(m+"--OK");
-    testProgress.textContent += "done\n"
 }
 
 Tests.testGetGLWeb20 = function() {
     var testProgress = document.getElementById('testProgress');
     var canvas = document.getElementById('glweb20');
     var gl;
-    assertOk(function(){gl = canvas.getContext(GL_CONTEXT_ID)});
+    assertOk(function(){gl = canvas.getContext(GL_CONTEXT_ID);});
     var funcs = [];
     for (var m in gl)
         if (typeof gl[m] == 'function')
             funcs.push(m);
-    var idx = 0, count = 0;
+    var idx = 0;
+    var count = 0;
     var limit = 1000;
-    var iv1, iv2;
+    var iv1;
+    var iv2;
     iv1 = setInterval(function(){
         if (idx >= funcs.length) {
             iv2 = setInterval(function(){
@@ -113,16 +183,15 @@ Tests.testGetGLWeb20 = function() {
                     return false;
                 }
                 count++;
-                var idx = Math.floor(Math.random() * funcs.length);
-                randomCall(testProgress, gl, funcs[idx]);
-            }, 0);
+                var f = Math.floor(Math.random() * funcs.length);
+                randomCall(testProgress, gl, funcs[f]);
+            }, 50);
             clearInterval(iv1);
             return false;
         }
-        var m = funcs[idx];
-        idx++;
         randomCall(testProgress, gl, funcs[idx]);
-    }, 0);
+        idx++;
+    }, 50);
 }
 
 constants = [
