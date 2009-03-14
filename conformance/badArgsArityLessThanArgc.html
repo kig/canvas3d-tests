@@ -425,17 +425,93 @@ Tests.test_texSubImage2D = function(gl) {
   assertFail(function(){ gl.texSubImage2D(0,0,0,0,0,0,0); });
   assertFail(function(){ gl.texSubImage2D(0,0,0,0,0,0,0,0); });
 }
-Tests.test_uniformf = function(gl) {
-  assertFail(function(){ gl.uniformf(); });
-  assertFail(function(){ gl.uniformf(0); });
+Tests.test_uniform1f = function(gl) {
+  assertFail(function(){ gl.uniform1f(); });
+  assertFail(function(){ gl.uniform1f(0); });
 }
-Tests.test_uniformi = function(gl) {
-  assertFail(function(){ gl.uniformi(); });
-  assertFail(function(){ gl.uniformi(0); });
+Tests.test_uniform1fv = function(gl) {
+  assertFail(function(){ gl.uniform1fv(); });
+  assertFail(function(){ gl.uniform1fv(0); });
 }
-Tests.test_uniformMatrix = function(gl) {
-  assertFail(function(){ gl.uniformMatrix(); });
-  assertFail(function(){ gl.uniformMatrix(0); });
+Tests.test_uniform1i = function(gl) {
+  assertFail(function(){ gl.uniform1i(); });
+  assertFail(function(){ gl.uniform1i(0); });
+}
+Tests.test_uniform1iv = function(gl) {
+  assertFail(function(){ gl.uniform1iv(); });
+  assertFail(function(){ gl.uniform1iv(0); });
+}
+Tests.test_uniform2f = function(gl) {
+  assertFail(function(){ gl.uniform2f(); });
+  assertFail(function(){ gl.uniform2f(0); });
+  assertFail(function(){ gl.uniform2f(0,0); });
+}
+Tests.test_uniform2fv = function(gl) {
+  assertFail(function(){ gl.uniform2fv(); });
+  assertFail(function(){ gl.uniform2fv(0); });
+}
+Tests.test_uniform2i = function(gl) {
+  assertFail(function(){ gl.uniform2i(); });
+  assertFail(function(){ gl.uniform2i(0); });
+  assertFail(function(){ gl.uniform2i(0,0); });
+}
+Tests.test_uniform2iv = function(gl) {
+  assertFail(function(){ gl.uniform2iv(); });
+  assertFail(function(){ gl.uniform2iv(0); });
+}
+Tests.test_uniform3f = function(gl) {
+  assertFail(function(){ gl.uniform3f(); });
+  assertFail(function(){ gl.uniform3f(0); });
+  assertFail(function(){ gl.uniform3f(0,0); });
+  assertFail(function(){ gl.uniform3f(0,0,0); });
+}
+Tests.test_uniform3fv = function(gl) {
+  assertFail(function(){ gl.uniform3fv(); });
+  assertFail(function(){ gl.uniform3fv(0); });
+}
+Tests.test_uniform3i = function(gl) {
+  assertFail(function(){ gl.uniform3i(); });
+  assertFail(function(){ gl.uniform3i(0); });
+  assertFail(function(){ gl.uniform3i(0,0); });
+  assertFail(function(){ gl.uniform3i(0,0,0); });
+}
+Tests.test_uniform3iv = function(gl) {
+  assertFail(function(){ gl.uniform3iv(); });
+  assertFail(function(){ gl.uniform3iv(0); });
+}
+Tests.test_uniform4f = function(gl) {
+  assertFail(function(){ gl.uniform4f(); });
+  assertFail(function(){ gl.uniform4f(0); });
+  assertFail(function(){ gl.uniform4f(0,0); });
+  assertFail(function(){ gl.uniform4f(0,0,0); });
+  assertFail(function(){ gl.uniform4f(0,0,0,0); });
+}
+Tests.test_uniform4fv = function(gl) {
+  assertFail(function(){ gl.uniform4fv(); });
+  assertFail(function(){ gl.uniform4fv(0); });
+}
+Tests.test_uniform4i = function(gl) {
+  assertFail(function(){ gl.uniform4i(); });
+  assertFail(function(){ gl.uniform4i(0); });
+  assertFail(function(){ gl.uniform4i(0,0); });
+  assertFail(function(){ gl.uniform4i(0,0,0); });
+  assertFail(function(){ gl.uniform4i(0,0,0,0); });
+}
+Tests.test_uniform4iv = function(gl) {
+  assertFail(function(){ gl.uniform4iv(); });
+  assertFail(function(){ gl.uniform4iv(0); });
+}
+Tests.test_uniformMatrix2fv = function(gl) {
+  assertFail(function(){ gl.uniformMatrix2fv(); });
+  assertFail(function(){ gl.uniformMatrix2fv(0); });
+}
+Tests.test_uniformMatrix3fv = function(gl) {
+  assertFail(function(){ gl.uniformMatrix3fv(); });
+  assertFail(function(){ gl.uniformMatrix3fv(0); });
+}
+Tests.test_uniformMatrix4fv = function(gl) {
+  assertFail(function(){ gl.uniformMatrix4fv(); });
+  assertFail(function(){ gl.uniformMatrix4fv(0); });
 }
 Tests.test_useProgram = function(gl) {
   assertFail(function(){ gl.useProgram(); });
@@ -443,9 +519,43 @@ Tests.test_useProgram = function(gl) {
 Tests.test_validateProgram = function(gl) {
   assertFail(function(){ gl.validateProgram(); });
 }
-Tests.test_vertexAttrib = function(gl) {
-  assertFail(function(){ gl.vertexAttrib(); });
-  assertFail(function(){ gl.vertexAttrib(0); });
+Tests.test_vertexAttrib1f = function(gl) {
+  assertFail(function(){ gl.vertexAttrib1f(); });
+  assertFail(function(){ gl.vertexAttrib1f(0); });
+}
+Tests.test_vertexAttrib1fv = function(gl) {
+  assertFail(function(){ gl.vertexAttrib1fv(); });
+  assertFail(function(){ gl.vertexAttrib1fv(0); });
+}
+Tests.test_vertexAttrib2f = function(gl) {
+  assertFail(function(){ gl.vertexAttrib2f(); });
+  assertFail(function(){ gl.vertexAttrib2f(0); });
+  assertFail(function(){ gl.vertexAttrib2f(0,0); });
+}
+Tests.test_vertexAttrib2fv = function(gl) {
+  assertFail(function(){ gl.vertexAttrib2fv(); });
+  assertFail(function(){ gl.vertexAttrib2fv(0); });
+}
+Tests.test_vertexAttrib3f = function(gl) {
+  assertFail(function(){ gl.vertexAttrib3f(); });
+  assertFail(function(){ gl.vertexAttrib3f(0); });
+  assertFail(function(){ gl.vertexAttrib3f(0,0); });
+  assertFail(function(){ gl.vertexAttrib3f(0,0,0); });
+}
+Tests.test_vertexAttrib3fv = function(gl) {
+  assertFail(function(){ gl.vertexAttrib3fv(); });
+  assertFail(function(){ gl.vertexAttrib3fv(0); });
+}
+Tests.test_vertexAttrib4f = function(gl) {
+  assertFail(function(){ gl.vertexAttrib4f(); });
+  assertFail(function(){ gl.vertexAttrib4f(0); });
+  assertFail(function(){ gl.vertexAttrib4f(0,0); });
+  assertFail(function(){ gl.vertexAttrib4f(0,0,0); });
+  assertFail(function(){ gl.vertexAttrib4f(0,0,0,0); });
+}
+Tests.test_vertexAttrib4fv = function(gl) {
+  assertFail(function(){ gl.vertexAttrib4fv(); });
+  assertFail(function(){ gl.vertexAttrib4fv(0); });
 }
 Tests.test_vertexAttribPointer = function(gl) {
   assertFail(function(){ gl.vertexAttribPointer(); });
@@ -458,6 +568,22 @@ Tests.test_viewport = function(gl) {
   assertFail(function(){ gl.viewport(0); });
   assertFail(function(){ gl.viewport(0,0); });
   assertFail(function(){ gl.viewport(0,0,0); });
+}
+Tests.test_uniformf = function(gl) {
+  assertFail(function(){ gl.uniformf(); });
+  assertFail(function(){ gl.uniformf(0); });
+}
+Tests.test_uniformi = function(gl) {
+  assertFail(function(){ gl.uniformi(); });
+  assertFail(function(){ gl.uniformi(0); });
+}
+Tests.test_uniformMatrix = function(gl) {
+  assertFail(function(){ gl.uniformMatrix(); });
+  assertFail(function(){ gl.uniformMatrix(0); });
+}
+Tests.test_vertexAttrib = function(gl) {
+  assertFail(function(){ gl.vertexAttrib(); });
+  assertFail(function(){ gl.vertexAttrib(0); });
 }
 Tests.test_texImage2DHTML = function(gl) {
   assertFail(function(){ gl.texImage2DHTML(); });

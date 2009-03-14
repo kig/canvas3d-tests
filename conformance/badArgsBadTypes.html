@@ -44,35 +44,35 @@ Tests.test_activeTexture = function(gl) {
   assertFail(function(){ gl.activeTexture('foo'); });
 }
 Tests.test_attachShader = function(gl) {
-  assertFail(function(){ gl.attachShader(-20, 1); });
-  assertFail(function(){ gl.attachShader(1, -20); });
+  assertFail(function(){ gl.attachShader('foo', 1); });
+  assertFail(function(){ gl.attachShader(1, 'foo'); });
 }
 Tests.test_bindAttribLocation = function(gl) {
-  assertFail(function(){ gl.bindAttribLocation(-20, 1, 'foo'); });
-  assertFail(function(){ gl.bindAttribLocation(1, -20, 'foo'); });
+  assertFail(function(){ gl.bindAttribLocation('foo', 1, 'foo'); });
+  assertFail(function(){ gl.bindAttribLocation(1, 'foo', 'foo'); });
   assertFail(function(){ gl.bindAttribLocation(1, 1, 89); });
 }
 Tests.test_bindBuffer = function(gl) {
   assertFail(function(){ gl.bindBuffer('foo', 1); });
-  assertFail(function(){ gl.bindBuffer(0, -20); });
+  assertFail(function(){ gl.bindBuffer(0, 'foo'); });
 }
 Tests.test_bindFramebuffer = function(gl) {
   assertFail(function(){ gl.bindFramebuffer('foo', 1); });
-  assertFail(function(){ gl.bindFramebuffer(0, -20); });
+  assertFail(function(){ gl.bindFramebuffer(0, 'foo'); });
 }
 Tests.test_bindRenderbuffer = function(gl) {
   assertFail(function(){ gl.bindRenderbuffer('foo', 1); });
-  assertFail(function(){ gl.bindRenderbuffer(0, -20); });
+  assertFail(function(){ gl.bindRenderbuffer(0, 'foo'); });
 }
 Tests.test_bindTexture = function(gl) {
   assertFail(function(){ gl.bindTexture('foo', 1); });
-  assertFail(function(){ gl.bindTexture(0, -20); });
+  assertFail(function(){ gl.bindTexture(0, 'foo'); });
 }
 Tests.test_blendColor = function(gl) {
-  assertFail(function(){ gl.blendColor(null, 0.4, 0.4, 0.4); });
-  assertFail(function(){ gl.blendColor(0.4, null, 0.4, 0.4); });
-  assertFail(function(){ gl.blendColor(0.4, 0.4, null, 0.4); });
-  assertFail(function(){ gl.blendColor(0.4, 0.4, 0.4, null); });
+  assertFail(function(){ gl.blendColor('foo', 0.4, 0.4, 0.4); });
+  assertFail(function(){ gl.blendColor(0.4, 'foo', 0.4, 0.4); });
+  assertFail(function(){ gl.blendColor(0.4, 0.4, 'foo', 0.4); });
+  assertFail(function(){ gl.blendColor(0.4, 0.4, 0.4, 'foo'); });
 }
 Tests.test_blendEquation = function(gl) {
   assertFail(function(){ gl.blendEquation('foo'); });
@@ -92,16 +92,16 @@ Tests.test_blendFuncSeparate = function(gl) {
   assertFail(function(){ gl.blendFuncSeparate(0, 0, 0, 'foo'); });
 }
 Tests.test_bufferData = function(gl) {
-  assertFail(function(){ gl.bufferData(-20, [], 1, 1); });
+  assertFail(function(){ gl.bufferData('foo', [], 1, 1); });
   assertFail(function(){ gl.bufferData(1, 'hello', 1, 1); });
-  assertFail(function(){ gl.bufferData(1, [], -20, 1); });
-  assertFail(function(){ gl.bufferData(1, [], 1, -20); });
+  assertFail(function(){ gl.bufferData(1, [], 'foo', 1); });
+  assertFail(function(){ gl.bufferData(1, [], 1, 'foo'); });
 }
 Tests.test_bufferSubData = function(gl) {
-  assertFail(function(){ gl.bufferSubData(-20, 1, [], 1); });
-  assertFail(function(){ gl.bufferSubData(1, -20, [], 1); });
+  assertFail(function(){ gl.bufferSubData('foo', 1, [], 1); });
+  assertFail(function(){ gl.bufferSubData(1, 'foo', [], 1); });
   assertFail(function(){ gl.bufferSubData(1, 1, 'hello', 1); });
-  assertFail(function(){ gl.bufferSubData(1, 1, [], -20); });
+  assertFail(function(){ gl.bufferSubData(1, 1, [], 'foo'); });
 }
 Tests.test_checkFramebufferStatus = function(gl) {
   assertFail(function(){ gl.checkFramebufferStatus('foo'); });
@@ -110,16 +110,16 @@ Tests.test_clear = function(gl) {
   assertFail(function(){ gl.clear('no'); });
 }
 Tests.test_clearColor = function(gl) {
-  assertFail(function(){ gl.clearColor(null, 0.4, 0.4, 0.4); });
-  assertFail(function(){ gl.clearColor(0.4, null, 0.4, 0.4); });
-  assertFail(function(){ gl.clearColor(0.4, 0.4, null, 0.4); });
-  assertFail(function(){ gl.clearColor(0.4, 0.4, 0.4, null); });
+  assertFail(function(){ gl.clearColor('foo', 0.4, 0.4, 0.4); });
+  assertFail(function(){ gl.clearColor(0.4, 'foo', 0.4, 0.4); });
+  assertFail(function(){ gl.clearColor(0.4, 0.4, 'foo', 0.4); });
+  assertFail(function(){ gl.clearColor(0.4, 0.4, 0.4, 'foo'); });
 }
 Tests.test_clearDepth = function(gl) {
   assertFail(function(){ gl.clearDepth('foo'); });
 }
 Tests.test_clearStencil = function(gl) {
-  assertFail(function(){ gl.clearStencil(null); });
+  assertFail(function(){ gl.clearStencil('foo'); });
 }
 Tests.test_colorMask = function(gl) {
   assertFail(function(){ gl.colorMask(['s',2,3], true, true, true); });
@@ -128,25 +128,25 @@ Tests.test_colorMask = function(gl) {
   assertFail(function(){ gl.colorMask(true, true, true, ['s',2,3]); });
 }
 Tests.test_compileShader = function(gl) {
-  assertFail(function(){ gl.compileShader(-20); });
+  assertFail(function(){ gl.compileShader('foo'); });
 }
 Tests.test_copyTexImage2D = function(gl) {
   assertFail(function(){ gl.copyTexImage2D('foo', 0, 0, 0, 0, 1, 1, 0); });
-  assertFail(function(){ gl.copyTexImage2D(0, null, 0, 0, 0, 1, 1, 0); });
+  assertFail(function(){ gl.copyTexImage2D(0, 'foo', 0, 0, 0, 1, 1, 0); });
   assertFail(function(){ gl.copyTexImage2D(0, 0, 'foo', 0, 0, 1, 1, 0); });
-  assertFail(function(){ gl.copyTexImage2D(0, 0, 0, null, 0, 1, 1, 0); });
-  assertFail(function(){ gl.copyTexImage2D(0, 0, 0, 0, null, 1, 1, 0); });
+  assertFail(function(){ gl.copyTexImage2D(0, 0, 0, 'foo', 0, 1, 1, 0); });
+  assertFail(function(){ gl.copyTexImage2D(0, 0, 0, 0, 'foo', 1, 1, 0); });
   assertFail(function(){ gl.copyTexImage2D(0, 0, 0, 0, 0, -10, 1, 0); });
   assertFail(function(){ gl.copyTexImage2D(0, 0, 0, 0, 0, 1, -10, 0); });
-  assertFail(function(){ gl.copyTexImage2D(0, 0, 0, 0, 0, 1, 1, null); });
+  assertFail(function(){ gl.copyTexImage2D(0, 0, 0, 0, 0, 1, 1, 'foo'); });
 }
 Tests.test_copyTexSubImage2D = function(gl) {
   assertFail(function(){ gl.copyTexSubImage2D('foo', 0, 0, 0, 0, 0, 1, 1); });
-  assertFail(function(){ gl.copyTexSubImage2D(0, null, 0, 0, 0, 0, 1, 1); });
-  assertFail(function(){ gl.copyTexSubImage2D(0, 0, null, 0, 0, 0, 1, 1); });
-  assertFail(function(){ gl.copyTexSubImage2D(0, 0, 0, null, 0, 0, 1, 1); });
-  assertFail(function(){ gl.copyTexSubImage2D(0, 0, 0, 0, null, 0, 1, 1); });
-  assertFail(function(){ gl.copyTexSubImage2D(0, 0, 0, 0, 0, null, 1, 1); });
+  assertFail(function(){ gl.copyTexSubImage2D(0, 'foo', 0, 0, 0, 0, 1, 1); });
+  assertFail(function(){ gl.copyTexSubImage2D(0, 0, 'foo', 0, 0, 0, 1, 1); });
+  assertFail(function(){ gl.copyTexSubImage2D(0, 0, 0, 'foo', 0, 0, 1, 1); });
+  assertFail(function(){ gl.copyTexSubImage2D(0, 0, 0, 0, 'foo', 0, 1, 1); });
+  assertFail(function(){ gl.copyTexSubImage2D(0, 0, 0, 0, 0, 'foo', 1, 1); });
   assertFail(function(){ gl.copyTexSubImage2D(0, 0, 0, 0, 0, 0, -10, 1); });
   assertFail(function(){ gl.copyTexSubImage2D(0, 0, 0, 0, 0, 0, 1, -10); });
 }
@@ -165,13 +165,13 @@ Tests.test_deleteFramebuffers = function(gl) {
   assertFail(function(){ gl.deleteFramebuffers('hello'); });
 }
 Tests.test_deleteProgram = function(gl) {
-  assertFail(function(){ gl.deleteProgram(-20); });
+  assertFail(function(){ gl.deleteProgram('foo'); });
 }
 Tests.test_deleteRenderbuffers = function(gl) {
   assertFail(function(){ gl.deleteRenderbuffers('hello'); });
 }
 Tests.test_deleteShader = function(gl) {
-  assertFail(function(){ gl.deleteShader(-20); });
+  assertFail(function(){ gl.deleteShader('foo'); });
 }
 Tests.test_deleteTextures = function(gl) {
   assertFail(function(){ gl.deleteTextures('hello'); });
@@ -186,170 +186,170 @@ Tests.test_depthRange = function(gl) {
   assertFail(function(){ gl.depthRange('foo'); });
 }
 Tests.test_detachShader = function(gl) {
-  assertFail(function(){ gl.detachShader(-20, 1); });
-  assertFail(function(){ gl.detachShader(1, -20); });
+  assertFail(function(){ gl.detachShader('foo', 1); });
+  assertFail(function(){ gl.detachShader(1, 'foo'); });
 }
 Tests.test_disable = function(gl) {
   assertFail(function(){ gl.disable('foo'); });
 }
 Tests.test_disableVertexAttribArray = function(gl) {
-  assertFail(function(){ gl.disableVertexAttribArray(-20); });
+  assertFail(function(){ gl.disableVertexAttribArray('foo'); });
 }
 Tests.test_drawArrays = function(gl) {
   assertFail(function(){ gl.drawArrays('foo', 0, 1); });
-  assertFail(function(){ gl.drawArrays(0, null, 1); });
+  assertFail(function(){ gl.drawArrays(0, 'foo', 1); });
   assertFail(function(){ gl.drawArrays(0, 0, -10); });
 }
 Tests.test_drawElements = function(gl) {
-  assertFail(function(){ gl.drawElements(-20, 1, []); });
-  assertFail(function(){ gl.drawElements(1, -20, []); });
+  assertFail(function(){ gl.drawElements('foo', 1, []); });
+  assertFail(function(){ gl.drawElements(1, 'foo', []); });
   assertFail(function(){ gl.drawElements(1, 1, 'hello'); });
 }
 Tests.test_enable = function(gl) {
   assertFail(function(){ gl.enable('foo'); });
 }
 Tests.test_enableVertexAttribArray = function(gl) {
-  assertFail(function(){ gl.enableVertexAttribArray(-20); });
+  assertFail(function(){ gl.enableVertexAttribArray('foo'); });
 }
 Tests.test_framebufferRenderbuffer = function(gl) {
   assertFail(function(){ gl.framebufferRenderbuffer('foo', 0, 0, 1); });
   assertFail(function(){ gl.framebufferRenderbuffer(0, 'foo', 0, 1); });
   assertFail(function(){ gl.framebufferRenderbuffer(0, 0, 'foo', 1); });
-  assertFail(function(){ gl.framebufferRenderbuffer(0, 0, 0, -20); });
+  assertFail(function(){ gl.framebufferRenderbuffer(0, 0, 0, 'foo'); });
 }
 Tests.test_framebufferTexture2D = function(gl) {
   assertFail(function(){ gl.framebufferTexture2D('foo', 0, 0, 1, 0); });
   assertFail(function(){ gl.framebufferTexture2D(0, 'foo', 0, 1, 0); });
   assertFail(function(){ gl.framebufferTexture2D(0, 0, 'foo', 1, 0); });
-  assertFail(function(){ gl.framebufferTexture2D(0, 0, 0, -20, 0); });
-  assertFail(function(){ gl.framebufferTexture2D(0, 0, 0, 1, null); });
+  assertFail(function(){ gl.framebufferTexture2D(0, 0, 0, 'foo', 0); });
+  assertFail(function(){ gl.framebufferTexture2D(0, 0, 0, 1, 'foo'); });
 }
 Tests.test_frontFace = function(gl) {
   assertFail(function(){ gl.frontFace('foo'); });
 }
 Tests.test_genBuffers = function(gl) {
-  assertFail(function(){ gl.genBuffers(-20); });
+  assertFail(function(){ gl.genBuffers('foo'); });
 }
 Tests.test_generateMipmap = function(gl) {
   assertFail(function(){ gl.generateMipmap('foo'); });
 }
 Tests.test_genFramebuffers = function(gl) {
-  assertFail(function(){ gl.genFramebuffers(-20); });
+  assertFail(function(){ gl.genFramebuffers('foo'); });
 }
 Tests.test_genRenderbuffers = function(gl) {
-  assertFail(function(){ gl.genRenderbuffers(-20); });
+  assertFail(function(){ gl.genRenderbuffers('foo'); });
 }
 Tests.test_genTextures = function(gl) {
-  assertFail(function(){ gl.genTextures(-20); });
+  assertFail(function(){ gl.genTextures('foo'); });
 }
 Tests.test_getActiveAttrib = function(gl) {
-  assertFail(function(){ gl.getActiveAttrib(-20, 1); });
-  assertFail(function(){ gl.getActiveAttrib(1, -20); });
+  assertFail(function(){ gl.getActiveAttrib('foo', 1); });
+  assertFail(function(){ gl.getActiveAttrib(1, 'foo'); });
 }
 Tests.test_getActiveUniform = function(gl) {
-  assertFail(function(){ gl.getActiveUniform(-20, 1); });
-  assertFail(function(){ gl.getActiveUniform(1, -20); });
+  assertFail(function(){ gl.getActiveUniform('foo', 1); });
+  assertFail(function(){ gl.getActiveUniform(1, 'foo'); });
 }
 Tests.test_getAttachedShaders = function(gl) {
-  assertFail(function(){ gl.getAttachedShaders(-20); });
+  assertFail(function(){ gl.getAttachedShaders('foo'); });
 }
 Tests.test_getAttribLocation = function(gl) {
-  assertFail(function(){ gl.getAttribLocation(-20, 'foo'); });
+  assertFail(function(){ gl.getAttribLocation('foo', 'foo'); });
   assertFail(function(){ gl.getAttribLocation(1, 89); });
 }
 Tests.test_getParameter = function(gl) {
-  assertFail(function(){ gl.getParameter(-20); });
+  assertFail(function(){ gl.getParameter('foo'); });
 }
 Tests.test_getBufferParameter = function(gl) {
-  assertFail(function(){ gl.getBufferParameter(-20, 1); });
-  assertFail(function(){ gl.getBufferParameter(1, -20); });
+  assertFail(function(){ gl.getBufferParameter('foo', 1); });
+  assertFail(function(){ gl.getBufferParameter(1, 'foo'); });
 }
 Tests.test_getError = function(gl) {
 }
 Tests.test_getFramebufferAttachmentParameter = function(gl) {
-  assertFail(function(){ gl.getFramebufferAttachmentParameter(-20, 1, 1); });
-  assertFail(function(){ gl.getFramebufferAttachmentParameter(1, -20, 1); });
-  assertFail(function(){ gl.getFramebufferAttachmentParameter(1, 1, -20); });
+  assertFail(function(){ gl.getFramebufferAttachmentParameter('foo', 1, 1); });
+  assertFail(function(){ gl.getFramebufferAttachmentParameter(1, 'foo', 1); });
+  assertFail(function(){ gl.getFramebufferAttachmentParameter(1, 1, 'foo'); });
 }
 Tests.test_getProgramParameter = function(gl) {
-  assertFail(function(){ gl.getProgramParameter(-20, 1); });
-  assertFail(function(){ gl.getProgramParameter(1, -20); });
+  assertFail(function(){ gl.getProgramParameter('foo', 1); });
+  assertFail(function(){ gl.getProgramParameter(1, 'foo'); });
 }
 Tests.test_getProgramInfoLog = function(gl) {
-  assertFail(function(){ gl.getProgramInfoLog(-20); });
+  assertFail(function(){ gl.getProgramInfoLog('foo'); });
 }
 Tests.test_getRenderbufferParameter = function(gl) {
-  assertFail(function(){ gl.getRenderbufferParameter(-20, 1); });
-  assertFail(function(){ gl.getRenderbufferParameter(1, -20); });
+  assertFail(function(){ gl.getRenderbufferParameter('foo', 1); });
+  assertFail(function(){ gl.getRenderbufferParameter(1, 'foo'); });
 }
 Tests.test_getShaderParameter = function(gl) {
-  assertFail(function(){ gl.getShaderParameter(-20, 1); });
-  assertFail(function(){ gl.getShaderParameter(1, -20); });
+  assertFail(function(){ gl.getShaderParameter('foo', 1); });
+  assertFail(function(){ gl.getShaderParameter(1, 'foo'); });
 }
 Tests.test_getShaderInfoLog = function(gl) {
-  assertFail(function(){ gl.getShaderInfoLog(-20); });
+  assertFail(function(){ gl.getShaderInfoLog('foo'); });
 }
 Tests.test_getShaderSource = function(gl) {
-  assertFail(function(){ gl.getShaderSource(-20); });
+  assertFail(function(){ gl.getShaderSource('foo'); });
 }
 Tests.test_getTexParameter = function(gl) {
-  assertFail(function(){ gl.getTexParameter(-20, 1); });
-  assertFail(function(){ gl.getTexParameter(1, -20); });
+  assertFail(function(){ gl.getTexParameter('foo', 1); });
+  assertFail(function(){ gl.getTexParameter(1, 'foo'); });
 }
 Tests.test_getUniform = function(gl) {
-  assertFail(function(){ gl.getUniform(-20, 1); });
-  assertFail(function(){ gl.getUniform(1, -20); });
+  assertFail(function(){ gl.getUniform('foo', 1); });
+  assertFail(function(){ gl.getUniform(1, 'foo'); });
 }
 Tests.test_getUniformLocation = function(gl) {
-  assertFail(function(){ gl.getUniformLocation(-20, 'foo'); });
+  assertFail(function(){ gl.getUniformLocation('foo', 'foo'); });
   assertFail(function(){ gl.getUniformLocation(1, 89); });
 }
 Tests.test_getVertexAttrib = function(gl) {
-  assertFail(function(){ gl.getVertexAttrib(-20, 1); });
-  assertFail(function(){ gl.getVertexAttrib(1, -20); });
+  assertFail(function(){ gl.getVertexAttrib('foo', 1); });
+  assertFail(function(){ gl.getVertexAttrib(1, 'foo'); });
 }
 Tests.test_hint = function(gl) {
   assertFail(function(){ gl.hint('foo', 0); });
   assertFail(function(){ gl.hint(0, 'foo'); });
 }
 Tests.test_isBuffer = function(gl) {
-  assertFail(function(){ gl.isBuffer(-20); });
+  assertFail(function(){ gl.isBuffer('foo'); });
 }
 Tests.test_isEnabled = function(gl) {
   assertFail(function(){ gl.isEnabled('foo'); });
 }
 Tests.test_isFramebuffer = function(gl) {
-  assertFail(function(){ gl.isFramebuffer(-20); });
+  assertFail(function(){ gl.isFramebuffer('foo'); });
 }
 Tests.test_isProgram = function(gl) {
-  assertFail(function(){ gl.isProgram(-20); });
+  assertFail(function(){ gl.isProgram('foo'); });
 }
 Tests.test_isRenderbuffer = function(gl) {
-  assertFail(function(){ gl.isRenderbuffer(-20); });
+  assertFail(function(){ gl.isRenderbuffer('foo'); });
 }
 Tests.test_isShader = function(gl) {
-  assertFail(function(){ gl.isShader(-20); });
+  assertFail(function(){ gl.isShader('foo'); });
 }
 Tests.test_isTexture = function(gl) {
-  assertFail(function(){ gl.isTexture(-20); });
+  assertFail(function(){ gl.isTexture('foo'); });
 }
 Tests.test_lineWidth = function(gl) {
   assertFail(function(){ gl.lineWidth('foo'); });
 }
 Tests.test_linkProgram = function(gl) {
-  assertFail(function(){ gl.linkProgram(-20); });
+  assertFail(function(){ gl.linkProgram('foo'); });
 }
 Tests.test_polygonOffset = function(gl) {
   assertFail(function(){ gl.polygonOffset('foo', 4.8); });
   assertFail(function(){ gl.polygonOffset(4.8, 'foo'); });
 }
 Tests.test_readPixels = function(gl) {
-  assertFail(function(){ gl.readPixels(null, 0, 1, 1, 1, 1); });
-  assertFail(function(){ gl.readPixels(0, null, 1, 1, 1, 1); });
-  assertFail(function(){ gl.readPixels(0, 0, -20, 1, 1, 1); });
-  assertFail(function(){ gl.readPixels(0, 0, 1, -20, 1, 1); });
-  assertFail(function(){ gl.readPixels(0, 0, 1, 1, -20, 1); });
-  assertFail(function(){ gl.readPixels(0, 0, 1, 1, 1, -20); });
+  assertFail(function(){ gl.readPixels('foo', 0, 1, 1, 1, 1); });
+  assertFail(function(){ gl.readPixels(0, 'foo', 1, 1, 1, 1); });
+  assertFail(function(){ gl.readPixels(0, 0, 'foo', 1, 1, 1); });
+  assertFail(function(){ gl.readPixels(0, 0, 1, 'foo', 1, 1); });
+  assertFail(function(){ gl.readPixels(0, 0, 1, 1, 'foo', 1); });
+  assertFail(function(){ gl.readPixels(0, 0, 1, 1, 1, 'foo'); });
 }
 Tests.test_renderbufferStorage = function(gl) {
   assertFail(function(){ gl.renderbufferStorage('foo', 0, 1, 1); });
@@ -358,36 +358,36 @@ Tests.test_renderbufferStorage = function(gl) {
   assertFail(function(){ gl.renderbufferStorage(0, 0, 1, -10); });
 }
 Tests.test_sampleCoverage = function(gl) {
-  assertFail(function(){ gl.sampleCoverage(null, true); });
+  assertFail(function(){ gl.sampleCoverage('foo', true); });
   assertFail(function(){ gl.sampleCoverage(0.4, ['s',2,3]); });
 }
 Tests.test_scissor = function(gl) {
-  assertFail(function(){ gl.scissor(null, 0, 1, 1); });
-  assertFail(function(){ gl.scissor(0, null, 1, 1); });
+  assertFail(function(){ gl.scissor('foo', 0, 1, 1); });
+  assertFail(function(){ gl.scissor(0, 'foo', 1, 1); });
   assertFail(function(){ gl.scissor(0, 0, -10, 1); });
   assertFail(function(){ gl.scissor(0, 0, 1, -10); });
 }
 Tests.test_shaderSource = function(gl) {
-  assertFail(function(){ gl.shaderSource(-20, 'foo'); });
+  assertFail(function(){ gl.shaderSource('foo', 'foo'); });
   assertFail(function(){ gl.shaderSource(1, 89); });
 }
 Tests.test_stencilFunc = function(gl) {
   assertFail(function(){ gl.stencilFunc('foo', 0, 1); });
-  assertFail(function(){ gl.stencilFunc(0, null, 1); });
-  assertFail(function(){ gl.stencilFunc(0, 0, -20); });
+  assertFail(function(){ gl.stencilFunc(0, 'foo', 1); });
+  assertFail(function(){ gl.stencilFunc(0, 0, 'foo'); });
 }
 Tests.test_stencilFuncSeparate = function(gl) {
   assertFail(function(){ gl.stencilFuncSeparate('foo', 0, 0, 1); });
   assertFail(function(){ gl.stencilFuncSeparate(0, 'foo', 0, 1); });
-  assertFail(function(){ gl.stencilFuncSeparate(0, 0, null, 1); });
-  assertFail(function(){ gl.stencilFuncSeparate(0, 0, 0, -20); });
+  assertFail(function(){ gl.stencilFuncSeparate(0, 0, 'foo', 1); });
+  assertFail(function(){ gl.stencilFuncSeparate(0, 0, 0, 'foo'); });
 }
 Tests.test_stencilMask = function(gl) {
-  assertFail(function(){ gl.stencilMask(-20); });
+  assertFail(function(){ gl.stencilMask('foo'); });
 }
 Tests.test_stencilMaskSeparate = function(gl) {
   assertFail(function(){ gl.stencilMaskSeparate('foo', 1); });
-  assertFail(function(){ gl.stencilMaskSeparate(0, -20); });
+  assertFail(function(){ gl.stencilMaskSeparate(0, 'foo'); });
 }
 Tests.test_stencilOp = function(gl) {
   assertFail(function(){ gl.stencilOp('foo', 0, 0); });
@@ -401,75 +401,201 @@ Tests.test_stencilOpSeparate = function(gl) {
   assertFail(function(){ gl.stencilOpSeparate(0, 0, 0, 'foo'); });
 }
 Tests.test_texImage2D = function(gl) {
-  assertFail(function(){ gl.texImage2D(-20, 0, 0, 1, 1, 0, 0, 0, 'foo'); });
-  assertFail(function(){ gl.texImage2D(1, null, 0, 1, 1, 0, 0, 0, 'foo'); });
-  assertFail(function(){ gl.texImage2D(1, 0, null, 1, 1, 0, 0, 0, 'foo'); });
-  assertFail(function(){ gl.texImage2D(1, 0, 0, -10, 1, 0, 0, 0, 'foo'); });
-  assertFail(function(){ gl.texImage2D(1, 0, 0, 1, -10, 0, 0, 0, 'foo'); });
-  assertFail(function(){ gl.texImage2D(1, 0, 0, 1, 1, null, 0, 0, 'foo'); });
-  assertFail(function(){ gl.texImage2D(1, 0, 0, 1, 1, 0, 'foo', 0, 'foo'); });
-  assertFail(function(){ gl.texImage2D(1, 0, 0, 1, 1, 0, 0, 'foo', 'foo'); });
-  assertFail(function(){ gl.texImage2D(1, 0, 0, 1, 1, 0, 0, 0, 89); });
+  assertFail(function(){ gl.texImage2D('foo', 0, 0, 1, 1, 0, 0, 0, []); });
+  assertFail(function(){ gl.texImage2D(1, 'foo', 0, 1, 1, 0, 0, 0, []); });
+  assertFail(function(){ gl.texImage2D(1, 0, 'foo', 1, 1, 0, 0, 0, []); });
+  assertFail(function(){ gl.texImage2D(1, 0, 0, -10, 1, 0, 0, 0, []); });
+  assertFail(function(){ gl.texImage2D(1, 0, 0, 1, -10, 0, 0, 0, []); });
+  assertFail(function(){ gl.texImage2D(1, 0, 0, 1, 1, 'foo', 0, 0, []); });
+  assertFail(function(){ gl.texImage2D(1, 0, 0, 1, 1, 0, 'foo', 0, []); });
+  assertFail(function(){ gl.texImage2D(1, 0, 0, 1, 1, 0, 0, 'foo', []); });
+  assertFail(function(){ gl.texImage2D(1, 0, 0, 1, 1, 0, 0, 0, 'hello'); });
 }
 Tests.test_getTexParameter = function(gl) {
-  assertFail(function(){ gl.getTexParameter(-20, 1); });
-  assertFail(function(){ gl.getTexParameter(1, -20); });
+  assertFail(function(){ gl.getTexParameter('foo', 1); });
+  assertFail(function(){ gl.getTexParameter(1, 'foo'); });
 }
 Tests.test_texSubImage2D = function(gl) {
-  assertFail(function(){ gl.texSubImage2D(-20, 0, 0, 0, 1, 1, 0, 0, 'foo'); });
-  assertFail(function(){ gl.texSubImage2D(1, null, 0, 0, 1, 1, 0, 0, 'foo'); });
-  assertFail(function(){ gl.texSubImage2D(1, 0, null, 0, 1, 1, 0, 0, 'foo'); });
-  assertFail(function(){ gl.texSubImage2D(1, 0, 0, null, 1, 1, 0, 0, 'foo'); });
-  assertFail(function(){ gl.texSubImage2D(1, 0, 0, 0, -10, 1, 0, 0, 'foo'); });
-  assertFail(function(){ gl.texSubImage2D(1, 0, 0, 0, 1, -10, 0, 0, 'foo'); });
-  assertFail(function(){ gl.texSubImage2D(1, 0, 0, 0, 1, 1, 'foo', 0, 'foo'); });
-  assertFail(function(){ gl.texSubImage2D(1, 0, 0, 0, 1, 1, 0, 'foo', 'foo'); });
-  assertFail(function(){ gl.texSubImage2D(1, 0, 0, 0, 1, 1, 0, 0, 89); });
+  assertFail(function(){ gl.texSubImage2D('foo', 0, 0, 0, 1, 1, 0, 0, []); });
+  assertFail(function(){ gl.texSubImage2D(1, 'foo', 0, 0, 1, 1, 0, 0, []); });
+  assertFail(function(){ gl.texSubImage2D(1, 0, 'foo', 0, 1, 1, 0, 0, []); });
+  assertFail(function(){ gl.texSubImage2D(1, 0, 0, 'foo', 1, 1, 0, 0, []); });
+  assertFail(function(){ gl.texSubImage2D(1, 0, 0, 0, -10, 1, 0, 0, []); });
+  assertFail(function(){ gl.texSubImage2D(1, 0, 0, 0, 1, -10, 0, 0, []); });
+  assertFail(function(){ gl.texSubImage2D(1, 0, 0, 0, 1, 1, 'foo', 0, []); });
+  assertFail(function(){ gl.texSubImage2D(1, 0, 0, 0, 1, 1, 0, 'foo', []); });
+  assertFail(function(){ gl.texSubImage2D(1, 0, 0, 0, 1, 1, 0, 0, 'hello'); });
 }
-Tests.test_uniformf = function(gl) {
-  assertFail(function(){ gl.uniformf(null, []); });
-  assertFail(function(){ gl.uniformf(0, 'hello'); });
+Tests.test_uniform1f = function(gl) {
+  assertFail(function(){ gl.uniform1f('foo', 4.8); });
+  assertFail(function(){ gl.uniform1f(0, 'foo'); });
 }
-Tests.test_uniformi = function(gl) {
-  assertFail(function(){ gl.uniformi(null, []); });
-  assertFail(function(){ gl.uniformi(0, 'hello'); });
+Tests.test_uniform1fv = function(gl) {
+  assertFail(function(){ gl.uniform1fv('foo', []); });
+  assertFail(function(){ gl.uniform1fv(1, 'hello'); });
 }
-Tests.test_uniformMatrix = function(gl) {
-  assertFail(function(){ gl.uniformMatrix(null, []); });
-  assertFail(function(){ gl.uniformMatrix(0, 'hello'); });
+Tests.test_uniform1i = function(gl) {
+  assertFail(function(){ gl.uniform1i('foo', 0); });
+  assertFail(function(){ gl.uniform1i(0, 'foo'); });
+}
+Tests.test_uniform1iv = function(gl) {
+  assertFail(function(){ gl.uniform1iv('foo', []); });
+  assertFail(function(){ gl.uniform1iv(1, 'hello'); });
+}
+Tests.test_uniform2f = function(gl) {
+  assertFail(function(){ gl.uniform2f('foo', 4.8, 4.8); });
+  assertFail(function(){ gl.uniform2f(0, 'foo', 4.8); });
+  assertFail(function(){ gl.uniform2f(0, 4.8, 'foo'); });
+}
+Tests.test_uniform2fv = function(gl) {
+  assertFail(function(){ gl.uniform2fv('foo', []); });
+  assertFail(function(){ gl.uniform2fv(1, 'hello'); });
+}
+Tests.test_uniform2i = function(gl) {
+  assertFail(function(){ gl.uniform2i('foo', 0, 0); });
+  assertFail(function(){ gl.uniform2i(0, 'foo', 0); });
+  assertFail(function(){ gl.uniform2i(0, 0, 'foo'); });
+}
+Tests.test_uniform2iv = function(gl) {
+  assertFail(function(){ gl.uniform2iv('foo', []); });
+  assertFail(function(){ gl.uniform2iv(1, 'hello'); });
+}
+Tests.test_uniform3f = function(gl) {
+  assertFail(function(){ gl.uniform3f('foo', 4.8, 4.8, 4.8); });
+  assertFail(function(){ gl.uniform3f(0, 'foo', 4.8, 4.8); });
+  assertFail(function(){ gl.uniform3f(0, 4.8, 'foo', 4.8); });
+  assertFail(function(){ gl.uniform3f(0, 4.8, 4.8, 'foo'); });
+}
+Tests.test_uniform3fv = function(gl) {
+  assertFail(function(){ gl.uniform3fv('foo', []); });
+  assertFail(function(){ gl.uniform3fv(1, 'hello'); });
+}
+Tests.test_uniform3i = function(gl) {
+  assertFail(function(){ gl.uniform3i('foo', 0, 0, 0); });
+  assertFail(function(){ gl.uniform3i(0, 'foo', 0, 0); });
+  assertFail(function(){ gl.uniform3i(0, 0, 'foo', 0); });
+  assertFail(function(){ gl.uniform3i(0, 0, 0, 'foo'); });
+}
+Tests.test_uniform3iv = function(gl) {
+  assertFail(function(){ gl.uniform3iv('foo', []); });
+  assertFail(function(){ gl.uniform3iv(1, 'hello'); });
+}
+Tests.test_uniform4f = function(gl) {
+  assertFail(function(){ gl.uniform4f('foo', 4.8, 4.8, 4.8, 4.8); });
+  assertFail(function(){ gl.uniform4f(0, 'foo', 4.8, 4.8, 4.8); });
+  assertFail(function(){ gl.uniform4f(0, 4.8, 'foo', 4.8, 4.8); });
+  assertFail(function(){ gl.uniform4f(0, 4.8, 4.8, 'foo', 4.8); });
+  assertFail(function(){ gl.uniform4f(0, 4.8, 4.8, 4.8, 'foo'); });
+}
+Tests.test_uniform4fv = function(gl) {
+  assertFail(function(){ gl.uniform4fv('foo', []); });
+  assertFail(function(){ gl.uniform4fv(1, 'hello'); });
+}
+Tests.test_uniform4i = function(gl) {
+  assertFail(function(){ gl.uniform4i('foo', 0, 0, 0, 0); });
+  assertFail(function(){ gl.uniform4i(0, 'foo', 0, 0, 0); });
+  assertFail(function(){ gl.uniform4i(0, 0, 'foo', 0, 0); });
+  assertFail(function(){ gl.uniform4i(0, 0, 0, 'foo', 0); });
+  assertFail(function(){ gl.uniform4i(0, 0, 0, 0, 'foo'); });
+}
+Tests.test_uniform4iv = function(gl) {
+  assertFail(function(){ gl.uniform4iv('foo', []); });
+  assertFail(function(){ gl.uniform4iv(1, 'hello'); });
+}
+Tests.test_uniformMatrix2fv = function(gl) {
+  assertFail(function(){ gl.uniformMatrix2fv('foo', []); });
+  assertFail(function(){ gl.uniformMatrix2fv(1, 'hello'); });
+}
+Tests.test_uniformMatrix3fv = function(gl) {
+  assertFail(function(){ gl.uniformMatrix3fv('foo', []); });
+  assertFail(function(){ gl.uniformMatrix3fv(1, 'hello'); });
+}
+Tests.test_uniformMatrix4fv = function(gl) {
+  assertFail(function(){ gl.uniformMatrix4fv('foo', []); });
+  assertFail(function(){ gl.uniformMatrix4fv(1, 'hello'); });
 }
 Tests.test_useProgram = function(gl) {
-  assertFail(function(){ gl.useProgram(-20); });
+  assertFail(function(){ gl.useProgram('foo'); });
 }
 Tests.test_validateProgram = function(gl) {
-  assertFail(function(){ gl.validateProgram(-20); });
+  assertFail(function(){ gl.validateProgram('foo'); });
 }
-Tests.test_vertexAttrib = function(gl) {
-  assertFail(function(){ gl.vertexAttrib(-20, []); });
-  assertFail(function(){ gl.vertexAttrib(1, 'hello'); });
+Tests.test_vertexAttrib1f = function(gl) {
+  assertFail(function(){ gl.vertexAttrib1f('foo', 4.8); });
+  assertFail(function(){ gl.vertexAttrib1f(1, 'foo'); });
+}
+Tests.test_vertexAttrib1fv = function(gl) {
+  assertFail(function(){ gl.vertexAttrib1fv('foo', []); });
+  assertFail(function(){ gl.vertexAttrib1fv(1, 'hello'); });
+}
+Tests.test_vertexAttrib2f = function(gl) {
+  assertFail(function(){ gl.vertexAttrib2f('foo', 4.8, 4.8); });
+  assertFail(function(){ gl.vertexAttrib2f(1, 'foo', 4.8); });
+  assertFail(function(){ gl.vertexAttrib2f(1, 4.8, 'foo'); });
+}
+Tests.test_vertexAttrib2fv = function(gl) {
+  assertFail(function(){ gl.vertexAttrib2fv('foo', []); });
+  assertFail(function(){ gl.vertexAttrib2fv(1, 'hello'); });
+}
+Tests.test_vertexAttrib3f = function(gl) {
+  assertFail(function(){ gl.vertexAttrib3f('foo', 4.8, 4.8, 4.8); });
+  assertFail(function(){ gl.vertexAttrib3f(1, 'foo', 4.8, 4.8); });
+  assertFail(function(){ gl.vertexAttrib3f(1, 4.8, 'foo', 4.8); });
+  assertFail(function(){ gl.vertexAttrib3f(1, 4.8, 4.8, 'foo'); });
+}
+Tests.test_vertexAttrib3fv = function(gl) {
+  assertFail(function(){ gl.vertexAttrib3fv('foo', []); });
+  assertFail(function(){ gl.vertexAttrib3fv(1, 'hello'); });
+}
+Tests.test_vertexAttrib4f = function(gl) {
+  assertFail(function(){ gl.vertexAttrib4f('foo', 4.8, 4.8, 4.8, 4.8); });
+  assertFail(function(){ gl.vertexAttrib4f(1, 'foo', 4.8, 4.8, 4.8); });
+  assertFail(function(){ gl.vertexAttrib4f(1, 4.8, 'foo', 4.8, 4.8); });
+  assertFail(function(){ gl.vertexAttrib4f(1, 4.8, 4.8, 'foo', 4.8); });
+  assertFail(function(){ gl.vertexAttrib4f(1, 4.8, 4.8, 4.8, 'foo'); });
+}
+Tests.test_vertexAttrib4fv = function(gl) {
+  assertFail(function(){ gl.vertexAttrib4fv('foo', []); });
+  assertFail(function(){ gl.vertexAttrib4fv(1, 'hello'); });
 }
 Tests.test_vertexAttribPointer = function(gl) {
-  assertFail(function(){ gl.vertexAttribPointer(-20, 1, 1, 1); });
-  assertFail(function(){ gl.vertexAttribPointer(1, -20, 1, 1); });
-  assertFail(function(){ gl.vertexAttribPointer(1, 1, -20, 1); });
-  assertFail(function(){ gl.vertexAttribPointer(1, 1, 1, -20); });
+  assertFail(function(){ gl.vertexAttribPointer('foo', 1, 1, 1); });
+  assertFail(function(){ gl.vertexAttribPointer(1, 'foo', 1, 1); });
+  assertFail(function(){ gl.vertexAttribPointer(1, 1, 'foo', 1); });
+  assertFail(function(){ gl.vertexAttribPointer(1, 1, 1, 'foo'); });
 }
 Tests.test_viewport = function(gl) {
-  assertFail(function(){ gl.viewport(null, 0, 1, 1); });
-  assertFail(function(){ gl.viewport(0, null, 1, 1); });
+  assertFail(function(){ gl.viewport('foo', 0, 1, 1); });
+  assertFail(function(){ gl.viewport(0, 'foo', 1, 1); });
   assertFail(function(){ gl.viewport(0, 0, -10, 1); });
   assertFail(function(){ gl.viewport(0, 0, 1, -10); });
 }
+Tests.test_uniformf = function(gl) {
+  assertFail(function(){ gl.uniformf('foo', []); });
+  assertFail(function(){ gl.uniformf(0, 'hello'); });
+}
+Tests.test_uniformi = function(gl) {
+  assertFail(function(){ gl.uniformi('foo', []); });
+  assertFail(function(){ gl.uniformi(0, 'hello'); });
+}
+Tests.test_uniformMatrix = function(gl) {
+  assertFail(function(){ gl.uniformMatrix('foo', []); });
+  assertFail(function(){ gl.uniformMatrix(0, 'hello'); });
+}
+Tests.test_vertexAttrib = function(gl) {
+  assertFail(function(){ gl.vertexAttrib('foo', []); });
+  assertFail(function(){ gl.vertexAttrib(1, 'hello'); });
+}
 Tests.test_texImage2DHTML = function(gl) {
-  assertFail(function(){ gl.texImage2DHTML(-20, 0, new Image()); });
-  assertFail(function(){ gl.texImage2DHTML(1, null, new Image()); });
+  assertFail(function(){ gl.texImage2DHTML('foo', 0, new Image()); });
+  assertFail(function(){ gl.texImage2DHTML(1, 'foo', new Image()); });
   assertFail(function(){ gl.texImage2DHTML(1, 0, null); });
 }
 Tests.test_texSubImage2DHTML = function(gl) {
-  assertFail(function(){ gl.texSubImage2DHTML(-20, 0, 0, 0, new Image()); });
-  assertFail(function(){ gl.texSubImage2DHTML(1, null, 0, 0, new Image()); });
-  assertFail(function(){ gl.texSubImage2DHTML(1, 0, null, 0, new Image()); });
-  assertFail(function(){ gl.texSubImage2DHTML(1, 0, 0, null, new Image()); });
+  assertFail(function(){ gl.texSubImage2DHTML('foo', 0, 0, 0, new Image()); });
+  assertFail(function(){ gl.texSubImage2DHTML(1, 'foo', 0, 0, new Image()); });
+  assertFail(function(){ gl.texSubImage2DHTML(1, 0, 'foo', 0, new Image()); });
+  assertFail(function(){ gl.texSubImage2DHTML(1, 0, 0, 'foo', new Image()); });
   assertFail(function(){ gl.texSubImage2DHTML(1, 0, 0, 0, null); });
 }
 Tests.startUnit = function() {
