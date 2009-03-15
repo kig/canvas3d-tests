@@ -125,7 +125,7 @@ function redraw(canvas, gl, shader, fbo, fbo2, fbo3, depth, identity, unpremult,
     fbo3.use();
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     depth.use();
-    var dva = shader.attrib("Vertex");
+    var dva = depth.attrib("Vertex");
     
     drawScene(gl, depth, dva);
 
@@ -512,10 +512,13 @@ window.addEventListener("load", init, false);
       As there is no fixed-function pipeline, you need to write GLSL shaders to draw <i>anything</i>. And you need to do your own transformation math, including keeping track of the transformation matrix stack. So the raw API is really not for the faint of heart; you do need to know your 3D math and shading equations.
     </p>
     <p>
-      For example, to draw the per-pixel shaded spinning cube on the right - around 600 lines of code in total - I had to scrounge the internet for <a href="http://www.lighthouse3d.com/opengl/glsl/index.php?pointlight">GLSL shaders</a> to do the transformation and lighting, and write a small matrix math library in JavaScript to create the transformation matrices. While educational, it was also a rather tedious and error-prone experience. (Not to mention that I still don't know if it all works correctly.)
+      For example, to draw the spinning cubes on the right - around 200 lines of application code, 250 lines of shaders and 800 lines of library code - I had to scrounge the internet for <a href="http://www.lighthouse3d.com/opengl/glsl/index.php?pointlight">GLSL shaders</a> to do the transformation and lighting, write a small matrix math library in JavaScript and a DoF blur shader. While highly educational, it was also a rather steep hill to climb.
     </p>
     <p>
-      So, the intended users of the raw context interface are not really end-users in the same fashion as with the 2D context, but the OpenGL context is more aimed towards library developers for creating easy-to-use interfaces to the functionality and 3D developers who want as much control over the rendering pipeline as possible. And it's also a playground for learning about how immediate-mode 3D should work in the browser.
+      So, the intended audience of the raw context interface are not really end-users, but library developers who can write easy-to-use interfaces to the functionality, and 3D developers who require a high level of control over the rendering pipeline.
+    </p>
+    <p>
+      The really cool thing about the OpenGL Canvas is that it doesn't make policy decisions. There's no single set-in-stone use case for it: In addition to 3D graphics, you can also use it for filtering images, visualizing fluid dynamics, doing real-time video effects, or just crunching a whole lot of FP math. If you can do it on the GPU, you're in luck!
     </p>
     </div>
     <div id="above">
