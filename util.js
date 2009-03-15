@@ -562,15 +562,11 @@ VBO.prototype = {
     for (var i=0; i<arguments.length; i++) {
       if (arguments[i] == null) continue;
       gl.bindBuffer(gl.ARRAY_BUFFER, this.vbos[i]);
-//       throwError(gl, "bindBuffer");
       gl.vertexAttribPointer(arguments[i], this.data[i].size, gl.FLOAT, 0);
-//       throwError(gl, "vertexAttribPointer");
       gl.enableVertexAttribArray(arguments[i]);
-//       throwError(gl, "enableVertexAttribArray");
     }
     if (this.elementsVBO != null) {
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.elementsVBO);
-//       throwError(gl, "bindBuffer ELEMENT_ARRAY_BUFFER");
     }
   },
 
