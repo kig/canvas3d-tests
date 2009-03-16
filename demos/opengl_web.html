@@ -53,12 +53,31 @@ function drawCube (gl, shader, angle, axis, x,y,z, s, va, na, ta) {
     cube.draw(va, na, ta);
 }
 
+var carr = [];
+for (var i=0; i<75; i++) {
+    carr.push([Math.random(), Math.random(), Math.random()]);
+}
+
 function drawScene (gl, shader, va, na, ta) {
-    var t = new Date().getTime();
+    var ot = new Date().getTime();
 
     shader.uniformMatrix("PMatrix", pmat);
 
-    drawCube(gl, shader,
+    for (var i=0; i<carr.length; i++){
+        var c = carr[i];
+        var f = c[1] < 0.5 ? 1 : -1;
+        var t = ot;
+        drawCube(gl, shader,
+                (t/(f*400*(c[0]+0.5))) % (2*Math.PI), c,
+                  
+                -0.3+c[2],
+                -0.2+Math.cos((c[1]*Math.PI*2)+t/1000)*1,
+                0.3+Math.sin((c[1]*Math.PI*2)+t/1000)*3,
+
+                0.05 + Math.pow((c[0]+c[1]+c[2])*0.33, 2)*0.3,
+                va, na, ta);
+    }
+/*    drawCube(gl, shader,
               (t/400) % (2*Math.PI), [0, 1, 1],
               0, -0.1+Math.cos(t/1000)*1, Math.sin(t/1000)*3,
               0.6,
@@ -72,7 +91,7 @@ function drawScene (gl, shader, va, na, ta) {
               (-t/250) % (2*Math.PI), [0.2, 1.2, 1],
               0.9, -0.1+Math.cos((t*1.2-120)/1000)*1, Math.sin((t*1.2-120)/1000)*4,
               0.15,
-              va, na, ta);
+              va, na, ta);*/
 }
 
 var vmat = new Array(16);
@@ -81,7 +100,6 @@ var pmat;
 var look = Matrix.lookAt([4,-1,8], [-0.2,0,0], [0,1,0]);
 
 function redraw(canvas, gl, shader, fbo, fbo2, fbo3, depth, identity, unpremult, hblur, vblur, hdof, vdof) {
-//     return
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.enable(gl.DEPTH_TEST);
