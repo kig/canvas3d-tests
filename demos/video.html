@@ -75,8 +75,8 @@ var processor = {
         float x = cos(a) * r;
         float y = sin(a) * r;
         vec4 c2 = texture2D(Texture2, vec2(0.7+x, 0.5+y));
-        if (c.g > 120.0/255.0 && c.r > 120.0/255.0 && c.b < 50.0/255.0)
-            c2.a = 0.0;
+        bool b = (c.g > 120.0/255.0 && c.r > 120.0/255.0 && c.b < 50.0/255.0);
+        c2.a = mix(c2.a, 0.0, b);
         gl_FragColor = c2;
     }
 </script>
