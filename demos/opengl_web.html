@@ -54,7 +54,7 @@ function drawCube (gl, shader, angle, axis, x,y,z, s, va, na, ta) {
 }
 
 var carr = [];
-for (var i=0; i<75; i++) {
+for (var i=0; i<25; i++) {
     carr.push([Math.random(), Math.random(), Math.random()]);
 }
 
@@ -70,9 +70,9 @@ function drawScene (gl, shader, va, na, ta) {
         drawCube(gl, shader,
                 (t/(f*400*(c[0]+0.5))) % (2*Math.PI), c,
                   
-                -0.3+c[2],
-                -0.2+Math.cos((c[1]*Math.PI*2)+t/1000)*1,
-                0.3+Math.sin((c[1]*Math.PI*2)+t/1000)*3,
+                0.45+c[2],
+                -0.4+Math.cos((c[1]*Math.PI*2)+t/1000),
+                0.8+Math.sin((c[1]*Math.PI*2)+t/1000)*3.2,
 
                 0.05 + Math.pow((c[0]+c[1]+c[2])*0.33, 2)*0.3,
                 va, na, ta);
