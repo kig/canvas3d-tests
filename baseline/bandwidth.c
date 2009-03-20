@@ -78,9 +78,11 @@ void texImage2D() {
   clock_t t1, t2;
   int i;
   t1 = clock();
-  for (i=0; i<1000; i++)
+  for (i=0; i<1000; i++) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 256, 256, 0, 
                  GL_RGBA, GL_UNSIGNED_BYTE, texArr);
+    glFinish();
+  }
   t2 = clock();
   printf("texImage2D 1000x 256x256x4: %f\n", ((double)(t2-t1)) / CLOCKS_PER_SEC);
 }
@@ -88,29 +90,25 @@ void texSubImage2D() {
   clock_t t1, t2;
   int i;
   t1 = clock();
-  for (i=0; i<1000; i++)
+  for (i=0; i<1000; i++) {
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 256, 256,
                  GL_RGBA, GL_UNSIGNED_BYTE, texArr);
+    glFinish();
+  }
   t2 = clock();
   printf("texSubImage2D 1000x 256x256x4: %f\n", ((double)(t2-t1)) / CLOCKS_PER_SEC);
 }
-void readPixels() {
-  clock_t t1, t2;
-  int i,j;
-  t1 = clock();
-  for (i=0; i<1000; i++) {
-    glReadPixels(0, 0, 256, 256, GL_RGBA, GL_UNSIGNED_BYTE, texArr);
-  }
-  t2 = clock();
-  printf("readPixels 1000x 256x256x4: %f\n", ((double)(t2-t1)) / CLOCKS_PER_SEC);
-}
+
 void bufferData() {
   clock_t t1, t2;
   int i;
   glBindBuffer(GL_ARRAY_BUFFER, bufs[0]);
   t1 = clock();
-  for (i=0; i<1000; i++)
-    glBufferData(GL_ARRAY_BUFFER, 256*256*4*sizeof(GLuint), bufArr, GL_STATIC_DRAW);
+  for (i=0; i<1000; i++) {
+    glBufferData(GL_ARRAY_BUFFER, 256*256*4*sizeof(GLuint), bufArr,
+                  GL_STATIC_DRAW);
+    glFinish();
+}
   t2 = clock();
   printf("bufferData 1000x 256x256x4x4: %f\n", ((double)(t2-t1)) / CLOCKS_PER_SEC);
 }
@@ -119,8 +117,10 @@ void bufferSubData() {
   int i;
   glBindBuffer(GL_ARRAY_BUFFER, bufs[0]);
   t1 = clock();
-  for (i=0; i<1000; i++)
+  for (i=0; i<1000; i++) {
     glBufferSubData(GL_ARRAY_BUFFER, 0, 256*256*4*sizeof(GLuint), bufArr);
+    glFinish();
+  }
   t2 = clock();
   printf("bufferSubData 1000x 256x256x4x4: %f\n", ((double)(t2-t1)) / CLOCKS_PER_SEC);
 }
@@ -132,9 +132,10 @@ void vertexArrayDraw() {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glVertexPointer(4, GL_FLOAT, 0, bufArr);
   t1 = clock();
-  for (i=0; i<1000; i++)
+  for (i=0; i<1000; i++) {
     glDrawArrays(GL_TRIANGLES, 0, 256*256);
-  glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, texArr);
+    glFinish();
+  }
   t2 = clock();
   printf("vertex arrays 1000x 256x256 verts: %f\n", ((double)(t2-t1)) / CLOCKS_PER_SEC);
 }
@@ -148,8 +149,8 @@ void vertexArrayDrawC() {
   for (i=0; i<1000; i++) {
     glVertexPointer(4, GL_FLOAT, 0, bufArr);
     glDrawArrays(GL_TRIANGLES, 0, 256*256);
+    glFinish();
   }
-  glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, texArr);
   t2 = clock();
   printf("vertex arrays change after draw 1000x 256x256 verts: %f\n", ((double)(t2-t1)) / CLOCKS_PER_SEC);
 }
@@ -161,9 +162,10 @@ void vboDraw() {
   glBindBuffer(GL_ARRAY_BUFFER, bufs[0]);
   glVertexPointer(4, GL_FLOAT, 0, 0);
   t1 = clock();
-  for (i=0; i<1000; i++)
+  for (i=0; i<1000; i++) {
     glDrawArrays(GL_TRIANGLES, 0, 256*256);
-  glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, texArr);
+    glFinish();
+  }
   t2 = clock();
   printf("vbo 1000x 256x256 verts: %f\n", ((double)(t2-t1)) / CLOCKS_PER_SEC);
 }
@@ -179,8 +181,8 @@ void vboDrawC() {
     glBindBuffer(GL_ARRAY_BUFFER, bufs[i%2]);
     glVertexPointer(4, GL_FLOAT, 0, 0);
     glDrawArrays(GL_TRIANGLES, 0, 256*256);
+    glFinish();
   }
-  glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, texArr);
   t2 = clock();
   printf("vbo change after draw 1000x 256x256 verts: %f\n", ((double)(t2-t1)) / CLOCKS_PER_SEC);
 }
@@ -207,7 +209,6 @@ int main () {
   vertexArrayDrawC();
   vboDraw();
   vboDrawC();
-  readPixels();
   
   glDeleteBuffers(2, bufs);
   glDeleteTextures(1, &tex);
