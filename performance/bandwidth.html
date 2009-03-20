@@ -121,9 +121,10 @@ Tests.testTexImage2D = function(gl) {
     });
     sh.destroy();
     sh = new Filter(gl, 'vert-t', 'frag-t');
+    sh.apply();
     time("textureDraw", function() {
         for (var i=0; i<1000; i++)
-            sh.apply();
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
         gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
     });
     sh.destroy();
