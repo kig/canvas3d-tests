@@ -3,3 +3,4 @@ templates
 *.h.*
 *.cpp.*
 *.idl.*
+baseline/bandwidth
