@@ -54,6 +54,10 @@ Tests.testTexImage2D = function(gl) {
         for (var i=0; i<100; i++)
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 256, 256, 0, gl.RGBA, gl.UNSIGNED_BYTE, texArr);
     });
+    time("texImage2D", function() {
+        for (var i=0; i<100; i++)
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 256, 256, 0, gl.RGBA, gl.UNSIGNED_BYTE, texArr);
+    });
     time("texSubImage2D", function() {
         for (var i=0; i<100; i++)
             gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, 256, 256, gl.RGBA, gl.UNSIGNED_BYTE, texArr);
@@ -90,6 +94,8 @@ Tests.testTexImage2D = function(gl) {
     gl.disable(gl.DEPTH_TEST);
     sh.use();
     var v = sh.attrib('Vertex');
+    for (var i=0; i<16; i++)
+        gl.disableVertexAttribArray(i);
     gl.enableVertexAttribArray(v);
     gl.vertexAttribPointer(v, 4, gl.FLOAT, 0);
     time("verticeDraw", function() {
@@ -128,6 +134,8 @@ Tests.testTexImage2D = function(gl) {
         gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
     });
     sh.destroy();
+    gl.bindTexture(gl.TEXTURE_2D, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, 0);
     gl.deleteBuffers(bufs);
     gl.deleteTextures([tex]);
 }

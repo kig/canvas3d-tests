@@ -202,6 +202,7 @@ int main () {
   
   warmup();
   texImage2D();
+  texImage2D();
   texSubImage2D();
   bufferData();
   bufferSubData();
