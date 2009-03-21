@@ -9,26 +9,6 @@ Top priority functions to test are functions that:
 == List of methods ==
   [Legend: + = test exists, - = no test]
 
-copyTexImage2D
-  - with NULL
-  - with array of ints
-  - with bad args (bad dims, bad type, bad border, bad level)
-
-copyTexSubImage2D
-  - with array of ints
-  - with bad args (bad offset, bad dims, bad type, bad level)
-
-texSubImage2D
-  - with array of ints
-  - with bad args (bad offset, bad dims, bad type, bad level)
-
-texSubImage2DHTML
-  - with canvas
-  - with img
-  - with bad args (bad level, non-image element, bad offset)
-  - with non-SOP img
-  - with non-SOP canvas (i.e. canvas with non-SOP img)
-
 
 == Methods that have tests ==
 
@@ -39,6 +19,14 @@ bufferData
 bufferSubData
   + with array
   + with bad args
+
+copyTexImage2D
+  + normally
+  + with bad args (bad dims, bad type, bad border, bad level)
+
+copyTexSubImage2D
+  + normally
+  + with bad args (bad offset, bad dims, bad type, bad level)
 
 drawArrays
   + with vertex arrays
@@ -69,6 +57,17 @@ texImage2DHTML
   + with canvas
   + with img
   + with bad args (non-image element)
+  + with non-SOP img
+  + with non-SOP canvas (i.e. canvas with non-SOP img)
+
+texSubImage2D
+  + with array of ints
+  + with bad args (bad offset, bad dims, bad type, bad level)
+
+texSubImage2DHTML
+  + with canvas
+  + with img
+  + with bad args (bad level, non-image element, bad offset)
   + with non-SOP img
   + with non-SOP canvas (i.e. canvas with non-SOP img)
 
