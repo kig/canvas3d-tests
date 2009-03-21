@@ -70,13 +70,13 @@ Tests.testTexImage2D = function(gl) {
         gl.copyTexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 0,-1, 1,1,0);
     });
     assertFail(function(){
+        gl.copyTexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 0,0, -1,1,0);
+    });
+    assertFail(function(){
+        gl.copyTexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 0,0, 1,-1,0);
+    });
+    assertFail(function(){
         gl.copyTexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 0,0, 1,1,1);
-    });
-    assertFail(function(){
-        gl.copyTexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 0,0, -1,1,1);
-    });
-    assertFail(function(){
-        gl.copyTexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 0,0, 1,-1,1);
     });
     assertFail(function(){
         gl.copyTexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 0,0, 1,1,-1);
@@ -89,6 +89,9 @@ Tests.testTexImage2D = function(gl) {
     });
     assertFail(function(){
         gl.copyTexImage2D(gl.TEXTURE_2D, 0, gl.FLOAT, 0,0, 16,16,0);
+    });
+    assertFail(function(){
+        gl.copyTexImage2D(gl.TEXTURE_2D, -1, gl.RGBA, 0,0, 16,16,0);
     });
 }
 
