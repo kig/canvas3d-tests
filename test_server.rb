@@ -32,6 +32,6 @@ s = TCPServer.new(nil, 8888)
 
 while c = s.accept
   l = c.gets
-  puts URI.unescape(l.split(" ")[1][1..-1]) if l != nil
+  puts l.split(" ")[1][1..-1] if l != nil
   c.close
 end
