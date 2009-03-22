@@ -61,7 +61,7 @@ Tests.teardown = function(gl, prog, v,n,t) {
 }
 
 Tests.endUnit = function(gl, prog, v,n,t) {
-  deleteShader(gl, prog);
+  prog.destroy();
 }
 
 
