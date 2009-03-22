@@ -41,24 +41,18 @@ Tests.startUnit = function () {
 
 Tests.testBindBufferARRAY_BUFFER = function(gl) {
   var b = gl.genBuffers(1)[0];
-  assert(0 == checkError(gl, "bindBuffer"));
-  gl.bindBuffer(gl.ARRAY_BUFFER, -1);
-  assert(0 != checkError(gl, "bindBuffer -1"));
-  gl.bindBuffer(gl.ARRAY_BUFFER, 1000000000);
-  assert(0 != checkError(gl, "bindBuffer 1000000000"));
+  assertOk(function(){gl.bindBuffer(gl.ARRAY_BUFFER, b)});
+  assertFail(function(){gl.bindBuffer(gl.ARRAY_BUFFER, -1);});
+  assertFail(function(){gl.bindBuffer(gl.ARRAY_BUFFER, 1000000000);});
   gl.deleteBuffers([b]);
-  assert(0 == checkError(gl, "deleteBuffers"));
 }
 
 Tests.testBindBufferELEMENT_ARRAY_BUFFER = function(gl) {
   var b = gl.genBuffers(1)[0];
-  assert(0 == checkError(gl, "genBuffers"));
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, -1);
-  assert(0 != checkError(gl, "bindBuffer -1"));
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, 1000000000);
-  assert(0 != checkError(gl, "bindBuffer 1000000000"));
+  assertOk(function(){gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, b)});
+  assertFail(function(){gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, -1);});
+  assertFail(function(){gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, 1000000000);});
   gl.deleteBuffers([b]);
-  assert(0 == checkError(gl, "deleteBuffers"));
 }
 Tests.testBindBuffer = function(gl) {
     assertFail(function(){gl.bindBuffer(gl.FLOAT, 0);});
