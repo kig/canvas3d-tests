@@ -39,7 +39,7 @@ Tests.startUnit = function () {
   return [gl];
 }
 
-Tests.bindBufferARRAY_BUFFER = function(gl) {
+Tests.testBindBufferARRAY_BUFFER = function(gl) {
   var b = gl.genBuffers(1)[0];
   assert(0 == checkError(gl, "genBuffers"));
   gl.bindBuffer(gl.ARRAY_BUFFER, b);
@@ -50,7 +50,7 @@ Tests.bindBufferARRAY_BUFFER = function(gl) {
   assert(0 == checkError(gl, "deleteBuffers"));
 }
 
-Tests.bindBufferELEMENT_ARRAY_BUFFER = function(gl) {
+Tests.testBindBufferELEMENT_ARRAY_BUFFER = function(gl) {
   var b = gl.genBuffers(1)[0];
   assert(0 == checkError(gl, "genBuffers"));
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, b);
