@@ -214,7 +214,7 @@ Tests.testOES20Methods = function(gl) {
   }.join("\n"),
 
 
-  "badArgsBadTypes" => "Tests.autorun=false;\n"+ funcs.map{|_,fn,args|
+  "badArgsBadTypes" => funcs.map{|_,fn,args|
     s = "Tests.test_#{fn} = function(gl) {\n"
     (0...args.length).each{|i|
       begin
