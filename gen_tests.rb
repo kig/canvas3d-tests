@@ -206,28 +206,28 @@ Tests.testOES20Methods = function(gl) {
     s << "}"
   }.join("\n"),
 
-  "badArgsArityMoreThanArgc" => funcs.map {|_,fn,args|
-    s = "Tests.test_#{fn} = function(gl) {\n"
-    s << "  assertFail(function(){ gl.#{fn}(#{
-            (["0"] * (args.length+1)).join(",")}); });\n"
-    s << "}"
-  }.join("\n"),
+#   "badArgsArityMoreThanArgc" => funcs.map {|_,fn,args|
+#     s = "Tests.test_#{fn} = function(gl) {\n"
+#     s << "  assertFail(function(){ gl.#{fn}(#{
+#             (["0"] * (args.length+1)).join(",")}); });\n"
+#     s << "}"
+#   }.join("\n"),
 
 
-  "badArgsBadTypes" => funcs.map{|_,fn,args|
-    s = "Tests.test_#{fn} = function(gl) {\n"
-    (0...args.length).each{|i|
-      begin
-      fargs = generate_good_args(args)
-      fargs[i] = generate_bad_arg(args[i])
-      s << "  assertFail(function(){ gl.#{fn}(#{fargs.join(", ")}); });\n"
-      rescue => e
-        puts fn, e
-        exit 1
-      end
-    }
-    s << "}"
-  }.join("\n"),
+#   "badArgsBadTypes" => funcs.map{|_,fn,args|
+#     s = "Tests.test_#{fn} = function(gl) {\n"
+#     (0...args.length).each{|i|
+#       begin
+#       fargs = generate_good_args(args)
+#       fargs[i] = generate_bad_arg(args[i])
+#       s << "  assertFail(function(){ gl.#{fn}(#{fargs.join(", ")}); });\n"
+#       rescue => e
+#         puts fn, e
+#         exit 1
+#       end
+#     }
+#     s << "}"
+#   }.join("\n"),
 }
 
 test_header = <<EOF
