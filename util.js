@@ -617,7 +617,7 @@ FBO.prototype = {
       rb = this.rbo != null ? this.rbo : gl.genRenderbuffers(1)[0];
       gl.bindRenderbuffer(gl.RENDERBUFFER, rb);
       checkError(gl, "FBO.init bindRenderbuffer");
-      gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT, w, h);
+      gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, w, h);
       checkError(gl, "FBO.init renderbufferStorage");
     }
 
