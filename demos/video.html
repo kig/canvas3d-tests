@@ -14,11 +14,8 @@ var processor = {
       }, 0);
   },
 
-  doLoad: function() {
-    this.video = document.getElementById("video");
-    this.c1 = document.getElementById("c1");
-    this.ctx1 = this.c1.getContext("2d");
-    this.ctx1.globalCompositeOperation = 'copy';
+  init: function() {
+    if (this.initDone) return;
     this.c2 = document.getElementById("c2");
     this.ctx2 = this.c2.getContext("moz-glweb20");
     this.greenScreen = new Filter(this.ctx2, 'identity-flip-vert', 'greenScreen');
@@ -27,8 +24,18 @@ var processor = {
     this.ctx2.activeTexture(this.ctx2.TEXTURE1);
     this.tex2 = loadTexture(this.ctx2, document.getElementById('i'), false);
     this.ctx2.activeTexture(this.ctx2.TEXTURE0);
+    this.initDone = true;
+  },
+
+  doLoad: function() {
+    this.video = document.getElementById("video");
+    this.c1 = document.getElementById("c1");
+    this.ctx1 = this.c1.getContext("2d");
+    this.ctx1.globalCompositeOperation = 'copy';
+    this.ctx1.fillRect(0,0,this.c1.width, this.c1.height);
     var self = this;
     this.video.addEventListener("play", function() {
+        self.init();
         self.width = self.video.videoWidth;
         self.height = self.video.videoHeight;
         self.timerCallback();
@@ -39,8 +46,8 @@ var processor = {
     this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
     this.ctx2.texSubImage2DHTML(this.ctx2.TEXTURE_2D, 0, 0, 0, this.c1);
     this.greenScreen.apply(function(s) {
-        s.uniformi('Texture', [0]);
-        s.uniformi('Texture2', [1]);
+        s.uniform1iv('Texture', [0]);
+        s.uniform1iv('Texture2', [1]);
     });
     this.ctx2.swapBuffers();
 

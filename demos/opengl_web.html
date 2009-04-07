@@ -1,5 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head>
+
 <title>OpenGL for the web</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
@@ -39,15 +40,12 @@ function init(ev) {
 }
 
 function drawCube (gl, shader, angle, axis, x,y,z, s, va, na, ta) {
-    var rot = Matrix.rotate(angle, axis);
-    var trans = Matrix.translate3(x,y,z);
-    var sca = Matrix.scale1(s);
-    Matrix.mul4x4InPlace(Matrix.identity, look, vmat);
-    Matrix.mul4x4InPlace(vmat, trans, vmat2);
-    Matrix.mul4x4InPlace(vmat2, sca, vmat);
-    Matrix.mul4x4InPlace(vmat, rot, vmat2);
+    Matrix.copyMatrix(look, vmat);
+    Matrix.translate3InPlace(x,y,z,vmat);
+    Matrix.scale1InPlace(s,vmat);
+    Matrix.rotateInPlace(angle, axis, vmat);
 
-    shader.uniformMatrix("MVMatrix", vmat2);
+    shader.uniformMatrix4fv("MVMatrix", vmat);
 
     var cube = Cube.getCachedVBO(gl);
     cube.draw(va, na, ta);
@@ -60,9 +58,9 @@ for (var i=0; i<25; i++) {
 
 function drawScene (gl, shader, va, na, ta) {
     var ot = new Date().getTime();
+    var t = ot;
 
-    shader.uniformMatrix("PMatrix", pmat);
-
+    shader.uniformMatrix4fv("PMatrix", pmat);
     for (var i=0; i<carr.length; i++){
         var c = carr[i];
         var f = c[1] < 0.5 ? 1 : -1;
@@ -70,46 +68,32 @@ function drawScene (gl, shader, va, na, ta) {
         drawCube(gl, shader,
                 (t/(f*400*(c[0]+0.5))) % (2*Math.PI), c,
                   
-                0.45+c[2],
-                -0.4+Math.cos((c[1]*Math.PI*2)+t/1000),
-                0.8+Math.sin((c[1]*Math.PI*2)+t/1000)*3.2,
+                0.45+0.8*c[2],
+                -0.4+Math.cos((i/carr.length*Math.PI*2)+t/1000),
+                0.8+Math.sin((i/carr.length*Math.PI*2)+t/1000)*3.2,
 
                 0.05 + Math.pow((c[0]+c[1]+c[2])*0.33, 2)*0.3,
                 va, na, ta);
     }
-/*    drawCube(gl, shader,
-              (t/400) % (2*Math.PI), [0, 1, 1],
-              0, -0.1+Math.cos(t/1000)*1, Math.sin(t/1000)*3,
-              0.6,
-              va, na, ta);
-    drawCube(gl, shader,
-              (t/350) % (2*Math.PI), [0, 1.2, 1],
-              0.6, -0.1+Math.cos((t*1.4+120)/1000)*1, Math.sin((t*1.4+120)/1000)*3,
-              0.25,
-              va, na, ta);
-    drawCube(gl, shader,
-              (-t/250) % (2*Math.PI), [0.2, 1.2, 1],
-              0.9, -0.1+Math.cos((t*1.2-120)/1000)*1, Math.sin((t*1.2-120)/1000)*4,
-              0.15,
-              va, na, ta);*/
 }
 
 var vmat = new Array(16);
 var vmat2 = new Array(16);
 var pmat;
 var look = Matrix.lookAt([4,-1,8], [-0.2,0,0], [0,1,0]);
+var useDoF = false;
 
 function redraw(canvas, gl, shader, fbo, fbo2, fbo3, depth, identity, unpremult, hblur, vblur, hdof, vdof) {
+    
+    var doDoF = useDoF;
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.enable(gl.DEPTH_TEST);
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, 0);
-
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     
     fbo.use();
-
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     shader.use();
@@ -121,80 +105,69 @@ function redraw(canvas, gl, shader, fbo, fbo2, fbo3, depth, identity, unpremult,
     if (pmat == null)
         pmat = Matrix.perspective(30, canvas.width/canvas.height, 1, 100);
 
-    shader.uniformf("MaterialSpecular", [0.95, 0.9, 0.6, 1]);
-    shader.uniformf("MaterialDiffuse", [0.50, 0.35, 0.35, 1]);
-    shader.uniformf("MaterialAmbient", [0.0, 0.1, 0.2, 1]);
-    shader.uniformf("MaterialShininess", [1.5]);
+    shader.uniform4f("MaterialSpecular", 0.95, 0.9, 0.6, 1);
+    shader.uniform4f("MaterialDiffuse", 0.50, 0.35, 0.35, 1);
+    shader.uniform4f("MaterialAmbient", 0.0, 0.1, 0.2, 1);
+    shader.uniform1f("MaterialShininess", 1.5);
 
-    shader.uniformf("GlobalAmbient", [0.1, 0.1, 0.1, 1]);
+    shader.uniform4f("GlobalAmbient", 0.1, 0.1, 0.1, 1);
 
-    shader.uniformf("LightPos", [1, 5, 3, 1.0]);
+    shader.uniform4f("LightPos", 1, 5, 3, 1.0);
 
-    shader.uniformf("LightSpecular", [0.9, 0.9, 0.9, 1]);
-    shader.uniformf("LightDiffuse", [0.8, 0.8, 0.8, 1]);
-    shader.uniformf("LightAmbient", [0.0, 0.06, 0.2, 1]);
-    shader.uniformf("LightConstantAtt", [0.0]);
-    shader.uniformf("LightLinearAtt", [0.1]);
-    shader.uniformf("LightQuadraticAtt", [0.0]);
-
+    shader.uniform4f("LightSpecular", 0.9, 0.9, 0.9, 1);
+    shader.uniform4f("LightDiffuse", 0.8, 0.8, 0.8, 1);
+    shader.uniform4f("LightAmbient", 0.0, 0.06, 0.2, 1);
+    shader.uniform1f("LightConstantAtt", 0.0);
+    shader.uniform1f("LightLinearAtt", 0.1);
+    shader.uniform1f("LightQuadraticAtt", 0.0);
 
     drawScene(gl, shader, va, na);
 
-    fbo3.use();
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    depth.use();
-    var dva = depth.attrib("Vertex");
-    
-    drawScene(gl, depth, dva);
+    if (doDoF) {
 
+        fbo3.use();
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        depth.use();
+        var dva = depth.attrib("Vertex");
 
-    gl.disable(gl.DEPTH_TEST);
-    gl.activeTexture(gl.TEXTURE1);
-    gl.bindTexture(gl.TEXTURE_2D, fbo3.texture);
-    gl.activeTexture(gl.TEXTURE0);
+        drawScene(gl, depth, dva);
 
-    gl.bindTexture(gl.TEXTURE_2D, fbo.texture);
-    fbo2.use();
-    hblur.apply(function(f){
-      f.uniformi("Texture", [0]);
-      f.uniformf("step", [1.0/canvas.width]);
-    });
+        gl.disable(gl.DEPTH_TEST);
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, fbo3.texture);
+        gl.activeTexture(gl.TEXTURE0);
 
-    gl.bindTexture(gl.TEXTURE_2D, fbo2.texture);
-    fbo.use();
-    vblur.apply(function(f){
-      f.uniformi("Texture", [0]);
-      f.uniformf("step", [1/canvas.width]);
-    });
+        fbo.use();
+        gl.bindTexture(gl.TEXTURE_2D, fbo.texture);
 
-    for (var i=0; i<5; i++) {
-      gl.bindTexture(gl.TEXTURE_2D, fbo.texture);
-      fbo2.use();
-      hdof.apply(function(f){
-        f.uniformi("Texture", [0]);
-        f.uniformi("Depth", [1]);
-        f.uniformf("iter", [i]);
-        f.uniformf("step", [1.0/canvas.width]);
-      });
+        for (var i=0; i<3; i++) {
+            hdof.apply(function(f){
+                f.uniform1i("Texture", 0);
+                f.uniform1i("Depth", 1);
+                f.uniform1f("iter", i);
+                f.uniform1f("step", 1.0/canvas.width);
+            });
 
-      gl.bindTexture(gl.TEXTURE_2D, fbo2.texture);
-      fbo.use();
-      vdof.apply(function(f){
-        f.uniformi("Texture", [0]);
-        f.uniformi("Depth", [1]);
-        f.uniformf("iter", [i]);
-        f.uniformf("step", [1.0/canvas.width]);
-      });
+            vdof.apply(function(f){
+                f.uniform1i("Texture", 0);
+                f.uniform1i("Depth", 1);
+                f.uniform1f("iter", i);
+                f.uniform1f("step", 1.0/canvas.width);
+            });
+        }
+
     }
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, 0);
 
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(gl.TEXTURE_2D, 0);
     gl.activeTexture(gl.TEXTURE0);
-
-    gl.bindFramebuffer(gl.FRAMEBUFFER, 0);
     gl.bindTexture(gl.TEXTURE_2D, fbo.texture);
 
-    unpremult.apply();
+    unpremult.apply(function(f){
+      f.uniform1i("Texture", 0);
+    });
 
     gl.swapBuffers();
 }
@@ -296,7 +269,7 @@ window.addEventListener("load", init, false);
       }
     </script>
     <script id="depth-vert" type="x-shader/x-vertex">
-    #version 120
+    #version 110
       attribute vec3 Vertex;
       uniform mat4 PMatrix;
       uniform mat4 MVMatrix;
@@ -308,7 +281,7 @@ window.addEventListener("load", init, false);
       }
     </script>
     <script id="depth-frag" type="x-shader/x-fragment">
-    #version 120
+    #version 110
       varying float depth;
       void main()
       {
@@ -318,7 +291,7 @@ window.addEventListener("load", init, false);
     </script>
 
     <script id="identity-vert" type="x-shader/x-vertex">
-    #version 120
+    #version 110
       attribute vec3 Vertex;
       attribute vec2 Tex;
 
@@ -330,7 +303,7 @@ window.addEventListener("load", init, false);
       }
     </script>
     <script id="identity-frag" type="x-shader/x-fragment">
-    #version 120
+    #version 110
       uniform sampler2D Texture;
 
       varying vec4 texCoord0;
@@ -341,7 +314,7 @@ window.addEventListener("load", init, false);
       }
     </script>
     <script id="premult-frag" type="x-shader/x-fragment">
-    #version 120
+    #version 110
       uniform sampler2D Texture;
 
       varying vec4 texCoord0;
@@ -355,7 +328,7 @@ window.addEventListener("load", init, false);
       }
     </script>
     <script id="unpremult-frag" type="x-shader/x-fragment">
-    #version 120
+    #version 110
       uniform sampler2D Texture;
 
       varying vec4 texCoord0;
@@ -363,7 +336,7 @@ window.addEventListener("load", init, false);
       {
         vec4 c = texture2D(Texture, texCoord0.st);
         float a = c.a;
-        c *= 1.0 / a;
+        c /= a;
         c.a = a;
         gl_FragColor = c;
       }
@@ -373,17 +346,17 @@ window.addEventListener("load", init, false);
     #version 120
       uniform sampler2D Texture;
       uniform float step;
+      float kernel[7] = float[](0.046, 0.111, 0.202, 0.283, 0.202, 0.111, 0.046);
       
       varying vec4 texCoord0;
       void main()
       {
-        float kernel[7] = float[](0.046, 0.111, 0.202, 0.283, 0.202, 0.111, 0.046);
         int i=0;
         if (texture2D(Texture, texCoord0.st).a > 0.0) {
           vec4 sum = vec4(0.0);
-          for (i=-3; i<=3; i++) {
+          for (i=0; i<7; i++) {
             vec4 tmp = texture2D(Texture, texCoord0.st + vec2(i*step,0));
-            sum += tmp * kernel[i+3];
+            sum += tmp * kernel[i];
           }
           gl_FragColor = sum;
         } else {
@@ -395,17 +368,17 @@ window.addEventListener("load", init, false);
     #version 120
       uniform sampler2D Texture;
       uniform float step;
+      float kernel[7] = float[](0.046, 0.111, 0.202, 0.283, 0.202, 0.111, 0.046);
 
       varying vec4 texCoord0;
       void main()
       {
-        float kernel[7] = float[](0.046, 0.111, 0.202, 0.283, 0.202, 0.111, 0.046);
         int i=0;
         if (texture2D(Texture, texCoord0.st).a > 0.0) {
           vec4 sum = vec4(0.0);
-          for (i=-3; i<=3; i++) {
+          for (i=0; i<7; i++) {
             vec4 tmp = texture2D(Texture, texCoord0.st + vec2(0,i*step));
-            sum += tmp * kernel[i+3];
+            sum += tmp * kernel[i];
           }
           gl_FragColor = sum;
         } else {
@@ -419,23 +392,29 @@ window.addEventListener("load", init, false);
       uniform sampler2D Depth;
       uniform float step;
       uniform float iter;
+      float kernel[7] = float[7](0.046, 0.111, 0.202, 0.283, 0.202, 0.111, 0.046);
 
       varying vec4 texCoord0;
       void main()
       {
-        float kernel[7] = float[](0.046, 0.111, 0.202, 0.283, 0.202, 0.111, 0.046);
-        int i=0;
-        if (iter < -26.0+36.0*(1.0-texture2D(Depth, texCoord0.st).r)
-            && texture2D(Texture, texCoord0.st).a > 0.0) {
-          vec4 sum = vec4(0.0);
-          for (i=-3; i<=3; i++) {
-            vec4 tmp = texture2D(Texture, texCoord0.st + vec2(float(i)*step,0));
-            sum += tmp * kernel[i+3];
-          }
-          gl_FragColor = sum;
-        } else {
-          gl_FragColor = texture2D(Texture, texCoord0.st);
-        }
+        vec4 tmp;
+        vec4 sum = vec4(0.0);
+        bool b = (iter < -26.0+36.0*(1.0-texture2D(Depth, texCoord0.st).r) && texture2D(Texture, texCoord0.st).a > 0.0);
+        tmp = texture2D(Texture, texCoord0.st + vec2(float(0-3)*step,0));
+        sum += tmp * kernel[0];
+        tmp = texture2D(Texture, texCoord0.st + vec2(float(1-3)*step,0));
+        sum += tmp * kernel[1];
+        tmp = texture2D(Texture, texCoord0.st + vec2(float(2-3)*step,0));
+        sum += tmp * kernel[2];
+        tmp = texture2D(Texture, texCoord0.st + vec2(float(3-3)*step,0));
+        sum += tmp * kernel[3];
+        tmp = texture2D(Texture, texCoord0.st + vec2(float(4-3)*step,0));
+        sum += tmp * kernel[4];
+        tmp = texture2D(Texture, texCoord0.st + vec2(float(5-3)*step,0));
+        sum += tmp * kernel[5];
+        tmp = texture2D(Texture, texCoord0.st + vec2(float(6-3)*step,0));
+        sum += tmp * kernel[6];
+        gl_FragColor = mix(texture2D(Texture, texCoord0.st), sum, b);
       }
     </script>
     <script id="vdof-frag" type="x-shader/x-fragment">
@@ -444,26 +423,29 @@ window.addEventListener("load", init, false);
       uniform sampler2D Depth;
       uniform float step;
       uniform float iter;
+      float kernel[7] = float[7](0.046, 0.111, 0.202, 0.283, 0.202, 0.111, 0.046);
 
       varying vec4 texCoord0;
       void main()
       {
-        float kernel[7] = float[](0.046, 0.111, 0.202, 0.283, 0.202, 0.111, 0.046);
-        int i=0;
-        if (iter < -26.0+36.0*(1.0-texture2D(Depth, texCoord0.st).r)
-            && texture2D(Texture, texCoord0.st).a > 0.0) {
-          vec4 sum = vec4(0.0);
-          for (i=-3; i<=3; i++) {
-            vec4 tmp = texture2D(Texture, texCoord0.st + vec2(0,float(i)*step));
-            sum += tmp * kernel[i+3];
-          }
-          vec4 ic = vec4((5.0-iter)/5.0);
-          ic.a=1.0;
-          gl_FragColor = ic+0.1*sum;
-          gl_FragColor = sum;
-        } else {
-          gl_FragColor = texture2D(Texture, texCoord0.st);
-        }
+        vec4 tmp;
+        vec4 sum = vec4(0.0);
+        bool b = (iter < -26.0+36.0*(1.0-texture2D(Depth, texCoord0.st).r) && texture2D(Texture, texCoord0.st).a > 0.0);
+        tmp = texture2D(Texture, texCoord0.st + vec2(0,float(0-3)*step));
+        sum += tmp * kernel[0];
+        tmp = texture2D(Texture, texCoord0.st + vec2(0,float(1-3)*step));
+        sum += tmp * kernel[1];
+        tmp = texture2D(Texture, texCoord0.st + vec2(0,float(2-3)*step));
+        sum += tmp * kernel[2];
+        tmp = texture2D(Texture, texCoord0.st + vec2(0,float(3-3)*step));
+        sum += tmp * kernel[3];
+        tmp = texture2D(Texture, texCoord0.st + vec2(0,float(4-3)*step));
+        sum += tmp * kernel[4];
+        tmp = texture2D(Texture, texCoord0.st + vec2(0,float(5-3)*step));
+        sum += tmp * kernel[5];
+        tmp = texture2D(Texture, texCoord0.st + vec2(0,float(6-3)*step));
+        sum += tmp * kernel[6];
+        gl_FragColor = mix(texture2D(Texture, texCoord0.st), sum, b);
       }
     </script>
 
@@ -475,6 +457,7 @@ window.addEventListener("load", init, false);
       }
       #canvas {
         position: absolute;
+        cursor: pointer;
         top: 115px; left: 550px;
       }
       #note {
@@ -527,28 +510,42 @@ window.addEventListener("load", init, false);
     </style>
 
 </head><body>
-    <canvas id="canvas" width="400" height="400"></canvas>
+    <canvas id="canvas" width="400" height="400" title="Click to toggle DOF shader" onclick="useDoF = !useDoF"></canvas>
     <pre id="note"></pre>
 
     <div id="content">
     <h1>OpenGL for the web</h1>
     <p>
-      The Canvas 3D extension for Firefox 3 gives web developers access to an OpenGL ES 2.0 drawing context for the canvas tag. What that means is that you can finally harness the power of the GPU for awesome visuals and heavy-duty number crunching in your web apps.
+The Canvas 3D extension for Firefox 3 gives web developers access to an
+OpenGL ES 2.0 drawing context for the canvas tag. What that means is
+that you can finally harness the power of the GPU for awesome visuals
+and heavy-duty number crunching in your web apps. </p><p> OpenGL ES 2.0 is a subset of OpenGL 2.0 aimed at embedded
+devices and game consoles. As such, it's a very minimalistic low-level
+API, even more so than desktop OpenGL. In fact, if you took desktop
+OpenGL and stripped out everything but shaders, vertex arrays and
+textures, you'd get something quite like OpenGL ES 2.0. </p>
     <p>
-      OpenGL ES 2.0 is a subset of OpenGL 2.0 aimed at embedded devices and game consoles. As such, it's a very minimalistic low-level API, even more so than desktop OpenGL. In fact, if you took desktop OpenGL and stripped out everything but shaders, vertex arrays and textures, you'd get something quite like OpenGL ES 2.0.
-    </p>
-    <p>
-      As there is no fixed-function pipeline, you need to write GLSL shaders to draw <i>anything</i>. And you need to do your own transformation math, including keeping track of the transformation matrix stack. So the raw API is really not for the faint of heart; you do need to know your 3D math and shading equations.
-    </p>
-    <p>
-      For example, to draw the spinning cubes on the right - around 200 lines of application code, 250 lines of shaders and 800 lines of library code - I had to scrounge the internet for <a href="http://www.lighthouse3d.com/opengl/glsl/index.php?pointlight">GLSL shaders</a> to do the transformation and lighting, write a small matrix math library in JavaScript and a DoF blur shader. While highly educational, it was also a rather steep hill to climb.
-    </p>
-    <p>
-      So, the intended audience of the raw context interface are not really end-users, but library developers who can write easy-to-use interfaces to the functionality, and 3D developers who require a high level of control over the rendering pipeline.
-    </p>
-    <p>
-      The really cool thing about the OpenGL Canvas is that it doesn't make policy decisions. There's no single set-in-stone use case for it: In addition to 3D graphics, you can also use it for filtering images, visualizing fluid dynamics, doing real-time video effects, or just crunching a whole lot of FP math. If you can do it on the GPU, you're in luck!
-    </p>
+      As there is no fixed-function pipeline, you need to write GLSL shaders to draw <i>anything</i>.
+And you need to do your own transformation math, including keeping
+track of the transformation matrix stack. So the raw API is really not
+for the faint of heart; you do need to know your 3D math and shading
+equations. </p>
+    <p> For example, to draw the spinning cubes on the
+right - around 200 lines of application code, 250 lines of shaders and
+800 lines of library code - I had to scrounge the internet for <a href="http://www.lighthouse3d.com/opengl/glsl/index.php?pointlight">GLSL shaders</a>
+to do the transformation and lighting, write a small matrix math
+library in JavaScript and a DOF blur shader. While highly educational,
+it was also a rather steep hill to climb. </p>
+    <p> So, the intended audience of the raw context
+interface are not really end-users, but library developers who can
+write easy-to-use interfaces to the functionality, and 3D developers
+who require a high level of control over the rendering pipeline. </p>
+    <p> The really cool thing about the OpenGL Canvas is
+that it doesn't make policy decisions. There's no single set-in-stone
+use case for it: In addition to 3D graphics, you can also use it for
+filtering images, visualizing fluid dynamics, doing real-time video
+effects, or just crunching a whole lot of FP math. If you can do it on
+the GPU, you're in luck! </p>
     </div>
     <div id="above">
       <p>You can also place content above the canvas</p>
