@@ -144,6 +144,11 @@ Matrix = {
     0.0, 0.0, 0.0, 1.0
   ],
 
+  copyMatrix : function(src, dst) {
+    for (var i=0; i<16; i++) dst[i] = src[i];
+    return dst;
+  },
+
   make3x3 : function(m) {
     return [
       m[0], m[1], m[2],
@@ -284,6 +289,21 @@ Matrix = {
       0,0,0,1
     ];
   },
+  rotateInPlace : function(angle, axis, m) {
+    axis = Vec3.normalize(axis);
+    var x=axis[0], y=axis[1], z=axis[2];
+    var c = Math.cos(angle);
+    var c1 = 1-c;
+    var s = Math.sin(angle);
+    var tmpMatrix = this.tmpMatrix;
+    var tmpMatrix2 = this.tmpMatrix2;
+    tmpMatrix[0] = x*x*c1+c; tmpMatrix[1] = y*x*c1+z*s; tmpMatrix[2] = z*x*c1-y*s; tmpMatrix[3] = 0;
+    tmpMatrix[4] = x*y*c1-z*s; tmpMatrix[5] = y*y*c1+c; tmpMatrix[6] = y*z*c1+x*s; tmpMatrix[7] = 0;
+    tmpMatrix[8] = x*z*c1+y*s; tmpMatrix[9] = y*z*c1-x*s; tmpMatrix[10] = z*z*c1+c; tmpMatrix[11] = 0;
+    tmpMatrix[12] = 0; tmpMatrix[13] = 0; tmpMatrix[14] = 0; tmpMatrix[15] = 1;
+    this.copyMatrix(m, tmpMatrix2);
+    return this.mul4x4InPlace(tmpMatrix2, tmpMatrix, m);
+  },
 
   scale : function(v) {
     return [
@@ -309,6 +329,18 @@ Matrix = {
       0, 0, 0, 1
     ];
   },
+  scale3InPlace : function(x, y, z, m) {
+    var tmpMatrix = this.tmpMatrix;
+    var tmpMatrix2 = this.tmpMatrix2;
+    tmpMatrix[0] = x; tmpMatrix[1] = 0; tmpMatrix[2] = 0; tmpMatrix[3] = 0;
+    tmpMatrix[4] = 0; tmpMatrix[5] = y; tmpMatrix[6] = 0; tmpMatrix[7] = 0;
+    tmpMatrix[8] = 0; tmpMatrix[9] = 0; tmpMatrix[10] = z; tmpMatrix[11] = 0;
+    tmpMatrix[12] = 0; tmpMatrix[13] = 0; tmpMatrix[14] = 0; tmpMatrix[15] = 1;
+    this.copyMatrix(m, tmpMatrix2);
+    return this.mul4x4InPlace(tmpMatrix2, tmpMatrix, m);
+  },
+  scale1InPlace : function(s, m) { return this.scale3InPlace(s, s, s, m); },
+  scaleInPlace : function(s, m) { return this.scale3InPlace(s[0],s[1],s[2],m); },
 
   translate3 : function(x,y,z) {
     return [
@@ -322,6 +354,19 @@ Matrix = {
   translate : function(v) {
     return this.translate3(v[0], v[1], v[2]);
   },
+  tmpMatrix : [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+  tmpMatrix2 : [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+  translate3InPlace : function(x,y,z,m) {
+    var tmpMatrix = this.tmpMatrix;
+    var tmpMatrix2 = this.tmpMatrix2;
+    tmpMatrix[0] = 1; tmpMatrix[1] = 0; tmpMatrix[2] = 0; tmpMatrix[3] = 0;
+    tmpMatrix[4] = 0; tmpMatrix[5] = 1; tmpMatrix[6] = 0; tmpMatrix[7] = 0;
+    tmpMatrix[8] = 0; tmpMatrix[9] = 0; tmpMatrix[10] = 1; tmpMatrix[11] = 0;
+    tmpMatrix[12] = x; tmpMatrix[13] = y; tmpMatrix[14] = z; tmpMatrix[15] = 1;
+    this.copyMatrix(m, tmpMatrix2);
+    return this.mul4x4InPlace(tmpMatrix2, tmpMatrix, m);
+  },
+  translateInPlace : function(v,m){ return this.translate3InPlace(v[0], v[1], v[2], m); },
 
   lookAt : function (eye, center, up) {
     var z = Vec3.direction(eye, center);
@@ -351,7 +396,7 @@ Matrix = {
       m[1], m[5], m[9], m[13],
       m[2], m[6], m[10], m[14],
       m[3], m[7], m[11], m[15]
-    ]
+    ];
   }
 }
 
@@ -409,6 +454,8 @@ Vec3 = {
 Shader = function(gl){
   this.gl = gl;
   this.shaders = [];
+  this.uniformLocations = {};
+  this.attribLocations = {};
   for (var i=1; i<arguments.length; i++) {
     this.shaders.push(arguments[i]);
   }
@@ -434,33 +481,115 @@ Shader.prototype = {
     this.gl.useProgram(this.shader.program);
   },
 
-  uniformf : function(name, value, elementSize, elementCount) {
-    var loc = this.gl.getUniformLocation(this.shader.program, name);
-    if (elementSize == null)
-      this.gl.uniformf(loc, value);
-    else
-      this.gl.uniformf(loc, elementSize, elementCount, value);
+  uniform1fv : function(name, value) {
+    var loc = this.uniform(name);
+    this.gl.uniform1fv(loc, value);
   },
 
-  uniformi : function(name, value, elementSize, elementCount) {
-    var loc = this.gl.getUniformLocation(this.shader.program, name);
-    if (elementSize == null)
-      this.gl.uniformi(loc, value);
-    else
-      this.gl.uniformi(loc, elementSize, elementCount, value);
+  uniform2fv : function(name, value) {
+    var loc = this.uniform(name);
+    this.gl.uniform2fv(loc, value);
   },
 
-  uniformMatrix : function(name, value) {
-    var loc = this.gl.getUniformLocation(this.shader.program, name);
-    this.gl.uniformMatrix(loc, value);
+  uniform3fv : function(name, value) {
+    var loc = this.uniform(name);
+    this.gl.uniform3fv(loc, value);
+  },
+
+  uniform4fv : function(name, value) {
+    var loc = this.uniform(name);
+    this.gl.uniform4fv(loc, value);
+  },
+  
+  uniform1f : function(name, value) {
+    var loc = this.uniform(name);
+    this.gl.uniform1f(loc, value);
+  },
+
+  uniform2f : function(name, v1,v2) {
+    var loc = this.uniform(name);
+    this.gl.uniform2f(loc, v1,v2);
+  },
+
+  uniform3f : function(name, v1,v2,v3) {
+    var loc = this.uniform(name);
+    this.gl.uniform3f(loc, v1,v2,v3);
+  },
+
+  uniform4f : function(name, v1,v2,v3,v4) {
+    var loc = this.uniform(name);
+    this.gl.uniform4f(loc, v1, v2, v3, v4);
+  },
+  
+  uniform1iv : function(name, value) {
+    var loc = this.uniform(name);
+    this.gl.uniform1iv(loc, value);
+  },
+
+  uniform2iv : function(name, value) {
+    var loc = this.uniform(name);
+    this.gl.uniform2iv(loc, value);
+  },
+
+  uniform3iv : function(name, value) {
+    var loc = this.uniform(name);
+    this.gl.uniform3iv(loc, value);
+  },
+
+  uniform4iv : function(name, value) {
+    var loc = this.uniform(name);
+    this.gl.uniform4iv(loc, value);
+  },
+
+  uniform1i : function(name, value) {
+    var loc = this.uniform(name);
+    this.gl.uniform1i(loc, value);
+  },
+
+  uniform2i : function(name, v1,v2) {
+    var loc = this.uniform(name);
+    this.gl.uniform2i(loc, v1,v2);
+  },
+
+  uniform3i : function(name, v1,v2,v3) {
+    var loc = this.uniform(name);
+    this.gl.uniform3i(loc, v1,v2,v3);
+  },
+
+  uniform4i : function(name, v1,v2,v3,v4) {
+    var loc = this.uniform(name);
+    this.gl.uniform4i(loc, v1, v2, v3, v4);
+  },
+
+  uniformMatrix4fv : function(name, value) {
+    var loc = this.uniform(name);
+    this.gl.uniformMatrix4fv(loc, value);
+  },
+
+  uniformMatrix3fv : function(name, value) {
+    var loc = this.uniform(name);
+    this.gl.uniformMatrix3fv(loc, value);
+  },
+
+  uniformMatrix2fv : function(name, value) {
+    var loc = this.uniform(name);
+    this.gl.uniformMatrix2fv(loc, value);
   },
 
   attrib : function(name) {
-    return this.gl.getAttribLocation(this.shader.program, name);
+    if (this.attribLocations[name] == null) {
+      var loc = this.gl.getAttribLocation(this.shader.program, name);
+      this.attribLocations[name] = loc;
+    }
+    return this.attribLocations[name];
   },
 
   uniform : function(name) {
-    return this.gl.getUniformLocation(this.shader.program, name);
+    if (this.uniformLocations[name] == null) {
+      var loc = this.gl.getUniformLocation(this.shader.program, name);
+      this.uniformLocations[name] = loc;
+    }
+    return this.uniformLocations[name];
   }
 }
 Filter = function(gl, shader) {
@@ -480,6 +609,7 @@ Filter.prototype.apply = function(init) {
 VBO = function(gl) {
   this.gl = gl;
   this.data = [];
+  this.elementsVBO = null;
   for (var i=1; i<arguments.length; i++) {
     if (arguments[i].elements)
       this.elements = arguments[i];
@@ -565,7 +695,7 @@ VBO.prototype = {
     for (var i=0; i<arguments.length; i++) {
       if (arguments[i] == null) continue;
       gl.bindBuffer(gl.ARRAY_BUFFER, this.vbos[i]);
-      gl.vertexAttribPointer(arguments[i], this.data[i].size, gl.FLOAT, 0);
+      gl.vertexAttribPointer(arguments[i], this.data[i].size, gl.FLOAT, false, 0, 0);
       gl.enableVertexAttribArray(arguments[i]);
     }
     if (this.elementsVBO != null) {
@@ -578,7 +708,7 @@ VBO.prototype = {
     this.use.apply(this, arguments);
     var gl = this.gl;
     if (this.elementsVBO != null) {
-      gl.drawElements(gl[this.type], this.elementsLength, 0);
+      gl.drawElements(gl[this.type], this.elementsLength, gl.UNSIGNED_SHORT, 0);
     } else {
       gl.drawArrays(gl[this.type], 0, this.length);
     }
