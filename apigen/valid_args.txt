@@ -1,0 +1,165 @@
+#define blend_eq GL_FUNC_ADD ; GL_FUNC_SUBTRACT ; GL_FUNC_REVERSE_SUBTRACT
+#define blend_dfactor GL_ZERO ; GL_ONE ; GL_SRC_COLOR ; GL_ONE_MINUS_SRC_COLOR ; GL_DST_COLOR ; GL_ONE_MINUS_DST_COLOR ; GL_SRC_ALPHA ; GL_ONE_MINUS_SRC_ALPHA ; GL_DST_ALPHA ; GL_ONE_MINUS_DST_ALPHA ; GL_CONSTANT_COLOR ; GL_ONE_MINUS_CONSTANT_COLOR ; GL_CONSTANT_ALPHA ; GL_ONE_MINUS_CONSTANT_ALPHA
+#define blend_sfactor blend_dfactor ; GL_SRC_ALPHA_SATURATE
+#define buffer_target GL_ARRAY_BUFFER ; GL_ELEMENT_ARRAY_BUFFER
+#define buffer_data_type GL_FLOAT ; GL_UNSIGNED_SHORT
+#define bind_texture_target GL_TEXTURE_2D ; GL_TEXTURE_CUBE_MAP
+#define cb GL_COLOR_BUFFER_BIT
+#define db GL_DEPTH_BUFFER_BIT
+#define sb GL_STENCIL_BUFFER_BIT
+#define texture_target GL_TEXTURE_2D ; GL_TEXTURE_CUBE_MAP_POSITIVE_X ; GL_TEXTURE_CUBE_MAP_NEGATIVE_X ; GL_TEXTURE_CUBE_MAP_POSITIVE_Y ;  GL_TEXTURE_CUBE_MAP_NEGATIVE_Y ; GL_TEXTURE_CUBE_MAP_POSITIVE_Z ;  GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+#define internalformat GL_ALPHA ; GL_LUMINANCE ; GL_LUMINANCE_ALPHA ; GL_RGB ; GL_RGBA
+#define cull_mode GL_FRONT ; GL_BACK ; GL_FRONT_AND_BACK
+#define depth_func GL_NEVER ; GL_LESS ; GL_EQUAL ; GL_LEQUAL ; GL_GREATER ; GL_NOTEQUAL ; GL_GEQUAL ; GL_ALWAYS
+#define gl_cap GL_BLEND; GL_CULL_FACE; GL_DEPTH_TEST; GL_DITHER; GL_POLYGON_OFFSET_FILL; GL_SAMPLE_ALPHA_TO_COVERAGE; GL_SAMPLE_COVERAGE; GL_SCISSOR_TEST
+#define draw_mode GL_POINTS; GL_LINE_STRIP; GL_LINE_LOOP; GL_LINES; GL_TRIANGLE_STRIP; GL_TRIANGLE_FAN; GL_TRIANGLES
+#define fb_attachment GL_COLOR_ATTACHMENT0; GL_DEPTH_ATTACHMENT; GL_STENCIL_ATTACHMENT
+#define readpixels_format GL_ALPHA; GL_RGB; GL_RGBA
+#define readpixels_type GL_UNSIGNED_BYTE; GL_UNSIGNED_SHORT_5_6_5; GL_UNSIGNED_SHORT_4_4_4_4; GL_UNSIGNED_SHORT_5_5_5_1
+#define rb_internalformat GL_RGBA4; GL_RGB565; GL_RGB5_A1; GL_DEPTH_COMPONENT16; GL_STENCIL_INDEX8
+#define rb_dimension %% >= 0 && %% <= GetGLInt(GL_MAX_RENDERBUFFER_SIZE)
+#define stencil_func GL_NEVER; GL_LESS; GL_LEQUAL; GL_GREATER; GL_GEQUAL; GL_EQUAL; GL_NOTEQUAL; GL_ALWAYS
+#define sfail GL_KEEP; GL_ZERO; GL_REPLACE; GL_INCR; GL_INCR_WRAP; GL_DECR; GL_DECR_WRAP; GL_INVERT
+
+#define ValidVertexAttrib %% >= 0 && (GLint)%% < GetGLInt(GL_MAX_VERTEX_ATTRIBS)
+#define CheckScreenRectXYWH %% >= 0 && %% < mWidth, %% >= 0 && %% < mHeight, %% >= 0 && %% <= mWidth - x, %% >= 0 && %% <= mHeight - y
+
+activeTexture ((GLint)%% >= GL_TEXTURE0 && (GLint)%% < GL_TEXTURE0 + GetGLInt(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS))
+attachShader (ValidProgram(%%), ValidShader(%%) && !ShaderAttachedTo(program, %%))
+
+bindAttribLocation (ValidProgram(%%), ValidVertexAttrib, %%)
+bindBuffer (buffer_target, ValidBuffer(%%))
+bindFramebuffer (GL_FRAMEBUFFER, ValidFramebuffer(%%))
+bindRenderbuffer (GL_RENDERBUFFER, ValidRenderbuffer(%%))
+bindTexture (bind_texture_target, ValidTexture(%%))
+blendColor (_, _, _, _)
+blendEquation (blend_eq)
+blendEquationSeparate (blend_eq, blend_eq)
+blendFunc (blend_sfactor, blend_dfactor)
+blendFuncSeparate (blend_sfactor, blend_dfactor, blend_sfactor, blend_dfactor)
+// bufferData
+// bufferSubData
+
+checkFramebufferStatus (GL_FRAMEBUFFER)
+clear (cb ; cb|sb ; cb|db ; cb|sb|db ; sb ; sb|db ; db)
+clearColor (_, _, _, _)
+clearDepth (_)
+clearStencil (_)
+colorMask (_)
+compileShader (ValidShader(%%))
+copyTexImage2D (texture_target, %% >= 0, internalformat, CheckScreenRectXYWH, 0)
+copyTexSubImage2D (texture_target, %% >= 0, %% >= 0, %% >= 0, CheckScreenRectXYWH)
+// createProgram ()
+// createShader ()
+cullFace (cull_mode)
+
+// deleteBuffers
+// deleteFramebuffers
+deleteProgram (ValidProgram(%%))
+// deleteRenderbuffers
+deleteShader (ValidShader(%%))
+// deleteTextures
+depthFunc (depth_func)
+depthMask (_)
+depthRange (_, _)
+detachShader (ValidProgram(%%), ValidShader(%%) && ShaderAttachedTo(program, %%))
+disable (gl_cap)
+disableVertexAttribArray (ValidVertexAttrib)
+drawArrays (draw_mode, %% >= 0, %% >= 0 && ValidateBuffers(first + %%))
+// drawElements
+
+enable (gl_cap)
+enableVertexAttribArray (ValidVertexAttrib)
+
+framebufferRenderbuffer (GL_FRAMEBUFFER, fb_attachment, GL_RENDERBUFFER, ValidRenderbuffer(%%))
+framebufferTexture2D (GL_FRAMEBUFFER, fb_attachment, texture_target, ValidTexture(%%), 0)
+frontFace (GL_CW; GL_CCW)
+
+// genBuffers
+// genFramebuffers
+// genRenderbuffers
+// genTextures
+generateMipmap (bind_texture_target)
+// getParameter
+// getActiveAttrib
+// getActiveUniform
+// getAttachedShaders
+getAttribLocation (ValidProgram(%%), %%)
+// getBufferParameter
+// getError ()
+// getFramebufferAttachmentParameter
+// getProgramInfoLog
+// getProgramParameter
+// getRenderbufferParameter
+// getShaderInfoLog
+// getShaderSource
+// getShaderParameter
+// getTexParameter
+// getUniform
+getUniformLocation (ValidProgram(%%), %%)
+// getVertexAttribParameter
+
+hint (GL_GENERATE_MIPMAP_HINT, GL_FASTEST;GL_NICEST;GL_DONT_CARE)
+
+isBuffer (_)
+isEnabled (gl_cap)
+isFramebuffer (_)
+isProgram (_)
+isRenderbuffer (_)
+isShader (_)
+isTexture (_)
+
+lineWidth (_)
+// linkProgram (ValidProgram(%%))
+
+polygonOffset (_, _)
+
+// readPixels (CheckScreenRectXYWH, readpixels_format, readpixels_type)
+renderbufferStorage (GL_RENDERBUFFER, rb_internalformat, rb_dimension, rb_dimension)
+
+sampleCoverage (_, _)
+scissor (_, _, _, _)
+// shaderSource
+stencilFunc (stencil_func, _, _)
+stencilFuncSeparate (cull_mode, stencil_func, _, _)
+stencilMask (_)
+stencilMaskSeparate (cull_mode, _)
+stencilOp (sfail, sfail, sfail)
+stencilOpSeparate (cull_mode, sfail, sfail, sfail)
+
+// texImage2D
+// texParameter
+// texSubImage2D
+
+uniform1f (_, _)
+uniform2f (_, _, _)
+uniform3f (_, _, _, _)
+uniform4f (_, _, _, _, _)
+// uniform1fv (_, _)
+// uniform2fv (_, %%.Length() % 2 == 0)
+// uniform3fv (_, %%.Length() % 3 == 0)
+// uniform4fv (_, %%.Length() % 4 == 0)
+uniform1i (_, _)
+uniform2i (_, _, _)
+uniform3i (_, _, _, _)
+uniform4i (_, _, _, _, _)
+// uniform1iv (_, _)
+// uniform2iv (_, %%.Length() % 2 == 0)
+// uniform3iv (_, %%.Length() % 3 == 0)
+// uniform4iv (_, %%.Length() % 4 == 0)
+// uniformMatrix2fv (_, GL_FALSE, %%.Length() % 4 == 0)
+// uniformMatrix3fv (_, GL_FALSE, %%.Length() % 9 == 0)
+// uniformMatrix4fv (_, GL_FALSE, %%.Length() % 16 == 0)
+// useProgram (ValidProgram(%%))
+
+validateProgram (ValidProgram(%%))
+vertexAttrib1f (ValidVertexAttrib, _)
+vertexAttrib2f (ValidVertexAttrib, _, _)
+vertexAttrib3f (ValidVertexAttrib, _, _, _)
+vertexAttrib4f (ValidVertexAttrib, _, _, _, _)
+// vertexAttrib1fv (ValidVertexAttrib, _)
+// vertexAttrib2fv (ValidVertexAttrib, %%.Length() % 2 == 0)
+// vertexAttrib3fv (ValidVertexAttrib, %%.Length() % 3 == 0)
+// vertexAttrib4fv (ValidVertexAttrib, %%.Length() % 4 == 0)
+// vertexAttribPointer
+viewport (_, _, _, _)
