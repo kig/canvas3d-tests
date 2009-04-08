@@ -32,7 +32,7 @@ Tests.testBufferData = function(gl, buf, ebuf) {
     gl.bufferData(gl.ARRAY_BUFFER, data, gl.UNSIGNED_SHORT, gl.STATIC_DRAW);
     gl.bufferData(gl.ARRAY_BUFFER, data, gl.UNSIGNED_SHORT, gl.STREAM_DRAW);
     gl.bufferData(gl.ARRAY_BUFFER, data, gl.UNSIGNED_SHORT, gl.DYNAMIC_DRAW);
-    assertEquals(gl.getBufferParameter(gl.ARRAY_BUFFER, gl.BUFFER_SIZE, 12*2);
+    assertEquals(gl.getBufferParameter(gl.ARRAY_BUFFER, gl.BUFFER_SIZE), 12*2);
     throwError(gl, "array bufferSubData");
 }
 Tests.testBufferDataElement = function(gl, buf, ebuf) {
@@ -43,7 +43,7 @@ Tests.testBufferDataElement = function(gl, buf, ebuf) {
     assertEquals(gl.getBufferParameter(gl.ELEMENT_ARRAY_BUFFER, gl.BUFFER_USAGE), gl.STREAM_DRAW);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl.UNSIGNED_SHORT, gl.DYNAMIC_DRAW);
     assertEquals(gl.getBufferParameter(gl.ELEMENT_ARRAY_BUFFER, gl.BUFFER_USAGE), gl.DYNAMIC_DRAW);
-    assertEquals(gl.getBufferParameter(gl.ELEMENT_ARRAY_BUFFER, gl.BUFFER_SIZE, 12*2);
+    assertEquals(gl.getBufferParameter(gl.ELEMENT_ARRAY_BUFFER, gl.BUFFER_SIZE), 12*2);
     throwError(gl, "element array bufferSubData");
 }
 
