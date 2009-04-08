@@ -33,7 +33,7 @@ require 'cgi'
 require 'uri'
 require 'fileutils'
 
-api = File.read("gl2.h").strip.split("\n")
+api = File.read("apigen/gl2.h").strip.split("\n")
 mods = {}
 raw_funcs = api.grep(/^GL_APICALL/).map{|l|
   _, ret_type, name_args = l.strip.split(/\s*GL_[A-Z]+\s*/)
@@ -43,7 +43,7 @@ raw_funcs = api.grep(/^GL_APICALL/).map{|l|
   next if ["glGetShaderPrecisionFormat", "glReleaseShaderCompiler", "glShaderBinary"].include?(name)
   [ret_type, name, args]
 }.compact
-File.read("api_modifications.txt").strip.split("\n").each{|l|
+File.read("apigen/api_modifications.txt").strip.split("\n").each{|l|
   l = l.strip
   next if l.empty? or l =~ /^#/
   if l =~ /^[-+]?[A-Z0-9_]+([\s-]|$)/ # constant
@@ -270,13 +270,6 @@ File.open("constants.txt", "w") {|f|
   }
 }
 
-puts "Generating nsICanvasRenderingContextGL.idl.constants"
-File.open("nsICanvasRenderingContextGL.idl.constants", "w") {|f|
-  constants.each{|name, value|
-    f.puts("const PRUint32 #{name}".ljust(40) +" = #{value};")
-  }
-}
-
 puts "Generating methods.txt"
 File.open("methods.txt", "w") {|f|
   funcs.each{|ret_type, name, args|
@@ -293,20 +286,6 @@ funcs.each{|ret_type, name, args|
   unless File.exist?("functions/#{name}BadArgs.html")
     FileUtils.cp("template.html", "templates/#{name}BadArgs.html")
   end
-}
-
-puts "Generating glwrap.h.functions"
-File.open("glwrap.h.functions", "w") {|f|
-  raw_funcs.each{|ret_type, name, args|
-    f.puts("typedef #{ret_type} (GLAPIENTRY * PFN#{name.upcase}) #{args}")
-    f.puts("PFN#{name.upcase} #{name.sub(/^gl/,"f")};")
-  }
-}
-puts "Generating glwrap.cpp.InitWithPrefix"
-File.open("glwrap.cpp.InitWithPrefix", "w") {|f|
-  raw_funcs.each{|ret_type, name, args|
-    f.puts(%Q({ (PRFuncPtr*) &#{name.sub(/^gl/,"f")}, { "#{name[2..-1]}", NULL } },))
-  }
 }
 
 tests.each{|n,t|
