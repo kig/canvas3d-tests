@@ -18,7 +18,6 @@ Tests.testUniformf = function(gl) {
     var foo = f.uniform('foo');
     var bar = f.uniform('bar');
     var bar3 = f.uniform('bar3');
-    assertFail(function(){gl.uniformMatrix4fv(-1, [1,0,0,0, 0,2,0,0, 0,0,3,0, 0,0,0,4]);});
     assertFail(function(){gl.uniformMatrix4fv(588939, [1,0,0,0, 0,2,0,0, 0,0,3,0, 0,0,0,4]);});
     assertFail(function(){gl.uniformMatrix4fv(-588939, [1,0,0,0, 0,2,0,0, 0,0,3,0, 0,0,0,4]);});
     assertFail(function(){gl.uniformMatrix4fv(foo, [0,1,0,0,0, 0,2,0,0, 0,0,3,0, 0,0,0,4]);});

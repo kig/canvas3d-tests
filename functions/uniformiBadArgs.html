@@ -17,7 +17,6 @@ Tests.testUniformf = function(gl) {
     sh.apply(function(f){
         var foo = f.uniform('foo');
         var bar = f.uniform('bar');
-        assertFail(function(){gl.uniform4iv(-1, [1,2,3,4]);});
         assertFail(function(){gl.uniform4iv(58882929, [1,2,3,4]);});
         assertFail(function(){gl.uniform4iv(-58882929, [1,2,3,4]);});
         assertFail(function(){gl.uniform1iv(foo, [1,2,3,4,5]);});
@@ -25,7 +24,6 @@ Tests.testUniformf = function(gl) {
         assertFail(function(){gl.uniform4iv(bar, [2,3,4,5]);});
         assertFail(function(){gl.uniform3iv(bar, [2,3,4]);});
         assertFail(function(){gl.uniform2iv(bar, [2,3]);});
-        assertFail(function(){gl.uniform1iv(bar, []);});
         assertFail(function(){gl.uniform1iv(bar, [2,3,4,5,6,7,8,9,10,11,12,123]);});
         assertOk(function(){gl.uniform4iv(foo, [1,2,3,4]);});
         assertFail(function(){gl.uniform3iv(foo, [4,5,6]);});
@@ -33,6 +31,7 @@ Tests.testUniformf = function(gl) {
         assertFail(function(){gl.uniform1iv(foo, [6]);});
         assertFail(function(){gl.uniform1iv(foo, []);});
         assertOk(function(){gl.uniform1iv(bar, [2]);});
+        assertOk(function(){gl.uniform1iv(bar, []);});
         assertFail(function(){gl.uniform4iv(bar, [3,3,4,5]);});
     });
     var d = gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
