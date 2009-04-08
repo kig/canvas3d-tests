@@ -204,6 +204,7 @@ Tests.test_drawElements = function(gl) {
   assertFail(function(){ gl.drawElements(); });
   assertFail(function(){ gl.drawElements(0); });
   assertFail(function(){ gl.drawElements(0,0); });
+  assertFail(function(){ gl.drawElements(0,0,0); });
 }
 Tests.test_enable = function(gl) {
   assertFail(function(){ gl.enable(); });
@@ -544,6 +545,8 @@ Tests.test_vertexAttribPointer = function(gl) {
   assertFail(function(){ gl.vertexAttribPointer(0); });
   assertFail(function(){ gl.vertexAttribPointer(0,0); });
   assertFail(function(){ gl.vertexAttribPointer(0,0,0); });
+  assertFail(function(){ gl.vertexAttribPointer(0,0,0,0); });
+  assertFail(function(){ gl.vertexAttribPointer(0,0,0,0,0); });
 }
 Tests.test_viewport = function(gl) {
   assertFail(function(){ gl.viewport(); });
