@@ -241,12 +241,12 @@ Tests.gpuGaussianBlur = function(gl) {
   // gaussian blur
   for (var i=0; i<1000; i++) {
     hblur.apply(function(f){
-      f.uniformf('width', [256.0]);
-      f.uniformi('Texture', [0]);
+      f.uniform1f('width', 256.0);
+      f.uniform1i('Texture', 0);
     });
     vblur.apply(function(f){
-      f.uniformf('height', [256.0]);
-      f.uniformi('Texture', [0]);
+      f.uniform1f('height', 256.0);
+      f.uniform1i('Texture', 0);
     });
   }
 
