@@ -71,14 +71,6 @@ Tests.testTexImage2D = function(gl) {
         for (var i=0; i<100; i++)
             gl.texSubImage2DHTML(gl.TEXTURE_2D, 0, 0, 0, img);
     });
-    time("readPixels", function() {
-        for (var i=0; i<100; i++)
-            gl.readPixels(0, 0, 256, 256, gl.RGBA, gl.UNSIGNED_BYTE);
-    });
-    time("getImageData", function() {
-        for (var i=0; i<100; i++)
-            gl.getImageData(0, 0, 256, 256);
-    });
     var bufs = gl.genBuffers(2);
     var buf = bufs[0], buf2 = bufs[1];
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
@@ -97,7 +89,7 @@ Tests.testTexImage2D = function(gl) {
     for (var i=0; i<16; i++)
         gl.disableVertexAttribArray(i);
     gl.enableVertexAttribArray(v);
-    gl.vertexAttribPointer(v, 4, gl.FLOAT, 0);
+    gl.vertexAttribPointer(v, 4, gl.FLOAT, false, 0, 0);
     time("verticeDraw", function() {
         for (var i=0; i<100; i++)
             gl.drawArrays(gl.TRIANGLES, 0, 256*256);
@@ -112,7 +104,8 @@ Tests.testTexImage2D = function(gl) {
         }
         gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
     });
-    gl.vertexAttribPointer(v, 4, gl.FLOAT, bufArr);
+    gl.bindBuffer(gl.ARRAY_BUFFER, 0);
+    gl.vertexAttribPointer(v, 4, gl.FLOAT, false, 0, bufArr);
     time("verticeDrawVA", function() {
         for (var i=0; i<100; i++)
             gl.drawArrays(gl.TRIANGLES, 0, 256*256);
@@ -120,7 +113,7 @@ Tests.testTexImage2D = function(gl) {
     });
     time("verticeDrawVAC", function() {
         for (var i=0; i<100; i++) {
-            gl.vertexAttribPointer(v, 4, gl.FLOAT, bufArr);
+            gl.vertexAttribPointer(v, 4, gl.FLOAT, false, 0, bufArr);
             gl.drawArrays(gl.TRIANGLES, 0, 256*256);
         }
         gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
@@ -134,6 +127,14 @@ Tests.testTexImage2D = function(gl) {
         gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
     });
     sh.destroy();
+    time("readPixels", function() {
+        for (var i=0; i<100; i++)
+            gl.readPixels(0, 0, 256, 256, gl.RGBA, gl.UNSIGNED_BYTE);
+    });
+    time("getImageData", function() {
+        for (var i=0; i<100; i++)
+            gl.getImageData(0, 0, 256, 256);
+    });
     gl.bindTexture(gl.TEXTURE_2D, 0);
     gl.bindBuffer(gl.ARRAY_BUFFER, 0);
     gl.deleteBuffers(bufs);
