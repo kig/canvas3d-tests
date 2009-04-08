@@ -15,7 +15,7 @@ deleteFramebuffers -> void deleteFramebuffers (Array buffers)
 deleteRenderbuffers -> void deleteRenderbuffers (Array buffers)
 deleteTextures -> void deleteTextures (Array textures)
 depthRangef -> void depthRange (float min, float max)
-drawElements -> void drawElements (uint mode, uint count, Array indices)
+drawElements -> void drawElements (uint mode, uint count, enum type, Array indices)
 
 -finish
 -flush
@@ -92,7 +92,7 @@ vertexAttrib2fv -> void vertexAttrib2fv (GLuint target, Array data)
 vertexAttrib3fv -> void vertexAttrib3fv (GLuint target, Array data)
 vertexAttrib4fv -> void vertexAttrib4fv (GLuint target, Array data)
 
-vertexAttribPointer -> void vertexAttribPointer (uint id, uint count, uint type, uint offset)
+vertexAttribPointer -> void vertexAttribPointer (uint id, uint count, uint type, bool normalize, uint stride, uint offset)
 
 
 
