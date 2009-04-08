@@ -787,6 +787,30 @@ FBO.prototype = {
   }
 }
 
+function makeGLErrorWrapper(gl, fname) {
+    return (function() {
+        var rv = gl[fname].apply(gl, arguments);
+        var e = gl.getError();
+        if (e != 0) {
+            throw("GL error "+e);
+        }
+        return rv;
+    });
+}
+
+function wrapGLContext(gl) {
+    var wrap = {};
+    for (var i in gl) {
+        if (typeof gl[i] == 'function') {
+            wrap[i] = makeGLErrorWrapper(gl, i);
+        } else {
+            wrap[i] = gl[i];
+        }
+    }
+    wrap.getError = function(){ return gl.getError(); };
+    return wrap;
+}
+
 
 Quad = {
   vertices : [

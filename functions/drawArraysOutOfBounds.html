@@ -42,7 +42,7 @@ var texcoords = [0.0,0.0,  1.0,0.0,  0.0,1.0];
 
 Tests.startUnit = function () {
   var canvas = document.getElementById('gl');
-  var gl = canvas.getContext(GL_CONTEXT_ID);
+  var gl = wrapGLContext(canvas.getContext(GL_CONTEXT_ID));
   var prog = new Shader(gl, 'vert', 'frag');
   prog.use();
   var v = prog.attrib('Vertex');

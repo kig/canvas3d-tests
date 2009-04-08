@@ -252,7 +252,7 @@ EOF
 test_footer = <<EOF
 Tests.startUnit = function() {
   var canvas = document.getElementById('gl');
-  var gl = canvas.getContext(GL_CONTEXT_ID);
+  var gl = wrapGLContext(canvas.getContext(GL_CONTEXT_ID));
   return [gl];
 }
 
