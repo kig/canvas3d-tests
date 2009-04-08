@@ -69,7 +69,8 @@ function runTests() {
       return;
     }
   }
-  
+
+  var testsRun = false;
   
   for (var i in Tests) {
     if (i.substring(0,4) != "test") continue;
@@ -92,9 +93,10 @@ function runTests() {
       log.appendChild(__testLog__);
     }
     doTestNotify (i+"--"+(__testSuccess__?"OK":"FAIL"));
+    testsRun = true;
   }
   
-  printTestStatus();
+  printTestStatus(testsRun);
   if (Tests.endUnit != null) {
     __testLog__ = document.createElement('div');
     try {
@@ -140,14 +142,22 @@ function checkTestSuccess() {
 
 function log(msg) {
   var p = document.createElement('p');
-  p.textContent = msg;
+  var a = [];
+  for (var i=0; i<arguments.length; i++)
+    a.push(arguments[i]);
+  p.textContent = a.join(", ");
   __testLog__.appendChild(p);
 }
 
-function printTestStatus() {
+function printTestStatus(testsRun) {
   var status = document.getElementById('test-status');
-  document.body.className = checkTestSuccess() ? 'ok' : 'fail';
-  document.title = status.textContent = checkTestSuccess() ? "OK" : "FAIL";
+  if (testsRun) {
+    document.body.className = checkTestSuccess() ? 'ok' : 'fail';
+    document.title = status.textContent = checkTestSuccess() ? "OK" : "FAIL";
+  } else {
+    document.body.className = 'fail';
+    document.title = status.textContent = "NO TESTS FOUND";
+  }
 }
 
 function assertFail(name, f) {
