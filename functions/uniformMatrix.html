@@ -18,9 +18,9 @@ Tests.testUniformf = function(gl) {
     var foo = f.uniform('foo');
     var bar = f.uniform('bar');
     var bar3 = f.uniform('bar3');
-    gl.uniformMatrix(foo, [1,0,0,0, 0,2,0,0, 0,0,3,0, 0,0,0,4]);
-    gl.uniformMatrix(bar, [2,1, 2,2]);
-    gl.uniformMatrix(bar3, [2,2,2, 2,2,2, 2,1,2]);
+    gl.uniformMatrix4fv(foo, [1,0,0,0, 0,2,0,0, 0,0,3,0, 0,0,0,4]);
+    gl.uniformMatrix2fv(bar, [2,1, 2,2]);
+    gl.uniformMatrix3fv(bar3, [2,2,2, 2,2,2, 2,1,2]);
   });
   var d = gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
   assertEquals([1,2,3,8], d.data);

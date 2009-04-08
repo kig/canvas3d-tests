@@ -66,8 +66,8 @@ Tests.testMandelbrot = function(gl) {
     gl.disable(gl.DEPTH_TEST);
     var sh = new Filter(gl, 'identity-vert', 'mandelbrot-frag');
     sh.apply(function(s){
-        s.uniformf('z', [0.15]);
-        s.uniformf('x', [-1.25]);
+        s.uniform1f('z', 0.15);
+        s.uniform1f('x', -1.25);
     });
     for (var i=0; i<256; i++) {
         sh.apply();

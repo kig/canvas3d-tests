@@ -17,16 +17,16 @@ Tests.testUniformf = function(gl) {
   sh.apply(function(f){
     var foo = f.uniform('foo');
     var bar = f.uniform('bar');
-    gl.uniformf(foo, [1,2,3,4]);
-    gl.uniformf(bar, [2]);
+    gl.uniform4fv(foo, [1,2,3,4]);
+    gl.uniform1fv(bar, [2]);
   });
   var d = gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
   assertEquals([1,2,3,8], d.data);
   sh.apply(function(f){
     var foo = f.uniform('foo');
     var bar = f.uniform('bar');
-    gl.uniformf(foo, 2,2,3,4);
-    gl.uniformf(bar, 3);
+    gl.uniform4f(foo, 2,2,3,4);
+    gl.uniform1f(bar, 3);
   });
   var d = gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
   assertEquals([2,2,3,12], d.data);

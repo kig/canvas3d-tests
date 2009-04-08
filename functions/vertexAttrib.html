@@ -67,15 +67,15 @@ Tests.endUnit = function(gl, prog, v,n,t) {
 
 Tests.testVertexAttrib = function(gl, prog, v,n,t) {
   gl.enableVertexAttribArray(v);
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
-  gl.vertexAttrib(v, [1]);
-  gl.vertexAttrib(v, [1,2]);
-  gl.vertexAttrib(v, [1,2,3]);
-  gl.vertexAttrib(v, [1,2,3,4]);
-  gl.vertexAttrib(v, 1);
-  gl.vertexAttrib(v, 1,2);
-  gl.vertexAttrib(v, 1,2,3);
-  gl.vertexAttrib(v, 1,2,3,4);
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, verts);
+  gl.vertexAttrib1fv(v, [1]);
+  gl.vertexAttrib2fv(v, [1,2]);
+  gl.vertexAttrib3fv(v, [1,2,3]);
+  gl.vertexAttrib4fv(v, [1,2,3,4]);
+  gl.vertexAttrib1f(v, 1);
+  gl.vertexAttrib2f(v, 1,2);
+  gl.vertexAttrib3f(v, 1,2,3);
+  gl.vertexAttrib4f(v, 1,2,3,4);
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 3);});
   checkError(gl);
 }
@@ -84,18 +84,18 @@ Tests.testVertexAttribVBO = function(gl, prog, v,n,t) {
   gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
   gl.bufferData(gl.ARRAY_BUFFER, verts, gl.FLOAT, gl.STATIC_DRAW);
   gl.enableVertexAttribArray(v);
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, 0);
-  gl.vertexAttrib(v, [1]);
-  gl.vertexAttrib(v, [1,2]);
-  gl.vertexAttrib(v, [1,2,3]);
-  gl.vertexAttrib(v, [1,2,3,4]);
-  gl.vertexAttrib(v, 1);
-  gl.vertexAttrib(v, 1,2);
-  gl.vertexAttrib(v, 1,2,3);
-  gl.vertexAttrib(v, 1,2,3,4);
-  assertOk(function(){gl.vertexAttribPointer(v, 3, gl.FLOAT, 0);});
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttrib1fv(v, [1]);
+  gl.vertexAttrib2fv(v, [1,2]);
+  gl.vertexAttrib3fv(v, [1,2,3]);
+  gl.vertexAttrib4fv(v, [1,2,3,4]);
+  gl.vertexAttrib1f(v, 1);
+  gl.vertexAttrib2f(v, 1,2);
+  gl.vertexAttrib3f(v, 1,2,3);
+  gl.vertexAttrib4f(v, 1,2,3,4);
+  assertOk(function(){gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, 0);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 3);});
-  gl.vertexAttrib(v, [1,2,3,4]);
+  gl.vertexAttrib4fv(v, [1,2,3,4]);
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 3);});
   checkError(gl);
   gl.bindBuffer(gl.ARRAY_BUFFER, 0);

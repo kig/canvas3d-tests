@@ -44,14 +44,16 @@ arr.forEach(function(e){
     Tests['test'+e+'vert'] = function(gl) {
         var sh = new Filter(gl, e+'vert', 'frag');
         assertFail(function(){sh.apply(function(f){
-            f.uniformf('x', [0.0, 1.0, 2.0]);
+            f.uniform3fv('x', [0.0, 1.0, 2.0]);
+            throwError(e+"vert");
         });});
         sh.destroy();
     }
     Tests['test'+e+'frag'] = function(gl) {
         var sh = new Filter(gl, 'vert', e+'frag');
         assertFail(function(){sh.apply(function(f){
-            f.uniformf('x', [0.0, 1.0, 2.0]);
+            f.uniform3fv('x', [0.0, 1.0, 2.0]);
+            throwError(e+"frag");
         });});
         sh.destroy();
     }

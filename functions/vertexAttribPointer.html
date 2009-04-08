@@ -66,19 +66,19 @@ Tests.endUnit = function(gl, prog, v,n,t) {
 
 
 Tests.testVertexAttribPointer = function(gl, prog, v,n,t) {
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, [1,2,3]);
-  gl.vertexAttribPointer(v, 1, gl.FLOAT, [1]);
-  gl.vertexAttribPointer(v, 2, gl.FLOAT, [1,2]);
-  gl.vertexAttribPointer(v, 4, gl.FLOAT, [1,2,3,5]);
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, [1,2,3,4,5,6]);
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, verts);
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, [1,2,3]);
+  gl.vertexAttribPointer(v, 1, gl.FLOAT, false, 0, [1]);
+  gl.vertexAttribPointer(v, 2, gl.FLOAT, false, 0, [1,2]);
+  gl.vertexAttribPointer(v, 4, gl.FLOAT, false, 0, [1,2,3,5]);
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, [1,2,3,4,5,6]);
 }
 Tests.testVertexAttribPointerVBO = function(gl, prog, v,n,t) {
   var vbo = gl.genBuffers(1)[0];
   gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
   gl.bufferData(gl.ARRAY_BUFFER, verts, gl.FLOAT, gl.STATIC_DRAW);
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, 0);
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, 2);
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, 2);
   gl.bindBuffer(gl.ARRAY_BUFFER, 0);
   gl.deleteBuffers([vbo]);
 }

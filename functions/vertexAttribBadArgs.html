@@ -67,14 +67,14 @@ Tests.endUnit = function(gl, prog, v,n,t) {
 
 Tests.testVertexAttrib = function(gl, prog, v,n,t) {
   gl.enableVertexAttribArray(v);
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
-  assertFail(function(){gl.vertexAttrib(-1, 1);});
-  assertFail(function(){gl.vertexAttrib(-69092342, 1);});
-  assertFail(function(){gl.vertexAttrib(58928938, 1);});
-  assertFail(function(){gl.vertexAttrib(v, 1,2,3,4,5);});
-  assertFail(function(){gl.vertexAttrib(v);});
-  assertFail(function(){gl.vertexAttrib(v, [1,2,3,4,5]);});
-  assertFail(function(){gl.vertexAttrib(v, []);});
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, verts);
+  assertFail(function(){gl.vertexAttrib1f(-1, 1);});
+  assertFail(function(){gl.vertexAttrib1f(-69092342, 1);});
+  assertFail(function(){gl.vertexAttrib1f(58928938, 1);});
+  assertFail(function(){gl.vertexAttrib4f(v, 1,4,5);});
+  assertFail(function(){gl.vertexAttrib1f(v);});
+  assertFail(function(){gl.vertexAttrib1fv(v, [1,2,3,4,5]);});
+  assertFail(function(){gl.vertexAttrib1fv(v, []);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 3);});
   throwError(gl);
 }

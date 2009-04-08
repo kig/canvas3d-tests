@@ -66,7 +66,7 @@ Tests.endUnit = function(gl, prog, v,n,t) {
 
 
 Tests.testDrawArraysWithData = function(gl, prog, v,n,t) {
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, verts);
   assert(0 == checkError(gl, "vertexAttribPointer"));
   gl.enableVertexAttribArray(v);
   assert(0 == checkError(gl, "enableVertexAttribArray"));
@@ -77,11 +77,11 @@ Tests.testDrawArraysWithData = function(gl, prog, v,n,t) {
 }
 
 Tests.testDrawArraysMulti = function(gl, prog, v,n,t) {
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, verts);
   assert(0 == checkError(gl, "vertexAttribPointer v"));
-  gl.vertexAttribPointer(t, 2, gl.FLOAT, texcoords);
+  gl.vertexAttribPointer(t, 2, gl.FLOAT, false, 0, texcoords);
   assert(0 == checkError(gl, "vertexAttribPointer t"));
-  gl.vertexAttribPointer(n, 3, gl.FLOAT, normals);
+  gl.vertexAttribPointer(n, 3, gl.FLOAT, false, 0, normals);
   assert(0 == checkError(gl, "vertexAttribPointer n"));
   gl.enableVertexAttribArray(v);
   gl.enableVertexAttribArray(n);
@@ -90,20 +90,20 @@ Tests.testDrawArraysMulti = function(gl, prog, v,n,t) {
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 0);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
   assert(0 == checkError(gl, "drawArrays 1"));
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, verts.concat(verts));
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, verts.concat(verts));
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 0);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
   assert(0 == checkError(gl, "drawArrays 2"));
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, verts);
-  gl.vertexAttribPointer(n, 3, gl.FLOAT, normals.concat(normals));
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, verts);
+  gl.vertexAttribPointer(n, 3, gl.FLOAT, false, 0, normals.concat(normals));
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
   assert(0 == checkError(gl, "drawArrays 3"));
-  gl.vertexAttribPointer(n, 3, gl.FLOAT, normals);
-  gl.vertexAttribPointer(t, 2, gl.FLOAT, texcoords.concat(texcoords));
+  gl.vertexAttribPointer(n, 3, gl.FLOAT, false, 0, normals);
+  gl.vertexAttribPointer(t, 2, gl.FLOAT, false, 0, texcoords.concat(texcoords));
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
   assert(0 == checkError(gl, "drawArrays 4"));
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, verts.concat(verts));
-  gl.vertexAttribPointer(n, 3, gl.FLOAT, normals.concat(normals));
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, verts.concat(verts));
+  gl.vertexAttribPointer(n, 3, gl.FLOAT, false, 0, normals.concat(normals));
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 1);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 1, 0);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 1, 1);});
@@ -138,8 +138,8 @@ Tests.testDrawArraysVBOMulti = function(gl, prog, v,n,t) {
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 1, 5);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 1, 6);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 6, 1);});
-  //gl.bindBuffer(gl.ARRAY_BUFFER, 0); // this should be automatically disabled
-  gl.vertexAttribPointer(n, 3, gl.FLOAT, Quad.normals);
+  gl.bindBuffer(gl.ARRAY_BUFFER, 0);
+  gl.vertexAttribPointer(n, 3, gl.FLOAT, false, 0, Quad.normals);
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 5, 1);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 6);});
