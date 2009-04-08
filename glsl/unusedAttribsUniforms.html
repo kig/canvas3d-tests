@@ -50,9 +50,9 @@ Tests.testPassingTooManyVBOs = function(gl) {
 Tests.testPassingTooManyUniforms = function(gl) {
     var sh = new Filter(gl, 'vert2', 'frag2');
     sh.apply(function(f){
-        assertFail(function(){f.uniformf('foo', 3.0);});
-        f.uniformf('bar', 1.0);
-        assertFail(function(){f.uniformf('baz', 1.0);});
+        assertFail(function(){f.uniform1f('foo', 3.0);throwError("foo")});
+        f.uniform1f('bar', 1.0);
+        assertFail(function(){f.uniform1f('baz', 1.0);throwError("baz")});
     });
     sh.destroy();
 }
