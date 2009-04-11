@@ -71,6 +71,8 @@ drawArrays (draw_mode, %% >= 0, %% >= 0 && ValidateBuffers(first + %%))
 enable (gl_cap)
 enableVertexAttribArray (ValidVertexAttrib)
 
+flush ()
+finish ()
 framebufferRenderbuffer (GL_FRAMEBUFFER, fb_attachment, GL_RENDERBUFFER, ValidRenderbuffer(%%))
 framebufferTexture2D (GL_FRAMEBUFFER, fb_attachment, texture_target, ValidTexture(%%), 0)
 frontFace (GL_CW; GL_CCW)

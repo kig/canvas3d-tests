@@ -17,9 +17,6 @@ deleteTextures -> void deleteTextures (Array textures)
 depthRangef -> void depthRange (float min, float max)
 drawElements -> void drawElements (uint mode, uint count, enum type, Array indices)
 
--finish
--flush
-
 genBuffers -> int genBuffers (uint count)
 genFramebuffers -> int genFramebuffers (uint count)
 genRenderbuffers -> int genRenderbuffers (uint count)
