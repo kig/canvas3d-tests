@@ -414,7 +414,7 @@ window.addEventListener("load", init, false);
         sum += tmp * kernel[5];
         tmp = texture2D(Texture, texCoord0.st + vec2(float(6-3)*step,0));
         sum += tmp * kernel[6];
-        gl_FragColor = mix(texture2D(Texture, texCoord0.st), sum, b);
+        gl_FragColor = mix(texture2D(Texture, texCoord0.st), sum, b ? 1.0 : 0.0);
       }
     </script>
     <script id="vdof-frag" type="x-shader/x-fragment">
@@ -445,7 +445,7 @@ window.addEventListener("load", init, false);
         sum += tmp * kernel[5];
         tmp = texture2D(Texture, texCoord0.st + vec2(0,float(6-3)*step));
         sum += tmp * kernel[6];
-        gl_FragColor = mix(texture2D(Texture, texCoord0.st), sum, b);
+        gl_FragColor = mix(texture2D(Texture, texCoord0.st), sum, b ? 1.0 : 0.0);
       }
     </script>
 
