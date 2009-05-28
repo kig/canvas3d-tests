@@ -61,6 +61,7 @@ Tests.testPassingTooManyUniforms = function(gl) {
 
 <script id="vert" type="x-shader/x-vertex">
   #version 130
+  precision mediump float;
   in vec3 Vertex; in vec2 Tex;
   out vec2 TexCoord;
   void main()
@@ -72,6 +73,7 @@ Tests.testPassingTooManyUniforms = function(gl) {
 
 <script id="frag" type="x-shader/x-fragment">
   #version 130
+  precision mediump float;
   out vec4 fragColor;
   void main()
   {
@@ -80,6 +82,7 @@ Tests.testPassingTooManyUniforms = function(gl) {
 </script>
 <script id="vert2" type="x-shader/x-vertex">
   #version 130
+  precision mediump float;
   uniform float foo, bar;
   in vec3 Vertex; in vec2 Tex;
   out vec2 TexCoord;
@@ -92,6 +95,7 @@ Tests.testPassingTooManyUniforms = function(gl) {
 
 <script id="frag2" type="x-shader/x-fragment">
   #version 130
+  precision mediump float;
   uniform float baz;
   out vec4 fragColor;
   in vec2 TexCoord;

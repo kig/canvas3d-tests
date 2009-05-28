@@ -82,6 +82,7 @@ Tests.testVertexAttrib = function(gl, prog, v,n,t) {
 </script>
 <script id="vert" type="x-shader/x-vertex">
   #version 130
+  precision mediump float;
 
   in vec3 Vertex;
   in vec3 Normal;
@@ -96,6 +97,7 @@ Tests.testVertexAttrib = function(gl, prog, v,n,t) {
 </script>
 <script id="frag" type="x-shader/x-fragment">
   #version 130
+  precision mediump float;
 
   in vec4 texCoord0;
   out vec4 fragColor;

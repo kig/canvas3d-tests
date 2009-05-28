@@ -62,6 +62,7 @@ arr.forEach(function(e){
 </script>
 <script id="crvert" type="x-shader/x-vertex">
   #version 130
+  precision mediump float;
   in vec3 Vertex; in vec2 Tex;
   uniform float x[3];
   void main()
@@ -71,6 +72,7 @@ arr.forEach(function(e){
 </script>
 <script id="cwvert" type="x-shader/x-vertex">
   #version 130
+  precision mediump float;
   in vec3 Vertex; in vec2 Tex;
   uniform float x[3];
   void main()
@@ -81,6 +83,7 @@ arr.forEach(function(e){
 </script>
 <script id="vrvert" type="x-shader/x-vertex">
   #version 130
+  precision mediump float;
   uniform float x[3];
   in vec3 Vertex; in vec2 Tex;
   void main()
@@ -91,6 +94,7 @@ arr.forEach(function(e){
 </script>
 <script id="vwvert" type="x-shader/x-vertex">
   #version 130
+  precision mediump float;
   in vec3 Vertex; in vec2 Tex;
   uniform float x[3];
   void main()
@@ -102,6 +106,7 @@ arr.forEach(function(e){
 </script>
 <script id="tvwvert" type="x-shader/x-vertex">
   #version 130
+  precision mediump float;
   in vec3 Vertex; in vec2 Tex;
   uniform float x[3];
   void main()
@@ -113,6 +118,7 @@ arr.forEach(function(e){
 </script>
 <script id="vert" type="x-shader/x-vertex">
   #version 130
+  precision mediump float;
   in vec3 Vertex; in vec2 Tex;
   out vec2 TexCoord;
   void main()
@@ -124,6 +130,7 @@ arr.forEach(function(e){
 
 <script id="crfrag" type="x-shader/x-fragment">
   #version 130
+  precision mediump float;
   uniform float x[3];
   out vec4 fragColor;
   in vec2 TexCoord;
@@ -134,6 +141,7 @@ arr.forEach(function(e){
 </script>
 <script id="cwfrag" type="x-shader/x-fragment">
   #version 130
+  precision mediump float;
   uniform float x[3];
   out vec4 fragColor;
   in vec2 TexCoord;
@@ -145,6 +153,7 @@ arr.forEach(function(e){
 </script>
 <script id="vrfrag" type="x-shader/x-fragment">
   #version 130
+  precision mediump float;
   uniform float x[3];
   out vec4 fragColor;
   in vec2 TexCoord;
@@ -156,6 +165,7 @@ arr.forEach(function(e){
 </script>
 <script id="vwfrag" type="x-shader/x-fragment">
   #version 130
+  precision mediump float;
   uniform float x[3];
   out vec4 fragColor;
   in vec2 TexCoord;
@@ -168,6 +178,7 @@ arr.forEach(function(e){
 </script>
 <script id="tvwfrag" type="x-shader/x-fragment">
   #version 130
+  precision mediump float;
   uniform float x[3];
   out vec4 fragColor;
   in vec2 TexCoord;
@@ -180,6 +191,7 @@ arr.forEach(function(e){
 </script>
 <script id="frag" type="x-shader/x-fragment">
   #version 130
+  precision mediump float;
   out vec4 fragColor;
   void main()
   {

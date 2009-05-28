@@ -142,6 +142,7 @@ void main() {
 </script>
 <script id="whiletruevert" type="x-shader/x-vertex">
     #version 130
+    precision mediump float;
     in vec3 Vertex; in vec2 Tex;
     out vec2 TexCoord;
     void main()
@@ -154,6 +155,7 @@ void main() {
 </script>
 <script id="loop100Mvert" type="x-shader/x-vertex">
     #version 130
+    precision mediump float;
     in vec3 Vertex; in vec2 Tex;
     out vec2 TexCoord;
     void main()
@@ -169,6 +171,7 @@ void main() {
 </script>
 <script id="loopCompvert" type="x-shader/x-vertex">
     #version 130
+    precision mediump float;
     in vec3 Vertex; in vec2 Tex;
     out vec2 TexCoord;
     void main()
@@ -181,6 +184,7 @@ void main() {
 </script>
 <script id="variablevert" type="x-shader/x-vertex">
     #version 130
+    precision mediump float;
     in vec3 Vertex; in vec2 Tex;
     out vec2 TexCoord;
     
@@ -194,6 +198,7 @@ void main() {
 </script>
 <script id="vert" type="x-shader/x-vertex">
     #version 130
+    precision mediump float;
     in vec3 Vertex; in vec2 Tex;
     out vec2 TexCoord;
     void main()
@@ -205,6 +210,7 @@ void main() {
 
 <script id="whiletruefrag" type="x-shader/x-fragment">
     #version 130
+    precision mediump float;
     out vec4 fragColor;
     in vec2 TexCoord;
     void main()
@@ -216,6 +222,7 @@ void main() {
 </script>
 <script id="loop100Mfrag" type="x-shader/x-fragment">
     #version 130
+    precision mediump float;
     out vec4 fragColor;
     in vec2 TexCoord;
     void main()
@@ -230,6 +237,7 @@ void main() {
 </script>
 <script id="loopCompfrag" type="x-shader/x-fragment">
     #version 130
+    precision mediump float;
     out vec4 fragColor;
     in vec2 TexCoord;
     void main()
@@ -241,6 +249,7 @@ void main() {
 </script>
 <script id="variablefrag" type="x-shader/x-fragment">
     #version 130
+    precision mediump float;
     out vec4 fragColor;
     in vec2 TexCoord;
     void main()
@@ -252,6 +261,7 @@ void main() {
 </script>
 <script id="frag" type="x-shader/x-fragment">
   #version 130
+  precision mediump float;
   out vec4 fragColor;
   in vec2 TexCoord;
   void main()
