@@ -672,7 +672,22 @@ GLConstants = [
 0x809D
 ];
 
-GL_CONTEXT_ID = 'moz-webgl'
+initGL_CONTEXT_ID = function(){
+  var c = document.createElement('canvas');
+  var contextNames = ['webgl', 'moz-webgl', 'webkit-3d'];
+  GL_CONTEXT_ID = null;
+  for (var i=0; i<contextNames.length; i++) {
+    try {
+      c.getContext(contextNames[i]);
+      GL_CONTEXT_ID = contextNames[i];
+      break;
+    } catch (e) {}
+  }
+  if (!GL_CONTEXT_ID)
+    alert("No WebGL context found. Unable to run tests.");
+}
+
+initGL_CONTEXT_ID();
 
 function initTests() {
   if (Tests.message != null) {
