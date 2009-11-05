@@ -8,20 +8,21 @@
 
 Tests.startUnit = function () {
   var canvas = document.getElementById('gl');
-  var gl = wrapGLContext(canvas.getContext(GL_CONTEXT_ID));
+  var gl = canvas.getContext(GL_CONTEXT_ID);
   return [gl];
 }
 
 Tests.testSimpleBadArgs = function(gl) {
   var p = gl.createProgram();
+  var shaders = [null];
   for (var i=0; i<1022; i++) {
-      gl.createShader(gl.FRAGMENT_SHADER);
+      shaders[i+1] = gl.createShader(gl.FRAGMENT_SHADER);
   }
-  gl.attachShader(p, 10);
-  gl.attachShader(p, 3);
-  gl.attachShader(p, 1021);
-  gl.attachShader(p, 1022);
-  gl.attachShader(p, 1023);
+  gl.attachShader(p, shaders[10]);
+  gl.attachShader(p, shaders[3]);
+  gl.attachShader(p, shaders[1020]);
+  gl.attachShader(p, shaders[1021]);
+  gl.attachShader(p, shaders[shaders.length-1]);
   assertFail(function() { gl.attachShader(p, 564732608); });
   assertFail(function() { gl.compileShader(840002); });
   assertFail(function() { gl.attachShader(p, 840002); });
@@ -35,13 +36,10 @@ Tests.testSimpleBadArgs = function(gl) {
   assertFail(function() { gl.attachShader(p, -1); });
   assertFail(function() { gl.attachShader(p, 5901080860202); });
   assertFail(function() { gl.attachShader(p, 590108080000060202); });
-  for (var i=-1000000; i<100000000; i+=1000000*Math.random())
-    if (i < 0 || i > 1023)
-        assertFail(function() { gl.attachShader(p, i); });
   assertOk(function(){ gl.linkProgram(p); });
   gl.deleteProgram(p);
-  for (var i=0; i<1024; i++) {
-      try { gl.deleteShader(i); } catch (e) {}
+  for (var i=1; i<shaders.length; i++) {
+      assertOk(function() { gl.deleteShader(shaders[i]); });
   }
 }
 
