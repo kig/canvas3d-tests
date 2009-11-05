@@ -26,18 +26,18 @@ OTHER DEALINGS IN THE SOFTWARE.
 */
 
 function loadTexture(gl, elem, mipmaps) {
-  var tex = gl.genTextures(1)[0];
+  var tex = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, tex);
-  gl.texImage2DHTML(gl.TEXTURE_2D, 0, elem);
+  gl.texImage2D(gl.TEXTURE_2D, 0, elem);
   if (mipmaps != false)
     gl.generateMipmap(gl.TEXTURE_2D);
-  gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
   if (mipmaps)
-    gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
   else
-    gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
   return tex;
 }
 
@@ -67,7 +67,7 @@ function getShader(gl, id) {
   gl.shaderSource(shader, str);
   gl.compileShader(shader);
 
-  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) != 1) {
+  if (gl.getShaderi(shader, gl.COMPILE_STATUS) != 1) {
     var ilog = gl.getShaderInfoLog(shader);
     gl.deleteShader(shader);
     throw("Failed to compile shader "+shaderScript.id + ", Shader info log: " + ilog);
@@ -92,11 +92,11 @@ function loadShaderArray(gl, shaders) {
   var prog = {program: id, shaders: shaderObjs};
   gl.linkProgram(id);
   gl.validateProgram(id);
-  if (gl.getProgramParameter(id, gl.LINK_STATUS) != 1) {
+  if (gl.getProgrami(id, gl.LINK_STATUS) != 1) {
     deleteShader(gl,prog);
     throw("Failed to link shader");
   }
-  if (gl.getProgramParameter(id, gl.VALIDATE_STATUS) != 1) {
+  if (gl.getProgrami(id, gl.VALIDATE_STATUS) != 1) {
     deleteShader(gl,prog);
     throw("Failed to validate shader");
   }
@@ -110,7 +110,7 @@ function loadShader(gl) {
 }
 
 function deleteShader(gl, sh) {
-  gl.useProgram(0);
+  gl.useProgram(null);
   sh.shaders.forEach(function(s){
     gl.detachShader(sh.program, s);
     gl.deleteShader(s);
@@ -563,17 +563,17 @@ Shader.prototype = {
 
   uniformMatrix4fv : function(name, value) {
     var loc = this.uniform(name);
-    this.gl.uniformMatrix4fv(loc, value);
+    this.gl.uniformMatrix4fv(loc, false, value);
   },
 
   uniformMatrix3fv : function(name, value) {
     var loc = this.uniform(name);
-    this.gl.uniformMatrix3fv(loc, value);
+    this.gl.uniformMatrix3fv(loc, false, value);
   },
 
   uniformMatrix2fv : function(name, value) {
     var loc = this.uniform(name);
-    this.gl.uniformMatrix2fv(loc, value);
+    this.gl.uniformMatrix2fv(loc, false, value);
   },
 
   attrib : function(name) {
@@ -639,9 +639,10 @@ VBO.prototype = {
 
   destroy : function() {
     if (this.vbos != null)
-      this.gl.deleteBuffers(this.vbos);
+      for (var i=0; i<this.vbos.length; i++)
+        this.gl.deleteBuffer(this.vbo[i]);
     if (this.elementsVBO != null)
-      this.gl.deleteBuffers([this.elementsVBO]);
+      this.gl.deleteBuffer(this.elementsVBO);
     this.length = this.elementsLength = 0;
     this.vbos = this.elementsVBO = null;
     this.initialized = false;
@@ -652,9 +653,12 @@ VBO.prototype = {
     var gl = this.gl;
    
     gl.getError();
-    var vbos = gl.genBuffers(this.data.length);
+    var vbos = [];
+    var length = 0;
+    for (var i=0; i<this.data.length; i++)
+      vbos.push(gl.createBuffer());
     if (this.elements != null)
-      this.elementsVBO = gl.genBuffers(1)[0];
+      this.elementsVBO = gl.createBuffer();
     try {
       throwError(gl, "genBuffers");
       for (var i = 0; i<this.data.length; i++) {
@@ -662,26 +666,31 @@ VBO.prototype = {
         var dlen = Math.floor(d.data.length / d.size);
         if (i == 0 || dlen < length)
             length = dlen;
+        if (!d.floatArray)
+          d.floatArray = new CanvasFloatArray(d.data);
         gl.bindBuffer(gl.ARRAY_BUFFER, vbos[i]);
         throwError(gl, "bindBuffer");
-        gl.bufferData(gl.ARRAY_BUFFER, d.data, gl.FLOAT, gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, d.floatArray, gl.STATIC_DRAW);
         throwError(gl, "bufferData");
       }
       if (this.elementsVBO != null) {
         var d = this.elements;
         this.elementsLength = d.data.length;
+        if (!d.ushortArray)
+          d.ushortArray = new CanvasUnsignedShortArray(d.data);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.elementsVBO);
         throwError(gl, "bindBuffer ELEMENT_ARRAY_BUFFER");
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, d.data, gl.UNSIGNED_SHORT, gl.STATIC_DRAW);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, d.ushortArray, gl.STATIC_DRAW);
         throwError(gl, "bufferData ELEMENT_ARRAY_BUFFER");
       }
     } catch(e) {
-      gl.deleteBuffers(vbos);
+      for (var i=0; i<vbos.length; i++)
+        gl.deleteBuffer(vbos[i]);
       throw(e);
     }
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, 0);
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
     this.length = length;
     this.vbos = vbos;
@@ -730,34 +739,35 @@ FBO.prototype = {
   texture : null,
 
   destroy : function() {
-    if (this.fbo) this.gl.deleteFramebuffers([this.fbo]);
-    if (this.rbo) this.gl.deleteRenderbuffers([this.rbo]);
-    if (this.texture) this.gl.deleteTextures([this.texture]);
+    if (this.fbo) this.gl.deleteFramebuffer(this.fbo);
+    if (this.rbo) this.gl.deleteRenderbuffer(this.rbo);
+    if (this.texture) this.gl.deleteTexture(this.texture);
   },
 
   init : function() {
     var gl = this.gl;
     var w = this.width, h = this.height;
-    var fbo = this.fbo != null ? this.fbo : gl.genFramebuffers(1)[0];
+    var fbo = this.fbo != null ? this.fbo : gl.createFramebuffer();
     var rb;
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
     checkError(gl, "FBO.init bindFramebuffer");
     if (this.useDepth) {
-      rb = this.rbo != null ? this.rbo : gl.genRenderbuffers(1)[0];
+      rb = this.rbo != null ? this.rbo : gl.createRenderbuffer();
       gl.bindRenderbuffer(gl.RENDERBUFFER, rb);
       checkError(gl, "FBO.init bindRenderbuffer");
       gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, w, h);
       checkError(gl, "FBO.init renderbufferStorage");
     }
 
-    var tex = this.texture != null ? this.texture : gl.genTextures(1)[0];
+    var tex = this.texture != null ? this.texture : gl.createTexture();
+    var tmp = this.getTempCanvas(w,h);
     gl.bindTexture(gl.TEXTURE_2D, tex);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-    gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texImage2D(gl.TEXTURE_2D, 0, tmp);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     checkError(gl, "FBO.init tex");
 
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
@@ -779,6 +789,15 @@ FBO.prototype = {
     this.rbo = rb;
     this.texture = tex;
     this.initialized = true;
+  },
+
+  getTempCanvas : function(w, h) {
+    if (!FBO.tempCanvas) {
+      FBO.tempCanvas = document.createElement('canvas');
+    }
+    FBO.tempCanvas.width = w;
+    FBO.tempCanvas.height = h;
+    return FBO.tempCanvas;
   },
 
   use : function() {

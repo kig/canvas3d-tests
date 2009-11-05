@@ -672,7 +672,7 @@ GLConstants = [
 0x809D
 ];
 
-GL_CONTEXT_ID = 'moz-glweb20'
+GL_CONTEXT_ID = 'moz-webgl'
 
 function initTests() {
   if (Tests.message != null) {
