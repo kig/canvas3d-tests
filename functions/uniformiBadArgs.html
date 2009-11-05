@@ -31,7 +31,7 @@ Tests.testUniformf = function(gl) {
         assertFail(function(){gl.uniform1iv(foo, [6]);});
         assertFail(function(){gl.uniform1iv(foo, []);});
         assertOk(function(){gl.uniform1iv(bar, [2]);});
-        assertOk(function(){gl.uniform1iv(bar, []);});
+        assertFail(function(){gl.uniform1iv(bar, []);});
         assertFail(function(){gl.uniform4iv(bar, [3,3,4,5]);});
     });
     var d = gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);

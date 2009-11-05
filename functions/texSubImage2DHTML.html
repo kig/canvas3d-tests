@@ -44,39 +44,38 @@ Tests.startUnit = function () {
 }
 
 Tests.setup = function(gl) {
-    var tex = gl.genTextures(1)[0];
+    var tex = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, tex);
     return [gl]
 }
 
-Tests.teardown = function(gl,tex) {
-    gl.bindTexture(gl.TEXTURE_2D, 0);
-    gl.deleteTextures([tex]);
+Tests.teardown = function(gl, tex) {
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.deleteTexture(tex);
 }
 
-Tests.testTexImage2DHTML = function(gl) {
+Tests.testTexImage2D = function(gl) {
     gl.enable(gl.BLEND);
     var img = document.getElementById('i');
     var c = document.getElementById('c');
     var ctx = c.getContext('2d');
     ctx.drawImage(img,0,0);
-    gl.texImage2DHTML(gl.TEXTURE_2D, 0, img);
-    gl.texSubImage2DHTML(gl.TEXTURE_2D, 0, 0, 0, img);
-    gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texImage2D(gl.TEXTURE_2D, 0, img);
+    gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, img);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     var f = new Filter(gl, 'identity-flip-vert', 'identity-frag');
     gl.blendFunc(gl.ONE, gl.ZERO);
     f.apply();
     f.destroy();
-    gl.texImage2DHTML(gl.TEXTURE_2D, 0, c);
-    gl.texSubImage2DHTML(gl.TEXTURE_2D, 0, 0, 0, c);
+    gl.texImage2D(gl.TEXTURE_2D, 0, c);
+    gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, c);
     f = new Filter(gl, 'identity-hflip-vert', 'identity-frag');
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     f.apply();
     f.destroy();
-    gl.swapBuffers();
     var valid_targets = [
         gl.TEXTURE_2D,
         gl.TEXTURE_CUBE_MAP_POSITIVE_X,
@@ -88,26 +87,26 @@ Tests.testTexImage2DHTML = function(gl) {
     ];
     valid_targets.forEach(function(t) {
         assertOk(function(){
-                gl.texImage2DHTML(t, 0, c);
-                gl.texSubImage2DHTML(t, 0, 0, 0, c);
+                gl.texImage2D(t, 0, c);
+                gl.texSubImage2D(t, 0, 0, 0, c);
         });
         assertOk(function(){
-                gl.texImage2DHTML(t, 1, c);
-                gl.texSubImage2DHTML(t, 1, 0, 0, c);
+                gl.texImage2D(t, 1, c);
+                gl.texSubImage2D(t, 1, 0, 0, c);
         });
     });
 }
 
-Tests.testTexImage2DHTMLNonSOP = function(gl) {
+Tests.testTexImage2DNonSOP = function(gl) {
     var img = document.getElementById('i2');
     while (!img.complete) {}
     var c = document.getElementById('c');
     var ctx = c.getContext('2d');
     ctx.drawImage(img,0,0);
-    gl.texImage2DHTML(gl.TEXTURE_2D, 0, img);
-    gl.texSubImage2DHTML(gl.TEXTURE_2D, 0, 0,0, img);
-    gl.texImage2DHTML(gl.TEXTURE_2D, 0, c);
-    gl.texSubImage2DHTML(gl.TEXTURE_2D, 0, 0,0, c);
+    gl.texImage2D(gl.TEXTURE_2D, 0, img);
+    gl.texSubImage2D(gl.TEXTURE_2D, 0, 0,0, img);
+    gl.texImage2D(gl.TEXTURE_2D, 0, c);
+    gl.texSubImage2D(gl.TEXTURE_2D, 0, 0,0, c);
 }
 
 Tests.endUnit = function(gl) {

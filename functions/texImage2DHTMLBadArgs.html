@@ -9,26 +9,26 @@
 Tests.startUnit = function () {
   var canvas = document.getElementById('gl');
   var gl = wrapGLContext(canvas.getContext(GL_CONTEXT_ID));
-  var tex = gl.genTextures(1)[0];
+  var tex = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, tex);
   return [gl, tex];
 }
 
-Tests.testTexImage2DHTML = function(gl) {
+Tests.testTexImage2D = function(gl) {
     var b = document.createElement('b');
     var div = document.createElement('div');
     var c = document.getElementById('c');
-    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0, b); });
-    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0, div); });
-    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0, 0); });
-    assertFail(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0, "foo"); });
-    assertOk(function() {gl.texImage2DHTML(gl.TEXTURE_2D, 0, c); });
-    assertFail(function() {gl.texImage2DHTML(gl.FLOAT, 0, c); });
+    assertFail(function() {gl.texImage2D(gl.TEXTURE_2D, 0, b); });
+    assertFail(function() {gl.texImage2D(gl.TEXTURE_2D, 0, div); });
+    assertFail(function() {gl.texImage2D(gl.TEXTURE_2D, 0, 0); });
+    assertFail(function() {gl.texImage2D(gl.TEXTURE_2D, 0, "foo"); });
+    assertOk(function() {gl.texImage2D(gl.TEXTURE_2D, 0, c); });
+    assertFail(function() {gl.texImage2D(gl.FLOAT, 0, c); });
 }
 
 Tests.endUnit = function(gl, tex) {
-    gl.bindTexture(gl.TEXTURE_2D, 0);
-    gl.deleteTextures([tex]);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.deleteTexture(tex);
 }
 
 </script>
