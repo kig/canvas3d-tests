@@ -9,8 +9,8 @@
 Tests.startUnit = function () {
     var canvas = document.getElementById('gl');
     var gl = wrapGLContext(canvas.getContext(GL_CONTEXT_ID));
-    var buf = gl.genBuffers(1)[0];
-    var ebuf = gl.genBuffers(1)[0];
+    var buf = gl.createBuffer();
+    var ebuf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ebuf);
     return [gl, buf, ebuf];
@@ -18,31 +18,32 @@ Tests.startUnit = function () {
 
 Tests.testBufferData = function(gl) {
     var data = [0,0,0,0, 1,0,0,0, 0,1,0,0];
-    gl.bufferData(gl.ARRAY_BUFFER, data, gl.FLOAT, gl.STREAM_DRAW);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl.UNSIGNED_SHORT, gl.STREAM_DRAW);
-    assertFail(function(){gl.bufferSubData(gl.ARRAY_BUFFER, 0, null, gl.FLOAT);});
-    assertFail(function(){gl.bufferSubData(gl.ARRAY_BUFFER, 0, 12, gl.FLOAT);});
-    assertFail(function(){gl.bufferSubData(gl.TEXTURE_2D, 0, [1,2,3], gl.FLOAT);});
+    gl.bufferData(gl.ARRAY_BUFFER, new CanvasFloatArray(data), gl.STREAM_DRAW);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new CanvasUnsignedShortArray(data), gl.STREAM_DRAW);
+    assertFail(function(){gl.bufferSubData(gl.ARRAY_BUFFER, 0, new CanvasFloatArray(null));});
+    assertFail(function(){gl.bufferSubData(gl.ARRAY_BUFFER, 0, 12);});
+    assertFail(function(){gl.bufferSubData(gl.TEXTURE_2D, 0, new CanvasFloatArray([1,2,3]));});
     assertFail(function(){gl.bufferSubData(gl.ARRAY_BUFFER, 0, [1,2,3], gl.TEXTURE_2D);});
-    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, [1,2,3], gl.FLOAT);});
-    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, -1, [1,2,3], gl.UNSIGNED_SHORT);});
-    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 24, [1,2,3], gl.UNSIGNED_SHORT);});
-    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 2400000, [1,2,3], gl.UNSIGNED_SHORT);});
-    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 19, [1,2,3], gl.UNSIGNED_SHORT);});
-    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, data.concat([1]), gl.UNSIGNED_SHORT);});
-    assertOk(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 18, [1,2,3], gl.UNSIGNED_SHORT);});
-    assertOk(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, [1,2,3], gl.UNSIGNED_SHORT);});
+    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, new CanvasFloatArray([1,2,3]));});
+    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, -1, new CanvasUnsignedShortArray([1,2,3]));});
+    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 24, new CanvasUnsignedShortArray([1,2,3]));});
+    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 2400000, new CanvasUnsignedShortArray([1,2,3]));});
+    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 19, new CanvasUnsignedShortArray([1,2,3]));});
+    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, new CanvasUnsignedShortArray(data.concat([1])));});
+    assertOk(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 18, new CanvasUnsignedShortArray([1,2,3]));});
+    assertOk(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, new CanvasUnsignedShortArray([1,2,3]));});
     throwError(gl, 'bufferData0');
-    gl.bindBuffer(gl.ARRAY_BUFFER, 0);
-    assertFail(function(){gl.bufferSubData(gl.ARRAY_BUFFER, 0, [1,2,3], gl.FLOAT);});
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    assertFail(function(){gl.bufferSubData(gl.ARRAY_BUFFER, 0, new CanvasFloatArray([1,2,3]));});
     throwError(gl, 'bufferData1');
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, 0);
-    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, [1,2,3], gl.UNSIGNED_SHORT);});
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, new CanvasUnsignedShortArray([1,2,3]));});
     throwError(gl, 'bufferData2');
 }
 
 Tests.endUnit = function(gl, buf, ebuf) {
-    gl.deleteBuffers([buf, ebuf]);
+    gl.deleteBuffer(buf);
+    gl.deleteBuffer(ebuf);
 }
 
 </script>
