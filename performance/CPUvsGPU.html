@@ -250,17 +250,15 @@ Tests.gpuGaussianBlur = function(gl) {
     });
   }
 
-  gl.bindFramebuffer(gl.FRAMEBUFFER, 0);
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   identity.apply(); // draw blurred image on screen
-
-  gl.swapBuffers();
 
   fbo1.destroy();
   hblur.destroy();
   vblur.destroy();
   identity.destroy();
   identityFlip.destroy();
-  gl.deleteTextures([tex]);
+  gl.deleteTexture(tex);
   checkError(gl, "end");
   var t1 = new Date().getTime();
   s.textContent = 'Done! Time: '+(t1-t0)+'ms';

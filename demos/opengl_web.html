@@ -17,7 +17,7 @@ function log(msg) {
 
 function init(ev) {
     var canvas = document.getElementById('canvas');
-    var gl = canvas.getContext('moz-glweb20');
+    var gl = canvas.getContext('moz-webgl');
 
     var shader = new Shader(gl, "ppix-vert", "ppix-frag");
     shader.compile();
@@ -90,7 +90,7 @@ function redraw(canvas, gl, shader, fbo, fbo2, fbo3, depth, identity, unpremult,
     gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.enable(gl.DEPTH_TEST);
 
-    gl.bindFramebuffer(gl.FRAMEBUFFER, 0);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     
     fbo.use();
@@ -158,18 +158,20 @@ function redraw(canvas, gl, shader, fbo, fbo2, fbo3, depth, identity, unpremult,
 
     }
 
-    gl.bindFramebuffer(gl.FRAMEBUFFER, 0);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
     gl.activeTexture(gl.TEXTURE1);
-    gl.bindTexture(gl.TEXTURE_2D, 0);
+    gl.bindTexture(gl.TEXTURE_2D, null);
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, fbo.texture);
 
+    // The DoF blur blurs the color from the transparent black background with
+    // the cubes. To get rid of the border, we can treat it as premultiplied alpha.
+    // To see the problem, try replacing unpremult with identity.
     unpremult.apply(function(f){
       f.uniform1i("Texture", 0);
     });
 
-    gl.swapBuffers();
 }
 
 window.addEventListener("load", init, false);

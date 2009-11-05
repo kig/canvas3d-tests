@@ -11,9 +11,9 @@
 Tests.message = "This was segfaulting when the GL context got GC'd (in glXDestroyContext)";
 Tests.testSeg = function () {
     var canvas = document.getElementById('canvas');
-    var gl = canvas.getContext('moz-glweb20');
+    var gl = canvas.getContext(GL_CONTEXT_ID);
 
-    var fbo = gl.genFramebuffers(1)[0];
+    var fbo = gl.createFramebuffer();
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
 }
 </script>
