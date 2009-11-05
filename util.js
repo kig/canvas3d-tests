@@ -640,7 +640,7 @@ VBO.prototype = {
   destroy : function() {
     if (this.vbos != null)
       for (var i=0; i<this.vbos.length; i++)
-        this.gl.deleteBuffer(this.vbo[i]);
+        this.gl.deleteBuffer(this.vbos[i]);
     if (this.elementsVBO != null)
       this.gl.deleteBuffer(this.elementsVBO);
     this.length = this.elementsLength = 0;
