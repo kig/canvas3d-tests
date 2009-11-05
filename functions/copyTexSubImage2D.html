@@ -35,20 +35,21 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 Tests.startUnit = function () {
   var canvas = document.getElementById('gl');
-  var gl = wrapGLContext(canvas.getContext(GL_CONTEXT_ID));
+  var gl = canvas.getContext(GL_CONTEXT_ID);
   return [gl];
 }
 
 Tests.setup = function(gl) {
-  var tex = gl.genTextures(1)[0];
+  var tex = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, tex);
   return [gl]
 }
 
 Tests.teardown = function(gl,tex) {
-  gl.bindTexture(gl.TEXTURE_2D, 0);
-  gl.deleteTextures([tex]);
+  gl.bindTexture(gl.TEXTURE_2D, null);
+  gl.deleteTexture(tex);
 }
+
 
 Tests.testTexImage2D = function(gl) {
   gl.copyTexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 0,0,16,16,0);
@@ -81,12 +82,16 @@ Tests.testRoundtrip = function(gl) {
     gl.clear(gl.COLOR_BUFFER_BIT);
     assertEquals([255,0,0,255], gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE).data);
     // red texture
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 16,16,0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.clearColor(0.0, 0.0, 0.0, 0.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.texImage2D(gl.TEXTURE_2D, 0, document.getElementById('gl'));
+    gl.clearColor(1.0, 0.0, 0.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
     gl.copyTexSubImage2D(gl.TEXTURE_2D, 0, 0,0,0,0,16,16);
-    gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameter(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.clearColor(0.0, 0.0, 1.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     // blue framebuffer

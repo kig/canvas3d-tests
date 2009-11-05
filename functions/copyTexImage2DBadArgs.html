@@ -40,14 +40,14 @@ Tests.startUnit = function () {
 }
 
 Tests.setup = function(gl) {
-    var tex = gl.genTextures(1)[0];
-    gl.bindTexture(gl.TEXTURE_2D, tex);
-    return [gl]
+  var tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  return [gl]
 }
 
 Tests.teardown = function(gl,tex) {
-    gl.bindTexture(gl.TEXTURE_2D, 0);
-    gl.deleteTextures([tex]);
+  gl.bindTexture(gl.TEXTURE_2D, null);
+  gl.deleteTexture(tex);
 }
 
 Tests.testTexImage2D = function(gl) {
