@@ -67,6 +67,7 @@ Tests.endUnit = function(gl, prog, v,n,t) {
   prog.destroy();
 }
 
+/* VertexAttribPointer with arrays disabled in WebGL (?)
 
 Tests.testDrawElementsWithData = function(gl, prog, v,n,t) {
   gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, verts);
@@ -118,6 +119,8 @@ Tests.testDrawElementsMulti = function(gl, prog, v,n,t) {
   assert(0 == checkError(gl, "drawElements 5"));
 }
 
+*/
+
 Tests.testDrawElementsVBO = function(gl, prog, v,n,t) {
     var vbo = new VBO(gl,
                        {size:3, data:Quad.vertices},
@@ -146,8 +149,8 @@ Tests.testDrawElementsVBOMulti = function(gl, prog, v,n,t) {
   assertFail(function(){gl.drawElements(gl.TRIANGLES, 1, 5);});
   assertFail(function(){gl.drawElements(gl.TRIANGLES, 1, 6);});
   assertFail(function(){gl.drawElements(gl.TRIANGLES, 6, 1);});
-  gl.bindBuffer(gl.ARRAY_BUFFER, 0);
-  gl.vertexAttribPointer(n, 3, gl.FLOAT, false, 0, Quad.normals);
+  gl.bindBuffer(gl.ARRAY_BUFFER, vbo.vbos[1]);
+  gl.vertexAttribPointer(n, 3, gl.FLOAT, false, 0, 0);
   assertFail(function(){gl.drawElements(gl.TRIANGLES, 5, 1);});
   assertFail(function(){gl.drawElements(gl.TRIANGLES, 0, 2);});
   assertFail(function(){gl.drawElements(gl.TRIANGLES, 6, 0);});

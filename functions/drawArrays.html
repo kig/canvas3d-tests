@@ -39,7 +39,7 @@ var texcoords = [0.0,0.0,  1.0,0.0,  0.0,1.0];
 
 Tests.startUnit = function () {
   var canvas = document.getElementById('gl');
-  var gl = wrapGLContext(canvas.getContext(GL_CONTEXT_ID));
+  var gl = canvas.getContext(GL_CONTEXT_ID);
   var prog = new Shader(gl, 'vert', 'frag');
   prog.use();
   var sh = prog.shader.program;
@@ -64,6 +64,7 @@ Tests.endUnit = function(gl, prog, v,n,t) {
   prog.destroy();
 }
 
+/* VertexAttribPointer drawing with data arrays is not in WebGL (?)
 
 Tests.testDrawArraysWithData = function(gl, prog, v,n,t) {
   gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, verts);
@@ -110,6 +111,7 @@ Tests.testDrawArraysMulti = function(gl, prog, v,n,t) {
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 1, 2);});
   assert(0 == checkError(gl, "drawArrays 5"));
 }
+*/
 
 Tests.testDrawArraysVBO = function(gl, prog, v,n,t) {
   var vbo = new VBO(gl, {size:3, data:Quad.vertices});
@@ -138,8 +140,8 @@ Tests.testDrawArraysVBOMulti = function(gl, prog, v,n,t) {
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 1, 5);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 1, 6);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 6, 1);});
-  gl.bindBuffer(gl.ARRAY_BUFFER, 0);
-  gl.vertexAttribPointer(n, 3, gl.FLOAT, false, 0, Quad.normals);
+  gl.bindBuffer(gl.ARRAY_BUFFER, vbo.vbos[1]);
+  gl.vertexAttribPointer(n, 3, gl.FLOAT, false, 0, 0);
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 5, 1);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 6);});

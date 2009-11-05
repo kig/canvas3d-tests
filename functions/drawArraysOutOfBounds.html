@@ -42,7 +42,7 @@ var texcoords = [0.0,0.0,  1.0,0.0,  0.0,1.0];
 
 Tests.startUnit = function () {
   var canvas = document.getElementById('gl');
-  var gl = wrapGLContext(canvas.getContext(GL_CONTEXT_ID));
+  var gl = canvas.getContext(GL_CONTEXT_ID);
   var prog = new Shader(gl, 'vert', 'frag');
   prog.use();
   var v = prog.attrib('Vertex');
@@ -83,6 +83,8 @@ Tests.testDrawArraysOutOfBounds = function(gl, prog, v,n,t) {
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 1, -1);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, -1, 1);});
 }
+
+/* VertexAttribPointer drawing with data arrays is not in WebGL (?)
 
 Tests.testDrawArraysWithDataOutOfBounds = function(gl, prog, v,n,t) {
   gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, verts);
@@ -142,6 +144,7 @@ Tests.testDrawArraysMultiOutOfBounds = function(gl, prog, v,n,t) {
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 1, 4);});
 }
 
+*/
 
 Tests.testDrawArraysVBOOutOfBounds = function(gl, prog, v,n,t) {
   var vbo = new VBO(gl, {size:3, data:Quad.vertices});
@@ -169,16 +172,24 @@ Tests.testDrawArraysVBOMultiOutOfBounds = function(gl, prog, v,n,t) {
 }
 
 Tests.testDrawArraysOOBShaderJuggle = function(gl, prog, v,n,t) {
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, [0,0,0]);
+  var vbo = new VBO(gl,
+    {size:3, data:[0,0,0]},
+    {size:3, data:[0,0,0,0,0,0]});
+  vbo.init();
+  gl.bindBuffer(gl.ARRAY_BUFFER, vbo.vbos[0]);
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(v);
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
   var sh2 = new Shader(gl, 'vert', 'frag');
   sh2.use();
-  gl.vertexAttribPointer(sh2.attrib('Vertex'), 3, gl.FLOAT, false, 0, [0,0,0,0,0,0]);
-  gl.enableVertexAttribArray(v);
+  gl.bindBuffer(gl.ARRAY_BUFFER, vbo.vbos[1]);
+  gl.vertexAttribPointer(sh2.attrib('Vertex'), 3, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(sh2.attrib('Vertex'));
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 3);});
   prog.use();
+  gl.vertexAttribPointer(prog.attrib('Vertex'), 3, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(prog.attrib('Vertex'));
   assertOk(function(){gl.drawArrays(gl.TRIANGLES, 0, 2);});
   assertFail(function(){gl.drawArrays(gl.TRIANGLES, 0, 3);});
   sh2.destroy();
