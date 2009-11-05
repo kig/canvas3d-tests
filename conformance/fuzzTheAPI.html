@@ -72,8 +72,8 @@ Tests.testGetGLWeb20 = function() {
     }
     if (funcs.length == 0) {
         for (var m in gl)
-            if (typeof gl[m] == 'function')
-                funcs.push(m);
+            try{if (typeof gl[m] == 'function')
+                funcs.push(m);}catch(e){}
     }
     var idx = 0;
     var count = 0;
