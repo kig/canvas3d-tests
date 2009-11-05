@@ -44,11 +44,11 @@ Tests.startUnit = function () {
 }
 
 Tests.testTexImage2D = function(gl) {
-    var tex = gl.genTextures(1)[0];
+    var tex = gl.createTexture();
     var texArr = new Array(256*256*4);
-    var bufArr = new Array(256*256*4);
+    var bufData = new Array(256*256*4);
     for (var i=0; i<texArr.length; i++) texArr[i] = 0;
-    for (var i=0; i<bufArr.length; i++) bufArr[i] = 0.5;
+    for (var i=0; i<bufData.length; i++) bufData[i] = 0.5;
     gl.bindTexture(gl.TEXTURE_2D, tex);
     time("texImage2D", function() {
         for (var i=0; i<100; i++)
@@ -65,22 +65,33 @@ Tests.testTexImage2D = function(gl) {
     var img = document.getElementById('logo');
     time("texImage2DHTML", function() {
         for (var i=0; i<100; i++)
-            gl.texImage2DHTML(gl.TEXTURE_2D, 0, img);
+            gl.texImage2D(gl.TEXTURE_2D, 0, img);
     });
     time("texSubImage2DHTML", function() {
         for (var i=0; i<100; i++)
-            gl.texSubImage2DHTML(gl.TEXTURE_2D, 0, 0, 0, img);
+            gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, img);
     });
-    var bufs = gl.genBuffers(2);
+    var bufs = [gl.createBuffer(), gl.createBuffer()];
     var buf = bufs[0], buf2 = bufs[1];
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    var bufArr = new CanvasFloatArray(bufData);
+    time("bufferDataNoChange", function() {
+        for (var i=0; i<100; i++)
+            gl.bufferData(gl.ARRAY_BUFFER, bufArr, gl.STATIC_DRAW);
+    });
+    time("bufferSubDataNoChange", function() {
+        for (var i=0; i<100; i++)
+            gl.bufferSubData(gl.ARRAY_BUFFER, 0, bufArr);
+    });
     time("bufferData", function() {
+        var bufArr = new CanvasFloatArray(bufData);
         for (var i=0; i<25; i++)
-            gl.bufferData(gl.ARRAY_BUFFER, bufArr, gl.FLOAT, gl.STATIC_DRAW);
+            gl.bufferData(gl.ARRAY_BUFFER, bufArr, gl.STATIC_DRAW);
     });
     time("bufferSubData", function() {
+        var bufArr = new CanvasFloatArray(bufData);
         for (var i=0; i<25; i++)
-            gl.bufferSubData(gl.ARRAY_BUFFER, 0, bufArr, gl.FLOAT);
+            gl.bufferSubData(gl.ARRAY_BUFFER, 0, bufArr);
     });
     var sh = new Shader(gl, 'vert-v', 'frag-v');
     gl.disable(gl.DEPTH_TEST);
@@ -96,7 +107,7 @@ Tests.testTexImage2D = function(gl) {
         gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
     });
     gl.bindBuffer(gl.ARRAY_BUFFER, buf2);
-    gl.bufferData(gl.ARRAY_BUFFER, bufArr, gl.FLOAT, gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, bufArr, gl.STATIC_DRAW);
     time("verticeDrawC", function() {
         for (var i=0; i<100; i++) {
             gl.bindBuffer(gl.ARRAY_BUFFER, (i % 2 == 0) ? buf : buf2);
@@ -104,7 +115,8 @@ Tests.testTexImage2D = function(gl) {
         }
         gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
     });
-    gl.bindBuffer(gl.ARRAY_BUFFER, 0);
+    // Drawing arrays with vertexAttribPointer seems to have been removed from WebGL.
+/*    gl.bindBuffer(gl.ARRAY_BUFFER, null);
     gl.vertexAttribPointer(v, 4, gl.FLOAT, false, 0, bufArr);
     time("verticeDrawVA", function() {
         for (var i=0; i<100; i++)
@@ -117,7 +129,7 @@ Tests.testTexImage2D = function(gl) {
             gl.drawArrays(gl.TRIANGLES, 0, 256*256);
         }
         gl.readPixels(0,0,1,1,gl.RGBA, gl.UNSIGNED_BYTE);
-    });
+    });*/
     sh.destroy();
     sh = new Filter(gl, 'vert-t', 'frag-t');
     sh.apply();
@@ -135,10 +147,10 @@ Tests.testTexImage2D = function(gl) {
         for (var i=0; i<100; i++)
             gl.getImageData(0, 0, 256, 256);
     });
-    gl.bindTexture(gl.TEXTURE_2D, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, 0);
-    gl.deleteBuffers(bufs);
-    gl.deleteTextures([tex]);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    bufs.forEach(function(buf){ gl.deleteBuffer(buf) });
+    gl.deleteTexture(tex);
 }
 
 
@@ -187,30 +199,34 @@ Tests.endUnit = function(gl) {
 <style>canvas{ position:absolute; }
 img{ display:none; }</style>
 </head><body>
-<h3>100x 256x256x4 texture upload with texImage2D</h3>
+<h3>100x 256x256x4 texture upload with texImage2D (26.2MB total)</h3>
 <p id="texImage2D"></p>
-<h3>100x 256x256x4 texture upload with texSubImage2D</h3>
+<h3>100x 256x256x4 texture upload with texSubImage2D (26.2MB total)</h3>
 <p id="texSubImage2D"></p>
-<h3>100x 256x256x4 texture upload with texImage2DHTML</h3>
+<h3>100x 256x256x4 texture upload with texImage2DHTML (26.2MB total)</h3>
 <p id="texImage2DHTML"></p>
-<h3>100x 256x256x4 texture upload with texSubImage2DHTML</h3>
+<h3>100x 256x256x4 texture upload with texSubImage2DHTML (26.2MB total)</h3>
 <p id="texSubImage2DHTML"></p>
-<h3>100x 256x256x4 readPixels</h3>
+<h3>100x 256x256x4 readPixels (26.2MB total)</h3>
 <p id="readPixels"></p>
-<h3>100x 256x256x4 getImageData</h3>
+<h3>100x 256x256x4 getImageData (26.2MB total)</h3>
 <p id="getImageData"></p>
-<h3>25x 256x256x4 float bufferData</h3>
+<h3>25x 256x256x4 float bufferData (6.6MB total)</h3>
 <p id="bufferData"></p>
-<h3>25x 256x256x4 float bufferSubData</h3>
+<h3>25x 256x256x4 float bufferSubData (6.6MB total)</h3>
 <p id="bufferSubData"></p>
+<h3>100x 256x256x4 float bufferData, reuse CanvasFloatArray (26.2MB total)</h3>
+<p id="bufferDataNoChange"></p>
+<h3>100x 256x256x4 float bufferSubData, reuse CanvasFloatArray (26.2MB total)</h3>
+<p id="bufferSubDataNoChange"></p>
 <h3>100x 256x256 vert VBO draw</h3>
 <p id="verticeDraw"></p>
 <h3>100x 256x256 vert VBO draw, change VBO after each draw</h3>
 <p id="verticeDrawC"></p>
-<h3>100x 256x256 vert vertex array draw</h3>
+<!--<h3>100x 256x256 vert vertex array draw</h3>
 <p id="verticeDrawVA"></p>
 <h3>100x 256x256 vert vertex array draw, change array after each draw</h3>
-<p id="verticeDrawVAC"></p>
+<p id="verticeDrawVAC"></p>-->
 <h3>1000x 256x256 texture draw</h3>
 <p id="textureDraw"></p>
 <canvas id="gl" width="256" height="256"></canvas>
