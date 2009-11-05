@@ -780,8 +780,11 @@ FBO.prototype = {
 
     var fbstat = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
     if (fbstat != gl.FRAMEBUFFER_COMPLETE) {
-      for (var v in gl) { if (gl[v] == fbstat) { fbstat = v; break; }}
-      log("Framebuffer status: " + fbstat);
+      var glv;
+      for (var v in gl) {
+        try { glv = gl[v]; } catch (e) { glv = null; }
+        if (glv == fbstat) { fbstat = v; break; }}
+        log("Framebuffer status: " + fbstat);
     }
     checkError(gl, "FBO.init check fbo");
 
