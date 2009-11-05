@@ -40,24 +40,24 @@ Tests.startUnit = function () {
 }
 
 Tests.testBindBufferARRAY_BUFFER = function(gl) {
-  var b = gl.genBuffers(1)[0];
+  var b = gl.createBuffer();
   assert(0 == checkError(gl, "genBuffers"));
   gl.bindBuffer(gl.ARRAY_BUFFER, b);
   assert(0 == checkError(gl, "bindBuffer"));
-  gl.bindBuffer(gl.ARRAY_BUFFER, 0);
+  gl.bindBuffer(gl.ARRAY_BUFFER, null);
   assert(0 == checkError(gl, "bindBuffer 0"));
-  gl.deleteBuffers([b]);
+  gl.deleteBuffer(b);
   assert(0 == checkError(gl, "deleteBuffers"));
 }
 
 Tests.testBindBufferELEMENT_ARRAY_BUFFER = function(gl) {
-  var b = gl.genBuffers(1)[0];
+  var b = gl.createBuffer();
   assert(0 == checkError(gl, "genBuffers"));
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, b);
   assert(0 == checkError(gl, "bindBuffer"));
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, 0);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
   assert(0 == checkError(gl, "bindBuffer 0"));
-  gl.deleteBuffers([b]);
+  gl.deleteBuffer(b);
   assert(0 == checkError(gl, "deleteBuffers"));
 }
 
