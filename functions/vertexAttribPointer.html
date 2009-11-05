@@ -39,7 +39,7 @@ var texcoords = [0.0,0.0,  1.0,0.0,  0.0,1.0];
 
 Tests.startUnit = function () {
   var canvas = document.getElementById('gl');
-  var gl = wrapGLContext(canvas.getContext(GL_CONTEXT_ID));
+  var gl = canvas.getContext(GL_CONTEXT_ID);
   var prog = new Shader(gl, 'vert', 'frag');
   prog.use();
   var sh = prog.shader.program;
@@ -64,7 +64,7 @@ Tests.endUnit = function(gl, prog, v,n,t) {
   prog.destroy();
 }
 
-
+/* VertexAttribPointer with array disabled in WebGL
 Tests.testVertexAttribPointer = function(gl, prog, v,n,t) {
   gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, verts);
   gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, [1,2,3]);
@@ -73,14 +73,16 @@ Tests.testVertexAttribPointer = function(gl, prog, v,n,t) {
   gl.vertexAttribPointer(v, 4, gl.FLOAT, false, 0, [1,2,3,5]);
   gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, [1,2,3,4,5,6]);
 }
+*/
 Tests.testVertexAttribPointerVBO = function(gl, prog, v,n,t) {
-  var vbo = gl.genBuffers(1)[0];
+  var vbo = gl.createBuffer();
+  var vertsArr = new CanvasFloatArray(verts);
   gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
-  gl.bufferData(gl.ARRAY_BUFFER, verts, gl.FLOAT, gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, vertsArr, gl.STATIC_DRAW);
   gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, 0);
   gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, 2);
-  gl.bindBuffer(gl.ARRAY_BUFFER, 0);
-  gl.deleteBuffers([vbo]);
+  gl.bindBuffer(gl.ARRAY_BUFFER, null);
+  gl.deleteBuffer(vbo);
 }
 
 </script>

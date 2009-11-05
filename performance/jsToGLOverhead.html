@@ -10,7 +10,7 @@ Tests.autorun = false;
 Tests.message = "This might take a second or two";
 
 Tests.testGLOverhead = function() {
-    var gl = document.getElementById("gl").getContext("moz-glweb20");
+    var gl = document.getElementById("gl").getContext(GL_CONTEXT_ID);
     var fakeGl = {getError: function(){ return 0; }};
     time("testGLOverhead", function() {
         for (var i=0; i<1000000; i++)

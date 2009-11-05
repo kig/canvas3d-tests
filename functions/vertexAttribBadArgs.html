@@ -39,7 +39,7 @@ var texcoords = [0.0,0.0,  1.0,0.0,  0.0,1.0];
 
 Tests.startUnit = function () {
   var canvas = document.getElementById('gl');
-  var gl = wrapGLContext(canvas.getContext(GL_CONTEXT_ID));
+  var gl = canvas.getContext(GL_CONTEXT_ID);
   var prog = new Shader(gl, 'vert', 'frag');
   prog.use();
   var sh = prog.shader.program;
@@ -66,8 +66,12 @@ Tests.endUnit = function(gl, prog, v,n,t) {
 
 
 Tests.testVertexAttrib = function(gl, prog, v,n,t) {
+  var vbo = gl.createBuffer();
+  var vertsArr = new CanvasFloatArray(verts);
+  gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+  gl.bufferData(gl.ARRAY_BUFFER, vertsArr, gl.STATIC_DRAW);
   gl.enableVertexAttribArray(v);
-  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, verts);
+  gl.vertexAttribPointer(v, 3, gl.FLOAT, false, 0, 0);
   assertFail(function(){gl.vertexAttrib1f(-1, 1);});
   assertFail(function(){gl.vertexAttrib1f(-69092342, 1);});
   assertFail(function(){gl.vertexAttrib1f(58928938, 1);});
