@@ -157,23 +157,23 @@ Tests.test_createShader = function(gl) {
 Tests.test_cullFace = function(gl) {
   assertFail(function(){ gl.cullFace(); });
 }
-Tests.test_deleteBuffers = function(gl) {
-  assertFail(function(){ gl.deleteBuffers(); });
+Tests.test_deleteBuffer = function(gl) {
+  assertFail(function(){ gl.deleteBuffer(); });
 }
-Tests.test_deleteFramebuffers = function(gl) {
-  assertFail(function(){ gl.deleteFramebuffers(); });
+Tests.test_deleteFramebuffer = function(gl) {
+  assertFail(function(){ gl.deleteFramebuffer(); });
 }
 Tests.test_deleteProgram = function(gl) {
   assertFail(function(){ gl.deleteProgram(); });
 }
-Tests.test_deleteRenderbuffers = function(gl) {
-  assertFail(function(){ gl.deleteRenderbuffers(); });
+Tests.test_deleteRenderbuffer = function(gl) {
+  assertFail(function(){ gl.deleteRenderbuffer(); });
 }
 Tests.test_deleteShader = function(gl) {
   assertFail(function(){ gl.deleteShader(); });
 }
-Tests.test_deleteTextures = function(gl) {
-  assertFail(function(){ gl.deleteTextures(); });
+Tests.test_deleteTexture = function(gl) {
+  assertFail(function(){ gl.deleteTexture(); });
 }
 Tests.test_depthFunc = function(gl) {
   assertFail(function(){ gl.depthFunc(); });
@@ -212,6 +212,10 @@ Tests.test_enable = function(gl) {
 Tests.test_enableVertexAttribArray = function(gl) {
   assertFail(function(){ gl.enableVertexAttribArray(); });
 }
+Tests.test_finish = function(gl) {
+}
+Tests.test_flush = function(gl) {
+}
 Tests.test_framebufferRenderbuffer = function(gl) {
   assertFail(function(){ gl.framebufferRenderbuffer(); });
   assertFail(function(){ gl.framebufferRenderbuffer(0); });
@@ -228,20 +232,16 @@ Tests.test_framebufferTexture2D = function(gl) {
 Tests.test_frontFace = function(gl) {
   assertFail(function(){ gl.frontFace(); });
 }
-Tests.test_genBuffers = function(gl) {
-  assertFail(function(){ gl.genBuffers(); });
+Tests.test_createBuffer = function(gl) {
 }
 Tests.test_generateMipmap = function(gl) {
   assertFail(function(){ gl.generateMipmap(); });
 }
-Tests.test_genFramebuffers = function(gl) {
-  assertFail(function(){ gl.genFramebuffers(); });
+Tests.test_createFramebuffer = function(gl) {
 }
-Tests.test_genRenderbuffers = function(gl) {
-  assertFail(function(){ gl.genRenderbuffers(); });
+Tests.test_createRenderbuffer = function(gl) {
 }
-Tests.test_genTextures = function(gl) {
-  assertFail(function(){ gl.genTextures(); });
+Tests.test_createTexture = function(gl) {
 }
 Tests.test_getActiveAttrib = function(gl) {
   assertFail(function(){ gl.getActiveAttrib(); });
@@ -251,38 +251,35 @@ Tests.test_getActiveUniform = function(gl) {
   assertFail(function(){ gl.getActiveUniform(); });
   assertFail(function(){ gl.getActiveUniform(0); });
 }
-Tests.test_getAttachedShaders = function(gl) {
-  assertFail(function(){ gl.getAttachedShaders(); });
-}
 Tests.test_getAttribLocation = function(gl) {
   assertFail(function(){ gl.getAttribLocation(); });
   assertFail(function(){ gl.getAttribLocation(0); });
 }
-Tests.test_getBufferParameter = function(gl) {
-  assertFail(function(){ gl.getBufferParameter(); });
-  assertFail(function(){ gl.getBufferParameter(0); });
+Tests.test_getBufferParameteri = function(gl) {
+  assertFail(function(){ gl.getBufferParameteri(); });
+  assertFail(function(){ gl.getBufferParameteri(0); });
 }
 Tests.test_getError = function(gl) {
 }
-Tests.test_getFramebufferAttachmentParameter = function(gl) {
-  assertFail(function(){ gl.getFramebufferAttachmentParameter(); });
-  assertFail(function(){ gl.getFramebufferAttachmentParameter(0); });
-  assertFail(function(){ gl.getFramebufferAttachmentParameter(0,0); });
+Tests.test_getFramebufferAttachmentParameteri = function(gl) {
+  assertFail(function(){ gl.getFramebufferAttachmentParameteri(); });
+  assertFail(function(){ gl.getFramebufferAttachmentParameteri(0); });
+  assertFail(function(){ gl.getFramebufferAttachmentParameteri(0,0); });
 }
-Tests.test_getProgramParameter = function(gl) {
-  assertFail(function(){ gl.getProgramParameter(); });
-  assertFail(function(){ gl.getProgramParameter(0); });
+Tests.test_getProgrami = function(gl) {
+  assertFail(function(){ gl.getProgrami(); });
+  assertFail(function(){ gl.getProgrami(0); });
 }
 Tests.test_getProgramInfoLog = function(gl) {
   assertFail(function(){ gl.getProgramInfoLog(); });
 }
-Tests.test_getRenderbufferParameter = function(gl) {
-  assertFail(function(){ gl.getRenderbufferParameter(); });
-  assertFail(function(){ gl.getRenderbufferParameter(0); });
+Tests.test_getRenderbufferParameteri = function(gl) {
+  assertFail(function(){ gl.getRenderbufferParameteri(); });
+  assertFail(function(){ gl.getRenderbufferParameteri(0); });
 }
-Tests.test_getShaderParameter = function(gl) {
-  assertFail(function(){ gl.getShaderParameter(); });
-  assertFail(function(){ gl.getShaderParameter(0); });
+Tests.test_getShaderi = function(gl) {
+  assertFail(function(){ gl.getShaderi(); });
+  assertFail(function(){ gl.getShaderi(0); });
 }
 Tests.test_getShaderInfoLog = function(gl) {
   assertFail(function(){ gl.getShaderInfoLog(); });
@@ -390,12 +387,11 @@ Tests.test_texImage2D = function(gl) {
   assertFail(function(){ gl.texImage2D(); });
   assertFail(function(){ gl.texImage2D(0); });
   assertFail(function(){ gl.texImage2D(0,0); });
-  assertFail(function(){ gl.texImage2D(0,0,0); });
-  assertFail(function(){ gl.texImage2D(0,0,0,0); });
-  assertFail(function(){ gl.texImage2D(0,0,0,0,0); });
-  assertFail(function(){ gl.texImage2D(0,0,0,0,0,0); });
-  assertFail(function(){ gl.texImage2D(0,0,0,0,0,0,0); });
-  assertFail(function(){ gl.texImage2D(0,0,0,0,0,0,0,0); });
+}
+Tests.test_texParameteri = function(gl) {
+  assertFail(function(){ gl.texParameteri(); });
+  assertFail(function(){ gl.texParameteri(0); });
+  assertFail(function(){ gl.texParameteri(0,0); });
 }
 Tests.test_texSubImage2D = function(gl) {
   assertFail(function(){ gl.texSubImage2D(); });
@@ -554,40 +550,40 @@ Tests.test_viewport = function(gl) {
   assertFail(function(){ gl.viewport(0,0); });
   assertFail(function(){ gl.viewport(0,0,0); });
 }
+Tests.test_currentArrayBufferBinding = function(gl) {
+}
+Tests.test_currentElementArrayBufferBinding = function(gl) {
+}
+Tests.test_currentFramebufferBinding = function(gl) {
+}
+Tests.test_currentRenderbufferBinding = function(gl) {
+}
+Tests.test_currentTextureBinding2D = function(gl) {
+}
+Tests.test_currentTextureBindingCubeMap = function(gl) {
+}
+Tests.test_currentProgram = function(gl) {
+}
 Tests.test_getParameter = function(gl) {
   assertFail(function(){ gl.getParameter(); });
 }
-Tests.test_getTexParameter = function(gl) {
-  assertFail(function(){ gl.getTexParameter(); });
-  assertFail(function(){ gl.getTexParameter(0); });
+Tests.test_getTexParameteri = function(gl) {
+  assertFail(function(){ gl.getTexParameteri(); });
+  assertFail(function(){ gl.getTexParameteri(0); });
 }
-Tests.test_getUniform = function(gl) {
-  assertFail(function(){ gl.getUniform(); });
-  assertFail(function(){ gl.getUniform(0); });
+Tests.test_getUniformi = function(gl) {
+  assertFail(function(){ gl.getUniformi(); });
+  assertFail(function(){ gl.getUniformi(0); });
 }
-Tests.test_getVertexAttrib = function(gl) {
-  assertFail(function(){ gl.getVertexAttrib(); });
-  assertFail(function(){ gl.getVertexAttrib(0); });
+Tests.test_getVertexAttribi = function(gl) {
+  assertFail(function(){ gl.getVertexAttribi(); });
+  assertFail(function(){ gl.getVertexAttribi(0); });
 }
-Tests.test_getTexParameter = function(gl) {
-  assertFail(function(){ gl.getTexParameter(); });
-  assertFail(function(){ gl.getTexParameter(0); });
-}
-Tests.test_texImage2DHTML = function(gl) {
-  assertFail(function(){ gl.texImage2DHTML(); });
-  assertFail(function(){ gl.texImage2DHTML(0); });
-  assertFail(function(){ gl.texImage2DHTML(0,0); });
-}
-Tests.test_texSubImage2DHTML = function(gl) {
-  assertFail(function(){ gl.texSubImage2DHTML(); });
-  assertFail(function(){ gl.texSubImage2DHTML(0); });
-  assertFail(function(){ gl.texSubImage2DHTML(0,0); });
-  assertFail(function(){ gl.texSubImage2DHTML(0,0,0); });
-  assertFail(function(){ gl.texSubImage2DHTML(0,0,0,0); });
+Tests.test_present = function(gl) {
 }
 Tests.startUnit = function() {
   var canvas = document.getElementById('gl');
-  var gl = canvas.getContext(GL_CONTEXT_ID);
+  var gl = wrapGLContext(canvas.getContext(GL_CONTEXT_ID));
   return [gl];
 }
 

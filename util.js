@@ -820,11 +820,15 @@ function makeGLErrorWrapper(gl, fname) {
 function wrapGLContext(gl) {
     var wrap = {};
     for (var i in gl) {
+      try {
         if (typeof gl[i] == 'function') {
             wrap[i] = makeGLErrorWrapper(gl, i);
         } else {
             wrap[i] = gl[i];
         }
+      } catch (e) {
+        // log("wrapGLContext: Error accessing " + i);
+      }
     }
     wrap.getError = function(){ return gl.getError(); };
     return wrap;
