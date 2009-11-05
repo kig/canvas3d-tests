@@ -1,5 +1,5 @@
-Tests for the OpenGL ES 2.0 canvas context (Canvas 3D)
-======================================================
+Tests for the OpenGL ES 2.0 canvas context (WebGL)
+==================================================
 
 These tests are intended to serve the following purposes:
 
@@ -34,13 +34,14 @@ Want to contribute?
   8. Congratulations, you're now a contributor!
 
 
-For more information on the Canvas 3D extension:
+For more information on WebGL:
 
-  * <a href="http://blog.vlad1.com/2007/11/26/canvas-3d-gl-power-web-style/">Canvas 3D: GL power, web-style</a>
-  * <a href="https://addons.mozilla.org/en-US/firefox/addon/7171">Canvas 3D Firefox add-on</a>
+  * <a href="http://planet-webgl.org">Planet WebGL</a>
+  * <a href="http://learningwebgl.com">Learning WebGL</a>
+  * <a href="http://www.khronos.org/message_boards/viewforum.php?f=34">WebGL on Khronos Message Boards</a>
 
 Developer links:
 
-  * <a href="http://hg.mozilla.org/users/vladimir_mozilla.com/canvas3d/">Canvas 3D Mercurial repo</a>
-  * <a href="https://bugzilla.mozilla.org/buglist.cgi?quicksearch=c3d">Bugzilla bugs tagged as Canvas 3D [c3d]</a>
+  * <a href="https://bugzilla.mozilla.org/buglist.cgi?quicksearch=webgl">WebGL on Mozilla Bugzilla</a>
+  * <a href="https://bugzilla.webkit.org/buglist.cgi?quicksearch=webgl">WebGL on WebKit Bugzilla</a>
 
