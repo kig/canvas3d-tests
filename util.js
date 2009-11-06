@@ -129,7 +129,7 @@ function checkError(gl, msg) {
 function throwError(gl, msg) {
   var e = gl.getError();
   if (e != 0) {
-    throw("Error " + e + " at " + msg);
+    throw(new Error("Error " + e + " at " + msg));
   }
 }
 
