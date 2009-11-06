@@ -23,8 +23,8 @@ Tests.testBufferData = function(gl) {
     assertFail(function(){gl.bufferSubData(gl.ARRAY_BUFFER, 0, new CanvasFloatArray(null));});
     assertFail(function(){gl.bufferSubData(gl.ARRAY_BUFFER, 0, 12);});
     assertFail(function(){gl.bufferSubData(gl.TEXTURE_2D, 0, new CanvasFloatArray([1,2,3]));});
-    assertFail(function(){gl.bufferSubData(gl.ARRAY_BUFFER, 0, [1,2,3], gl.TEXTURE_2D);});
-    assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, new CanvasFloatArray([1,2,3]));});
+    assertFail(function(){gl.bufferSubData(gl.ARRAY_BUFFER, 0, [1,2,3]);});
+    assertOk(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, new CanvasFloatArray([1,2,3]));});
     assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, -1, new CanvasUnsignedShortArray([1,2,3]));});
     assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 24, new CanvasUnsignedShortArray([1,2,3]));});
     assertFail(function(){gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 2400000, new CanvasUnsignedShortArray([1,2,3]));});
