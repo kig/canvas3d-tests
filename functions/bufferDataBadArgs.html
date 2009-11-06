@@ -18,7 +18,6 @@ Tests.startUnit = function () {
 
 Tests.testBufferData = function(gl) {
     assertFail(function(){gl.bufferData(gl.ARRAY_BUFFER, new CanvasFloatArray(null), gl.STATIC_DRAW);});
-    assertFail(function(){gl.bufferData(gl.ARRAY_BUFFER, 12, gl.STATIC_DRAW);});
     assertFail(function(){gl.bufferData(gl.TEXTURE_2D, new CanvasFloatArray([1,2,3]), gl.STATIC_DRAW);});
     assertFail(function(){gl.bufferData(gl.ARRAY_BUFFER, [1,2,3], gl.STATIC_DRAW);});
     assertFail(function(){gl.bufferData(gl.ARRAY_BUFFER, new CanvasFloatArray([1,2,3]), gl.TEXTURE_2D);});
