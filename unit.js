@@ -38,6 +38,12 @@ var __testSuccess__ = true;
 var __testLog__;
 var __backlog__ = [];
 
+function formatError(e) {
+  if (window.console) console.log(e);
+  var trace = e.filename + ":" + e.lineNumber + (e.trace ? "\n"+e.trace : "");
+  return e.message + "\n" + trace;
+}
+
 function runTests() {
   var h = document.getElementById('test-status');
   if (h == null) {
@@ -64,7 +70,7 @@ function runTests() {
       if (__testLog__.childNodes.length > 0)
         log.appendChild(__testLog__);
     } catch(e) {
-      testFailed("startUnit", e.toString());
+      testFailed("startUnit", formatError(e));
       log.appendChild(__testLog__);
       printTestStatus();
       return;
@@ -86,7 +92,9 @@ function runTests() {
       if (Tests.teardown != null)
         Tests.teardown.apply(Tests, args);
     }
-    catch (e) { testFailed(i, e.toString()); }
+    catch (e) {
+      testFailed(i, e.name, formatError(e));
+    }
     if (__testSuccess__ == false) {
       var h = document.createElement('h2');
       h.textContent = i;
@@ -105,7 +113,7 @@ function runTests() {
       if (__testLog__.childNodes.length > 0)
         log.appendChild(__testLog__);
     } catch(e) {
-      testFailed("endUnit", e.toString());
+      testFailed("endUnit", e.name, formatError(e));
       log.appendChild(__testLog__);
     }
   }
@@ -126,8 +134,9 @@ function testFailed(assertName, name) {
   for (var i=2; i<arguments.length; i++) {
     var a = arguments[i];
     var p = document.createElement('p');
+    p.style.whiteSpace = 'pre';
     p.textContent = (a == null) ? "null" :
-                    (typeof a == 'boolean') ? a : a.toSource();
+                    (typeof a == 'boolean' || typeof a == 'string') ? a : a.toSource();
     args.push(p.textContent);
     d.appendChild(p);
   }

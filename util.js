@@ -811,10 +811,15 @@ FBO.prototype = {
 
 function makeGLErrorWrapper(gl, fname) {
     return (function() {
-        var rv = gl[fname].apply(gl, arguments);
+        var rv;
+        try {
+            rv = gl[fname].apply(gl, arguments);
+        } catch (e) {
+            throw(new Error("GL error " + e.name + " in "+fname+ "\n"+ e.message+"\n" +arguments.callee.caller));
+        }
         var e = gl.getError();
         if (e != 0) {
-            throw("GL error "+e);
+            throw(new Error("GL error "+e+" in "+fname));
         }
         return rv;
     });
