@@ -36,6 +36,7 @@ Tests = {
 
 var __testSuccess__ = true;
 var __testLog__;
+var __backlog__ = [];
 
 function runTests() {
   var h = document.getElementById('test-status');
@@ -140,13 +141,25 @@ function checkTestSuccess() {
   return (log.childNodes.length == 0)
 }
 
+window.addEventListener('load', function(){
+  for (var i=0; i<__backlog__.length; i++)
+    log(__backlog__[i]);
+}, false);
+
 function log(msg) {
   var p = document.createElement('p');
   var a = [];
   for (var i=0; i<arguments.length; i++)
     a.push(arguments[i]);
   p.textContent = a.join(", ");
-  __testLog__.appendChild(p);
+  if (!__testLog__) {
+    if (document.body)
+      document.body.appendChild(p);
+    else
+      __backlog__.push(msg);
+  } else {
+    __testLog__.appendChild(p);
+  }
 }
 
 function printTestStatus(testsRun) {
@@ -683,8 +696,9 @@ initGL_CONTEXT_ID = function(){
       break;
     } catch (e) {}
   }
-  if (!GL_CONTEXT_ID)
-    alert("No WebGL context found. Unable to run tests.");
+  if (!GL_CONTEXT_ID) {
+    log("No WebGL context found. Unable to run tests.");
+  }
 }
 
 initGL_CONTEXT_ID();
