@@ -1,8 +1,8 @@
 /*
 Unit testing library for the OpenGL ES 2.0 HTML Canvas context
-
+ 
 Copyright (C) 2009  Ilmari Heikkinen <ilmari.heikkinen@gmail.com>
-
+ 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
 files (the "Software"), to deal in the Software without
@@ -11,10 +11,10 @@ copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the
 Software is furnished to do so, subject to the following
 conditions:
-
+ 
 The above copyright notice and this permission notice shall be
 included in all copies or substantial portions of the Software.
-
+ 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -27,23 +27,30 @@ OTHER DEALINGS IN THE SOFTWARE.
 Tests = {
   autorun : true,
   message : null,
-
+ 
   startUnit : function(){ return []; },
   setup : function() { return arguments; },
   teardown : function() {},
   endUnit : function() {}
 }
-
+ 
 var __testSuccess__ = true;
 var __testLog__;
 var __backlog__ = [];
-
+ 
+Object.toSource = function(a){
+  if (a == null) return "null";
+  if (typeof a == 'boolean') return a ? "true" : "false";
+  if (typeof a == 'string') '"' + a.replace(/"/g, "\\\"") + '"';
+  return a.toString();
+}
+ 
 function formatError(e) {
   if (window.console) console.log(e);
   var trace = e.filename + ":" + e.lineNumber + (e.trace ? "\n"+e.trace : "");
   return e.message + "\n" + trace;
 }
-
+ 
 function runTests() {
   var h = document.getElementById('test-status');
   if (h == null) {
@@ -60,7 +67,7 @@ function runTests() {
   }
   while (log.childNodes.length > 0)
     log.removeChild(log.firstChild);
-
+ 
   var setup_args = [];
     
   if (Tests.startUnit != null) {
@@ -76,7 +83,7 @@ function runTests() {
       return;
     }
   }
-
+ 
   var testsRun = false;
   
   for (var i in Tests) {
@@ -118,13 +125,13 @@ function runTests() {
     }
   }
 }
-
+ 
 function doTestNotify(name) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "http://localhost:8888/"+name, true);
   xhr.send(null);
 }
-
+ 
 function testFailed(assertName, name) {
   var d = document.createElement('div');
   var h = document.createElement('h3');
@@ -136,7 +143,7 @@ function testFailed(assertName, name) {
     var p = document.createElement('p');
     p.style.whiteSpace = 'pre';
     p.textContent = (a == null) ? "null" :
-                    (typeof a == 'boolean' || typeof a == 'string') ? a : a.toSource();
+                    (typeof a == 'boolean' || typeof a == 'string') ? a : Object.toSource(a);
     args.push(p.textContent);
     d.appendChild(p);
   }
@@ -144,17 +151,17 @@ function testFailed(assertName, name) {
   __testSuccess__ = false;
   doTestNotify([assertName, name].concat(args).join("--"));
 }
-
+ 
 function checkTestSuccess() {
   var log = document.getElementById('test-log');
   return (log.childNodes.length == 0)
 }
-
+ 
 window.addEventListener('load', function(){
   for (var i=0; i<__backlog__.length; i++)
     log(__backlog__[i]);
 }, false);
-
+ 
 function log(msg) {
   var p = document.createElement('p');
   var a = [];
@@ -170,7 +177,7 @@ function log(msg) {
     __testLog__.appendChild(p);
   }
 }
-
+ 
 function printTestStatus(testsRun) {
   var status = document.getElementById('test-status');
   if (testsRun) {
@@ -181,7 +188,7 @@ function printTestStatus(testsRun) {
     document.title = status.textContent = "NO TESTS FOUND";
   }
 }
-
+ 
 function assertFail(name, f) {
   if (f == null) { f = name; name = null; }
   var r = false;
@@ -193,7 +200,7 @@ function assertFail(name, f) {
     return true;
   }
 }
-
+ 
 function assertOk(name, f) {
   if (f == null) { f = name; name = null; }
   var r = false;
@@ -206,7 +213,7 @@ function assertOk(name, f) {
     return true;
   }
 }
-
+ 
 function assert(name, v) {
   if (v == null) { v = name; name = null; }
   if (!v) {
@@ -216,7 +223,7 @@ function assert(name, v) {
     return true;
   }
 }
-
+ 
 function assertProperty(name, v, p) {
   if (p == null) { p = v; v = name; name = p; }
   if (v[p] == null) {
@@ -226,15 +233,15 @@ function assertProperty(name, v, p) {
     return true;
   }
 }
-
+ 
 function compare(a,b) {
   if (typeof a == 'number' && typeof b == 'number') {
     return a == b;
   } else {
-    return a.toSource() == b.toSource();
+    return Object.toSource(a) == Object.toSource(b);
   }
 }
-
+ 
 function assertEquals(name, v, p) {
   if (p == null) { p = v; v = name; name = null; }
   if (!compare(v, p)) {
@@ -244,7 +251,7 @@ function assertEquals(name, v, p) {
     return true;
   }
 }
-
+ 
 function assertNotEquals(name, v, p) {
   if (p == null) { p = v; v = name; name = null; }
   if (compare(v, p)) {
@@ -254,7 +261,7 @@ function assertNotEquals(name, v, p) {
     return true;
   }
 }
-
+ 
 function time(elementId, f) {
     var s = document.getElementById(elementId);
     var t0 = new Date().getTime();
@@ -262,7 +269,7 @@ function time(elementId, f) {
     var t1 = new Date().getTime();
     s.textContent = 'Elapsed: '+(t1-t0)+' ms';
 }
-
+ 
 function randomFloat () {
     var fac = 1.0;
     var r = Math.random();
@@ -332,7 +339,7 @@ function randomString () {
 function randomGLConstant () {
     return GLConstants[Math.floor(Math.random() * GLConstants.length)];
 }
-
+ 
 function randomNonArray() {
     var r = Math.random();
     if (r < 0.25) {
@@ -349,7 +356,7 @@ function randomNonArray() {
         return null;
     }
 }
-
+ 
 function generateRandomArg(pos, count) {
     if (pos == 0 && Math.random() < 0.5)
         return randomGLConstant();
@@ -375,20 +382,20 @@ function generateRandomArg(pos, count) {
         return null;
     }
 }
-
-
+ 
+ 
 function generateRandomArgs(count) {
     var arr = new Array(count);
     for (var i=0; i<count; i++)
         arr[i] = generateRandomArg(i, count);
     return arr;
 }
-
+ 
 // qc (arg1gen, arg2gen, ..., predicate)
 // qc (randomString, randomInt, randomInt, function(s,i,j){ s.substring(i,j) })
 function qc() {
 }
-
+ 
 GLConstants = [
 1,
 0x00000100,
@@ -693,25 +700,26 @@ GLConstants = [
 0x0506,
 0x809D
 ];
-
+ 
 initGL_CONTEXT_ID = function(){
   var c = document.createElement('canvas');
-  var contextNames = ['webgl', 'moz-webgl', 'webkit-3d'];
+  var contextNames = ['webkit-3d','moz-webgl','webgl'];
   GL_CONTEXT_ID = null;
   for (var i=0; i<contextNames.length; i++) {
     try {
-      c.getContext(contextNames[i]);
-      GL_CONTEXT_ID = contextNames[i];
-      break;
+      if (c.getContext(contextNames[i])) {
+        GL_CONTEXT_ID = contextNames[i];
+        break;
+      }
     } catch (e) {}
   }
   if (!GL_CONTEXT_ID) {
     log("No WebGL context found. Unable to run tests.");
   }
 }
-
+ 
 initGL_CONTEXT_ID();
-
+ 
 function initTests() {
   if (Tests.message != null) {
     var h = document.getElementById('test-message');
@@ -741,6 +749,6 @@ function initTests() {
   }
   
 }
-
+ 
 window.addEventListener('load', initTests, false);
-
+ 
