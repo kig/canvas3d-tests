@@ -59,19 +59,19 @@ Object.toSource = function(a, seen){
     if (idx != -1) return '#'+(idx+1)+'#';
     seen.unshift(a);
     var members = [];
+    var name;
     for (var i in a) {
       if (i.search(/^[a-zA-Z0-9]+$/) != -1)
         name = i;
       else
-        name = i.escape();
+        name = '"' + i.replace(/"/g, '\\"') + '"';
       var s = name + ':' + Object.toSource(a[i], seen);
       members.push(s);
     }
     var prefix = '';
     idx = seen.indexOf(a);
     if (idx != -1) prefix = '#'+(idx+1)+'=';
-    str = prefix + '{' + members.join(", ") + '}'
-    return str;
+    return prefix + '{' + members.join(", ") + '}'
   }
   if (typeof a == 'function')
     return '('+a.toString().replace(/\n/g, " ").replace(/\s+/g, " ")+')';
