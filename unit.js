@@ -38,6 +38,46 @@ var __testSuccess__ = true;
 var __testLog__;
 var __backlog__ = [];
 
+Object.toSource = function(a, seen){
+  if (a == null) return "null";
+  if (typeof a == 'boolean') return a ? "true" : "false";
+  if (typeof a == 'string') return '"' + a.replace(/"/g, '\\"') + '"';
+  if (a instanceof Array) {
+    if (!seen) seen = [];
+    var idx = seen.indexOf(a);
+    if (idx != -1) return '#'+(idx+1)+'#';
+    seen.unshift(a);
+    var srcs = a.map(function(o){ return Object.toSource(o,seen) });
+    var prefix = '';
+    idx = seen.indexOf(a);
+    if (idx != -1) prefix = '#'+(idx+1)+'=';
+    return prefix + '[' + srcs.join(", ") + ']';
+  }
+  if (typeof a == 'object') {
+    if (!seen) seen = [];
+    var idx = seen.indexOf(a);
+    if (idx != -1) return '#'+(idx+1)+'#';
+    seen.unshift(a);
+    var members = [];
+    for (var i in a) {
+      if (i.search(/^[a-zA-Z0-9]+$/) != -1)
+        name = i;
+      else
+        name = i.escape();
+      var s = name + ':' + Object.toSource(a[i], seen);
+      members.push(s);
+    }
+    var prefix = '';
+    idx = seen.indexOf(a);
+    if (idx != -1) prefix = '#'+(idx+1)+'=';
+    str = prefix + '{' + members.join(", ") + '}'
+    return str;
+  }
+  if (typeof a == 'function')
+    return '('+a.toString().replace(/\n/g, " ").replace(/\s+/g, " ")+')';
+  return a.toString();
+}
+
 function formatError(e) {
   if (window.console) console.log(e);
   var trace = e.filename + ":" + e.lineNumber + (e.trace ? "\n"+e.trace : "");
@@ -136,7 +176,7 @@ function testFailed(assertName, name) {
     var p = document.createElement('p');
     p.style.whiteSpace = 'pre';
     p.textContent = (a == null) ? "null" :
-                    (typeof a == 'boolean' || typeof a == 'string') ? a : a.toSource();
+                    (typeof a == 'boolean' || typeof a == 'string') ? a : Object.toSource(a);
     args.push(p.textContent);
     d.appendChild(p);
   }
@@ -231,7 +271,7 @@ function compare(a,b) {
   if (typeof a == 'number' && typeof b == 'number') {
     return a == b;
   } else {
-    return a.toSource() == b.toSource();
+    return Object.toSource(a) == Object.toSource(b);
   }
 }
 
@@ -696,13 +736,14 @@ GLConstants = [
 
 initGL_CONTEXT_ID = function(){
   var c = document.createElement('canvas');
-  var contextNames = ['webgl', 'moz-webgl', 'webkit-3d'];
+  var contextNames = ['webkit-3d','moz-webgl','webgl'];
   GL_CONTEXT_ID = null;
   for (var i=0; i<contextNames.length; i++) {
     try {
-      c.getContext(contextNames[i]);
-      GL_CONTEXT_ID = contextNames[i];
-      break;
+      if (c.getContext(contextNames[i])) {
+        GL_CONTEXT_ID = contextNames[i];
+        break;
+      }
     } catch (e) {}
   }
   if (!GL_CONTEXT_ID) {
