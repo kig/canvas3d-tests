@@ -1010,3 +1010,10 @@ Sphere = {
 }
 
 Sphere.create();
+
+try {
+if (!CanvasFloatArray)
+  CanvasFloatArray = WebGLFloatArray;
+if (!CanvasUnsignedShortArray)
+  CanvasUnsignedShortArray = WebGLUnsignedShortArray;
+} catch(e) {}
