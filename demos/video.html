@@ -43,11 +43,11 @@ var processor = {
   },
 
   computeFrame: function() {
-    this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
-    this.ctx2.texSubImage2D(this.ctx2.TEXTURE_2D, 0, 0, 0, this.c1);
+//     this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
+    this.ctx2.texSubImage2D(this.ctx2.TEXTURE_2D, 0, 0, 0, this.video);
     this.greenScreen.apply(function(s) {
-        s.uniform1iv('Texture', [0]);
-        s.uniform1iv('Texture2', [1]);
+        s.uniform1i('Texture', 0);
+        s.uniform1i('Texture2', 1);
     });
 
     return;
