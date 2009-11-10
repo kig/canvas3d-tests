@@ -33,8 +33,26 @@ OTHER DEALINGS IN THE SOFTWARE.
     h2 { display: inline; font-size: 1em; margin-bottom: 0.2em; }
     iframe { display: inline; border: 1px solid black; overflow: hidden;}
   </style>
+  <script type="text/javascript">
+    function loadTest(id, url) {
+      document.getElementById(id).src = url;
+    }
+    function seqLoader() {
+      var iframes = document.getElementsByTagName('iframe');
+      for (var i=0; i<iframes.length; i++) {
+        iframes[i].addEventListener('load', (function(i) {
+          return function() {
+            var e = document.getElementById(i+'_link');
+            if (e) loadTest(i+1, e.href);
+          }
+        })(i+1), false);
+      }
+      var e = document.getElementById('1_link');
+      if (e) loadTest(1, e.href);
+    }
+  </script>
 </head>
-<body>
+<body onload="seqLoader()">
 
     <div>
       <iframe src="conformance/badArgsArityLessThanArgc.html" width="110" height="42"></iframe>
@@ -129,6 +147,12 @@ OTHER DEALINGS IN THE SOFTWARE.
     <div>
       <iframe src="functions/copyTexSubImage2DBadArgs.html" width="110" height="42"></iframe>
       <h2><a href="functions/copyTexSubImage2DBadArgs.html">functions/copyTexSubImage2DBadArgs.html</a></h2>
+    </div>
+    
+
+    <div>
+      <iframe src="functions/deleteBufferBadArgs.html" width="110" height="42"></iframe>
+      <h2><a href="functions/deleteBufferBadArgs.html">functions/deleteBufferBadArgs.html</a></h2>
     </div>
     
 

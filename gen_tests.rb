@@ -316,8 +316,26 @@ all_tests_header = <<EOF
     h2 { display: inline; font-size: 1em; margin-bottom: 0.2em; }
     iframe { display: inline; border: 1px solid black; overflow: hidden;}
   </style>
+  <script type="text/javascript">
+    function loadTest(id, url) {
+      document.getElementById(id).src = url;
+    }
+    function seqLoader() {
+      var iframes = document.getElementsByTagName('iframe');
+      for (var i=0; i<iframes.length; i++) {
+        iframes[i].addEventListener('load', (function(i) {
+          return function() {
+            var e = document.getElementById(i+'_link');
+            if (e) loadTest(i+1, e.href);
+          }
+        })(i+1), false);
+      }
+      var e = document.getElementById('1_link');
+      if (e) loadTest(1, e.href);
+    }
+  </script>
 </head>
-<body>
+<body onload="seqLoader()">
 EOF
 all_tests_footer = <<EOF
 </body>
@@ -331,6 +349,40 @@ File.open("all_tests.html", "w") {|f|
     <div>
       <iframe src="#{URI.escape(t)}" width="110" height="42"></iframe>
       <h2><a href="#{URI.escape(t)}">#{CGI.escapeHTML(t)}</a></h2>
+    </div>
+    ))
+  }
+  f.puts all_tests_footer
+}
+
+puts "Generating all_tests_linkonly.html"
+
+File.open("all_tests_linkonly.html", "w") {|f|
+  f.puts all_tests_header
+  i = 0
+  all_tests.each{|t|
+    i += 1
+    f.puts(%Q(
+    <div>
+      <iframe id="#{i}" width="110" height="42"></iframe>
+      <h2><a onclick="loadTest(#{i}, '#{URI.escape(t)}');return false" href="#{URI.escape(t)}">#{CGI.escapeHTML(t)}</a></h2>
+    </div>
+    ))
+  }
+  f.puts all_tests_footer
+}
+
+puts "Generating all_tests_sequential.html"
+
+File.open("all_tests_sequential.html", "w") {|f|
+  f.puts all_tests_header
+  i = 0
+  all_tests.each{|t|
+    i += 1
+    f.puts(%Q(
+    <div>
+      <iframe id="#{i}" width="110" height="42"></iframe>
+      <h2><a id="#{i}_link" href="#{URI.escape(t)}">#{CGI.escapeHTML(t)}</a></h2>
     </div>
     ))
   }
