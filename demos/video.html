@@ -17,7 +17,7 @@ var processor = {
   init: function() {
     if (this.initDone) return;
     this.c2 = document.getElementById("c2");
-    this.ctx2 = this.c2.getContext("moz-glweb20");
+    this.ctx2 = this.c2.getContext(GL_CONTEXT_ID);
     this.greenScreen = new Filter(this.ctx2, 'identity-flip-vert', 'greenScreen');
     this.ctx2.activeTexture(this.ctx2.TEXTURE0);
     this.tex = loadTexture(this.ctx2, this.c1, false);
@@ -44,12 +44,11 @@ var processor = {
 
   computeFrame: function() {
     this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
-    this.ctx2.texSubImage2DHTML(this.ctx2.TEXTURE_2D, 0, 0, 0, this.c1);
+    this.ctx2.texSubImage2D(this.ctx2.TEXTURE_2D, 0, 0, 0, this.c1);
     this.greenScreen.apply(function(s) {
         s.uniform1iv('Texture', [0]);
         s.uniform1iv('Texture2', [1]);
     });
-    this.ctx2.swapBuffers();
 
     return;
   }
