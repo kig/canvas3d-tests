@@ -1031,3 +1031,22 @@ try {
   if (!CanvasByteArray)
     CanvasByteArray = WebGLByteArray;
 } catch(e) {}
+
+initGL_CONTEXT_ID = function(){
+  var c = document.createElement('canvas');
+  var contextNames = ['webkit-3d','moz-webgl','webgl'];
+  GL_CONTEXT_ID = null;
+  for (var i=0; i<contextNames.length; i++) {
+    try {
+      if (c.getContext(contextNames[i])) {
+        GL_CONTEXT_ID = contextNames[i];
+        break;
+      }
+    } catch (e) {}
+  }
+  if (!GL_CONTEXT_ID) {
+    log("No WebGL context found. Unable to run tests.");
+  }
+}
+
+initGL_CONTEXT_ID();
