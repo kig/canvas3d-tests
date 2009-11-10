@@ -323,15 +323,15 @@ all_tests_header = <<EOF
     function seqLoader() {
       var iframes = document.getElementsByTagName('iframe');
       for (var i=0; i<iframes.length; i++) {
-        iframes[i].addEventListener('load', (function(i) {
+        iframes[i].addEventListener('load', (function(j) {
           return function() {
-            var e = document.getElementById(i+'_link');
-            if (e) loadTest(i+1, e.href);
+            var e = document.getElementById((j+1)+'_link');
+            if (e) loadTest(j+1, e.href);
           }
-        })(i+1), false);
+        })(i), false);
       }
-      var e = document.getElementById('1_link');
-      if (e) loadTest(1, e.href);
+      var e = document.getElementById('0_link');
+      if (e) loadTest(0, e.href);
     }
   </script>
 </head>
@@ -359,9 +359,7 @@ puts "Generating all_tests_linkonly.html"
 
 File.open("all_tests_linkonly.html", "w") {|f|
   f.puts all_tests_header
-  i = 0
-  all_tests.each{|t|
-    i += 1
+  all_tests.each_with_index{|t, i|
     f.puts(%Q(
     <div>
       <iframe id="#{i}" width="110" height="42"></iframe>
@@ -376,9 +374,7 @@ puts "Generating all_tests_sequential.html"
 
 File.open("all_tests_sequential.html", "w") {|f|
   f.puts all_tests_header
-  i = 0
-  all_tests.each{|t|
-    i += 1
+  all_tests.each_with_index{|t, i|
     f.puts(%Q(
     <div>
       <iframe id="#{i}" width="110" height="42"></iframe>
