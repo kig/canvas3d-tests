@@ -48,6 +48,6 @@ Developer links:
 
 What's the stuff in apigen?
 
-  There are some Python scripts in the apigen/ directory that generate C++ based on the API definition files (gl2.h, api_modifications.txt, valid_args.txt.) The generated code is Mozilla XPCOM functions that check their args against the valid GLES 2.0 constants (as they were written on the man pages.) There's also some wackier stuff for checking texImage2D and texSubImage2D image dimensions against given array dimensions.
+  There are some Python scripts in the apigen/ directory that generate C++ based on the API definition files (gl2.h, api_modifications.txt, valid_args.txt.) The generated code is Mozilla XPCOM functions that check their args against the valid GLES 2.0 constants (as they were written on the man pages.) There's also some wackier stuff for checking copyTexImage2D and copyTexSubImage2D image dimensions against viewport dimensions.
 
   If you can use it to generate code for your WebGL implementation, it might save you 1500 lines of typing and testing. The last time I used it was summer 2009 to generate a patch for Canvas 3D, so it's likely somewhat out of date.
