@@ -11,7 +11,7 @@ These tests are intended to serve the following purposes:
 Running the tests
 -----------------
 
-  1. Install the latest version of the OpenGL Canvas 3D extension (or write your own if you're using WebKit/Opera/IE, you could try to modify gen_tests.rb to autogen it for you...)
+  1. <a href="http://learningwebgl.com/blog/?p=11">Install a browser with WebGL support</a>
   2. Run <code>ruby gen_tests.rb</code> if you have modified the tests.
   3. Run <code>ruby test_server.rb</code> if you want to get test run output to test_server's stdout (especially useful for finding out which test crashed your browser.)
   4. Open all_tests.html in your browser.
@@ -44,4 +44,10 @@ Developer links:
 
   * <a href="https://bugzilla.mozilla.org/buglist.cgi?quicksearch=webgl">WebGL on Mozilla Bugzilla</a>
   * <a href="https://bugzilla.webkit.org/buglist.cgi?quicksearch=webgl">WebGL on WebKit Bugzilla</a>
+  * <a href="http://code.google.com/p/chromium/issues/list?q=label:3D-WebGL">WebGL on Chromium Bugzilla</a>
 
+What's the stuff in apigen?
+
+  There are some Python scripts in the apigen/ directory that generate C++ based on the API definition files (gl2.h, api_modifications.txt, valid_args.txt.) The generated code is Mozilla XPCOM functions that check their args against the valid GLES 2.0 constants (as they were written on the man pages.) There's also some wackier stuff for checking texImage2D and texSubImage2D image dimensions against given array dimensions.
+
+  If you can use it to generate code for your WebGL implementation, it might save you 1500 lines of typing and testing. The last time I used it was summer 2009 to generate a patch for Canvas 3D, so it's likely somewhat out of date.
