@@ -1016,8 +1016,18 @@ Sphere = {
 Sphere.create();
 
 try {
-if (!CanvasFloatArray)
-  CanvasFloatArray = WebGLFloatArray;
-if (!CanvasUnsignedShortArray)
-  CanvasUnsignedShortArray = WebGLUnsignedShortArray;
+  if (!CanvasFloatArray)
+    CanvasFloatArray = WebGLFloatArray;
+  if (!CanvasUnsignedIntArray)
+    CanvasUnsignedIntArray = WebGLUnsignedIntArray;
+  if (!CanvasIntArray)
+    CanvasIntArray = WebGLIntArray;
+  if (!CanvasUnsignedShortArray)
+    CanvasUnsignedShortArray = WebGLUnsignedShortArray;
+  if (!CanvasShortArray)
+    CanvasShortArray = WebGLShortArray;
+  if (!CanvasUnsignedByteArray)
+    CanvasUnsignedByteArray = WebGLUnsignedByteArray;
+  if (!CanvasByteArray)
+    CanvasByteArray = WebGLByteArray;
 } catch(e) {}
