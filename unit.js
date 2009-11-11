@@ -27,6 +27,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 Tests = {
   autorun : true,
   message : null,
+  delay : 0,
 
   startUnit : function(){ return []; },
   setup : function() { return arguments; },
@@ -764,5 +765,8 @@ function initTests() {
   
 }
 
-window.addEventListener('load', initTests, false);
+window.addEventListener('load', function(){
+  setTimeout(initTests, Tests.delay);
+  // let the browser finish updating the gl canvas surfaces...
+}, false);
 
