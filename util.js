@@ -1016,19 +1016,19 @@ Sphere = {
 Sphere.create();
 
 try {
-  if (!CanvasFloatArray)
+  if (!window.CanvasFloatArray)
     CanvasFloatArray = WebGLFloatArray;
-  if (!CanvasUnsignedIntArray)
+  if (!window.CanvasUnsignedIntArray)
     CanvasUnsignedIntArray = WebGLUnsignedIntArray;
-  if (!CanvasIntArray)
+  if (!window.CanvasIntArray)
     CanvasIntArray = WebGLIntArray;
-  if (!CanvasUnsignedShortArray)
+  if (!window.CanvasUnsignedShortArray)
     CanvasUnsignedShortArray = WebGLUnsignedShortArray;
-  if (!CanvasShortArray)
+  if (!window.CanvasShortArray)
     CanvasShortArray = WebGLShortArray;
-  if (!CanvasUnsignedByteArray)
+  if (!window.CanvasUnsignedByteArray)
     CanvasUnsignedByteArray = WebGLUnsignedByteArray;
-  if (!CanvasByteArray)
+  if (!window.CanvasByteArray)
     CanvasByteArray = WebGLByteArray;
 } catch(e) {}
 
