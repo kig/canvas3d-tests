@@ -94,13 +94,11 @@ Tests.test_bufferData = function(gl) {
   assertFail(function(){ gl.bufferData(); });
   assertFail(function(){ gl.bufferData(0); });
   assertFail(function(){ gl.bufferData(0,0); });
-  assertFail(function(){ gl.bufferData(0,0,0); });
 }
 Tests.test_bufferSubData = function(gl) {
   assertFail(function(){ gl.bufferSubData(); });
   assertFail(function(){ gl.bufferSubData(0); });
   assertFail(function(){ gl.bufferSubData(0,0); });
-  assertFail(function(){ gl.bufferSubData(0,0,0); });
 }
 Tests.test_checkFramebufferStatus = function(gl) {
   assertFail(function(){ gl.checkFramebufferStatus(); });
@@ -483,14 +481,17 @@ Tests.test_uniform4iv = function(gl) {
 Tests.test_uniformMatrix2fv = function(gl) {
   assertFail(function(){ gl.uniformMatrix2fv(); });
   assertFail(function(){ gl.uniformMatrix2fv(0); });
+  assertFail(function(){ gl.uniformMatrix2fv(0,0); });
 }
 Tests.test_uniformMatrix3fv = function(gl) {
   assertFail(function(){ gl.uniformMatrix3fv(); });
   assertFail(function(){ gl.uniformMatrix3fv(0); });
+  assertFail(function(){ gl.uniformMatrix3fv(0,0); });
 }
 Tests.test_uniformMatrix4fv = function(gl) {
   assertFail(function(){ gl.uniformMatrix4fv(); });
   assertFail(function(){ gl.uniformMatrix4fv(0); });
+  assertFail(function(){ gl.uniformMatrix4fv(0,0); });
 }
 Tests.test_useProgram = function(gl) {
   assertFail(function(){ gl.useProgram(); });
