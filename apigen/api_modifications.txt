@@ -10,8 +10,8 @@
 +VIEWPORT_RECT 0x0BA2
 
 bindAttribLocation -> void bindAttribLocation (uint program, uint index, string name)
-bufferData -> void bufferData (uint target, Array data, uint elementType, uint usage)
-bufferSubData -> void bufferSubData (uint target, uint offset, Array data, uint elementType)
+bufferData -> void bufferData (uint target, WebGLArray data, uint usage)
+bufferSubData -> void bufferSubData (uint target, uint offset, WebGLArray data)
 
 clearDepthf -> void clearDepth (float depth)
 -compressedTexImage2D
@@ -95,9 +95,9 @@ uniform2iv -> void uniform2iv (GLuint target, Array data)
 uniform3iv -> void uniform3iv (GLuint target, Array data)
 uniform4iv -> void uniform4iv (GLuint target, Array data)
 
-uniformMatrix2fv -> void uniformMatrix2fv (GLuint target, Array data)
-uniformMatrix3fv -> void uniformMatrix3fv (GLuint target, Array data)
-uniformMatrix4fv -> void uniformMatrix4fv (GLuint target, Array data)
+uniformMatrix2fv -> void uniformMatrix2fv (GLuint target, bool transpose, Array data)
+uniformMatrix3fv -> void uniformMatrix3fv (GLuint target, bool transpose, Array data)
+uniformMatrix4fv -> void uniformMatrix4fv (GLuint target, bool transpose, Array data)
 
 vertexAttrib1fv -> void vertexAttrib1fv (GLuint target, Array data)
 vertexAttrib2fv -> void vertexAttrib2fv (GLuint target, Array data)
