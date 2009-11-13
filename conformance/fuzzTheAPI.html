@@ -3,6 +3,7 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="../unit.css" />
 <script type="application/x-javascript" src="../unit.js"></script>
+<script type="application/x-javascript" src="../util.js"></script>
 
 <script type="application/x-javascript">
 
@@ -11,7 +12,7 @@ Tests.message = "This will fuzz the API with random inputs for a [long] while."
 
 
 function randomCall(testProgress, gl, m, arities) {
-//     doTestNotify(m);
+    doTestNotify(m);
     var argcs = {};
     var foundArity = false;
     if (arities == null) {
