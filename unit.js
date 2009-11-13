@@ -766,7 +766,10 @@ function initTests() {
 }
 
 window.addEventListener('load', function(){
-  setTimeout(initTests, Tests.delay);
-  // let the browser finish updating the gl canvas surfaces...
+  // let the browser hopefully finish updating the gl canvas surfaces if we are given a delay
+  if (Tests.delay)
+    setTimeout(initTests, Tests.delay);
+  else
+    initTests()
 }, false);
 
