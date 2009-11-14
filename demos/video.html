@@ -109,13 +109,16 @@ var processor = {
       }
       img { display: none; }
     </style>
- </head><body>
+ </head>
   <body onload="processor.doLoad()">
     <div>
         This is a port of Paul Rouget's <a href="http://blog.mozbox.org/post/2009/02/25/video-canvas%3A-special-effects">Canvas+Video green screen demo</a>, plus a texture lookup from the Firefox logo based on the values of the green and red color channels.
     </div>
     <div>
-      <video id="video" src="http://www.mozbox.org/pub/green/video.ogv" controls="true"></video>
+      <video id="video" controls="true">
+        <source src="http://www.mozbox.org/pub/green/video.ogv"></source>
+        <source src="http://cs.helsinki.fi/u/ilmarihe/c3d/demos/video.mp4"></source>
+      </video>
       <canvas id="c1" width="320" height="192"></canvas>
     </div>
     <div>
@@ -123,4 +126,4 @@ var processor = {
     </div>
     <img id="i" src="http://www.mozbox.org/pub/green/foo.png">
   </body>
-</body></html>
+</html>
