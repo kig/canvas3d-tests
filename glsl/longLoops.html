@@ -111,10 +111,10 @@ Tests.testMandelbrot = function(gl) {
     }
 </script>
 <script id="whiletruevert" type="x-shader/x-vertex">
-    #version 130
-    precision mediump float;
-    in vec3 Vertex; in vec2 Tex;
-    out vec2 TexCoord;
+    #version 120
+
+    attribute vec3 Vertex; attribute vec2 Tex;
+    varying vec2 TexCoord;
     void main()
     {
         float z = 1.0;
@@ -124,10 +124,10 @@ Tests.testMandelbrot = function(gl) {
     }
 </script>
 <script id="loop100Mvert" type="x-shader/x-vertex">
-    #version 130
-    precision mediump float;
-    in vec3 Vertex; in vec2 Tex;
-    out vec2 TexCoord;
+    #version 120
+
+    attribute vec3 Vertex; attribute vec2 Tex;
+    varying vec2 TexCoord;
     void main()
     {
         int i;
@@ -140,10 +140,10 @@ Tests.testMandelbrot = function(gl) {
     }
 </script>
 <script id="loopCompvert" type="x-shader/x-vertex">
-    #version 130
-    precision mediump float;
-    in vec3 Vertex; in vec2 Tex;
-    out vec2 TexCoord;
+    #version 120
+
+    attribute vec3 Vertex; attribute vec2 Tex;
+    varying vec2 TexCoord;
     void main()
     {
         float z = 1.0;
@@ -153,10 +153,10 @@ Tests.testMandelbrot = function(gl) {
     }
 </script>
 <script id="variablevert" type="x-shader/x-vertex">
-    #version 130
-    precision mediump float;
-    in vec3 Vertex; in vec2 Tex;
-    out vec2 TexCoord;
+    #version 120
+
+    attribute vec3 Vertex; attribute vec2 Tex;
+    varying vec2 TexCoord;
     
     void main()
     {
@@ -167,10 +167,10 @@ Tests.testMandelbrot = function(gl) {
     }
 </script>
 <script id="vert" type="x-shader/x-vertex">
-    #version 130
-    precision mediump float;
-    in vec3 Vertex; in vec2 Tex;
-    out vec2 TexCoord;
+    #version 120
+
+    attribute vec3 Vertex; attribute vec2 Tex;
+    varying vec2 TexCoord;
     void main()
     {
         TexCoord = Tex.st;
@@ -179,22 +179,22 @@ Tests.testMandelbrot = function(gl) {
 </script>
 
 <script id="whiletruefrag" type="x-shader/x-fragment">
-    #version 130
-    precision mediump float;
-    out vec4 fragColor;
-    in vec2 TexCoord;
+    #version 120
+
+
+    varying vec2 TexCoord;
     void main()
     {
         float z = 1.0;
         while(true) { z += 0.1; z *= 0.995; }
-        fragColor = vec4(1.0, TexCoord.s, TexCoord.t, z);
+        gl_FragColor = vec4(1.0, TexCoord.s, TexCoord.t, z);
     }
 </script>
 <script id="loop100Mfrag" type="x-shader/x-fragment">
-    #version 130
-    precision mediump float;
-    out vec4 fragColor;
-    in vec2 TexCoord;
+    #version 120
+
+
+    varying vec2 TexCoord;
     void main()
     {
         int i;
@@ -202,41 +202,41 @@ Tests.testMandelbrot = function(gl) {
         for (i = 0; i<1000000000; i++) {
             z += 0.1; z *= 0.995;
         }
-        fragColor = vec4(1.0, TexCoord.s, TexCoord.t, z);
+        gl_FragColor = vec4(1.0, TexCoord.s, TexCoord.t, z);
     }
 </script>
 <script id="loopCompfrag" type="x-shader/x-fragment">
-    #version 130
-    precision mediump float;
-    out vec4 fragColor;
-    in vec2 TexCoord;
+    #version 120
+
+
+    varying vec2 TexCoord;
     void main()
     {
         float z = TexCoord.s;
         while(z > 0.0) { z += 0.1; z *= 0.995; }
-        fragColor = vec4(1.0, TexCoord.s, TexCoord.t, z);
+        gl_FragColor = vec4(1.0, TexCoord.s, TexCoord.t, z);
     }
 </script>
 <script id="variablefrag" type="x-shader/x-fragment">
-    #version 130
-    precision mediump float;
-    out vec4 fragColor;
-    in vec2 TexCoord;
+    #version 120
+
+
+    varying vec2 TexCoord;
     void main()
     {
         float z = 1.0;
         while(z > TexCoord.s) { z += 0.1; z *= 0.995; }
-        fragColor = vec4(1.0, TexCoord.s, TexCoord.t, z);
+        gl_FragColor = vec4(1.0, TexCoord.s, TexCoord.t, z);
     }
 </script>
 <script id="frag" type="x-shader/x-fragment">
-  #version 130
-  precision mediump float;
-  out vec4 fragColor;
-  in vec2 TexCoord;
+  #version 120
+
+
+  varying vec2 TexCoord;
   void main()
   {
-    fragColor = vec4(1.0, TexCoord.s, TexCoord.t, 1.0);
+    gl_FragColor = vec4(1.0, TexCoord.s, TexCoord.t, 1.0);
   }
 </script>
 
