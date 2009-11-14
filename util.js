@@ -44,7 +44,7 @@ function loadTexture(gl, elem, mipmaps) {
 function getShader(gl, id) {
   var shaderScript = document.getElementById(id);
   if (!shaderScript) {
-    throw("No shader element with id: "+id);
+    throw(new Error("No shader element with id: "+id));
   }
 
   var str = "";
@@ -61,7 +61,7 @@ function getShader(gl, id) {
   } else if (shaderScript.type == "x-shader/x-vertex") {
     shader = gl.createShader(gl.VERTEX_SHADER);
   } else {
-    throw("Unknown shader type "+shaderScript.type);
+    throw(new Error("Unknown shader type "+shaderScript.type));
   }
 
   gl.shaderSource(shader, str);
@@ -70,7 +70,7 @@ function getShader(gl, id) {
   if (gl.getShaderi(shader, gl.COMPILE_STATUS) != 1) {
     var ilog = gl.getShaderInfoLog(shader);
     gl.deleteShader(shader);
-    throw("Failed to compile shader "+shaderScript.id + ", Shader info log: " + ilog);
+    throw(new Error("Failed to compile shader "+shaderScript.id + ", Shader info log: " + ilog));
   }
   return shader;
 }
@@ -94,11 +94,11 @@ function loadShaderArray(gl, shaders) {
   gl.validateProgram(id);
   if (gl.getProgrami(id, gl.LINK_STATUS) != 1) {
     deleteShader(gl,prog);
-    throw("Failed to link shader");
+    throw(new Error("Failed to link shader"));
   }
   if (gl.getProgrami(id, gl.VALIDATE_STATUS) != 1) {
     deleteShader(gl,prog);
-    throw("Failed to validate shader");
+    throw(new Error("Failed to validate shader"));
   }
   return prog;
 }
@@ -1016,6 +1016,8 @@ Sphere = {
 Sphere.create();
 
 try {
+  if (!window.CanvasArrayBuffer)
+    CanvasArrayBuffer = WebGLArrayBuffer;
   if (!window.CanvasFloatArray)
     CanvasFloatArray = WebGLFloatArray;
   if (!window.CanvasUnsignedIntArray)
@@ -1030,6 +1032,24 @@ try {
     CanvasUnsignedByteArray = WebGLUnsignedByteArray;
   if (!window.CanvasByteArray)
     CanvasByteArray = WebGLByteArray;
+} catch(e) {}
+try {
+  if (!window.WebGLArrayBuffer)
+    WebGLArrayBuffer = CanvasArrayBuffer;
+  if (!window.WebGLFloatArray)
+    WebGLFloatArray = CanvasFloatArray;
+  if (!window.WebGLUnsignedIntArray)
+    WebGLUnsignedIntArray = CanvasUnsignedIntArray;
+  if (!window.WebGLIntArray)
+    WebGLIntArray = CanvasIntArray;
+  if (!window.WebGLUnsignedShortArray)
+    WebGLUnsignedShortArray = CanvasUnsignedShortArray;
+  if (!window.WebGLShortArray)
+    WebGLShortArray = CanvasShortArray;
+  if (!window.WebGLUnsignedByteArray)
+    WebGLUnsignedByteArray = CanvasUnsignedByteArray;
+  if (!window.WebGLByteArray)
+    WebGLByteArray = CanvasByteArray;
 } catch(e) {}
 
 initGL_CONTEXT_ID = function(){
