@@ -84,7 +84,7 @@ var processor = {
         // Shaders with branches are not allowed when dealing with non-SOP content
         // so instead of "if (b) c2.a = 0;", we use mix()
         bool b = (c.g > 120.0/255.0 && c.r > 120.0/255.0 && c.b < 50.0/255.0);
-        c2.a = mix(c2.a, 0.0, b);
+        c2.a = mix(c2.a, 0.0, float(b));
         gl_FragColor = c2;
     }
 </script>
