@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../unit.css" />
+<script type="application/x-javascript" src="../unit.js"></script>
+<script type="application/x-javascript" src="../util.js"></script>
+
+<script type="application/x-javascript">
+  /*
+    QuickCheck tests for WebGL:
+
+      1. Write a valid arg generator for each function
+        1.1. Write valid arg predicates to use with random generator:
+            if value passes generator, accept it as valid.
+        1.2. Often needs initializing and cleanup:
+            setup - generate - cleanup
+            gl.createBuffer - test(bindBufferGenerator) - gl.deleteBuffer
+
+      2. Write an invalid arg generator
+        2.1. Take valid args, modify an arg until it no longer passes the predicates.
+        2.2. Repeat for all args.
+
+      3. Test functions using the generators
+        3.1. Args generated with the valid arg generator should pass assertOk(f(args))
+        3.2. Args generated with the invalid arg generator should pass assertFail(f(args))
+  */
+  GL = document.createElement('canvas').getContext(GL_CONTEXT_ID);
+  Array.from = function(o) {
+    var a = [];
+    for (var i=0; i<o.length; i++)
+      a.push(o[i]);
+    return a;
+  }
+  Array.prototype.has = function(v) { return this.indexOf(v) != -1; }
+  Array.prototype.random = function() {
+    return this[Math.floor(this.length * Math.random())];
+  }
+
+  constCheck = function() {
+    return Array.from(arguments);
+  }
+
+  bufferTarget = constCheck(GL.ARRAY_BUFFER, GL.ELEMENT_ARRAY_BUFFER);
+  bufferMode = constCheck(GL.STREAM_DRAW, GL.STATIC_DRAW, GL.DYNAMIC_DRAW);
+
+  ArgGenerators = {
+    // buffers
+    createBuffer : {
+      returnValueCleanup : function(buf) {
+        GL.deleteBuffer(buf);
+      }
+    },
+    
+    deleteBuffer : {
+      generate : function() {
+        return [GL.createBuffer()];
+      },
+      predicate : function(buf) {
+        return GL.isBuffer(buf);
+      },
+      cleanup : function(buf) {
+        try { GL.deleteBuffer(buf); } catch(e) {}
+      }
+    },
+
+    bindBuffer : {
+      generate : function(buf) {
+        return [bufferTarget.random(), GL.createBuffer(), bufferMode.random()];
+      },
+      predicate : function(target, buf, mode) {
+        return bufferTarget.has(target) && GL.isBuffer(buf) && bufferMode.has(mode);
+      },
+      cleanup : function(t, buf, m) {
+        GL.deleteBuffer(buf);
+      }
+    }
+  };
+
+  argGeneratorTestRunner = function(argGen, testFunction, numberOfTests) {
+    var setupVars = argGen.setup ? argGen.setup() : [];
+    var error;
+    for (var i=0; i<numberOfTests; i++) {
+      var failed = false;
+      var generatedArgs = argGen.generate ? argGen.generate.apply(argGen, setupVars) : [];
+      try {
+        testFunction.call(this, generatedArgs, argGen, setupVars);
+      } catch (e) {
+        failed = true;
+        error = e;
+      }
+      if (argGen.cleanup)
+        argGen.cleanup.apply(argGen, generatedArgs);
+      if (failed) break;
+    }
+    if (argGen.teardown)
+      argGen.teardown.apply(argGen, setupVars);
+    if (error) throw(error);
+  }
+  
+</script>
+
+<script type="application/x-javascript">
+
+Tests.testValidArgs = function() {
+  for (var name in ArgGenerators) {
+    var argGen = ArgGenerators[name];
+    argGeneratorTestRunner(argGen, function(args, gen, setupVars) {
+      if (gen.predicate)
+        assert("Valid args: "+name+"("+args.join(",")+")", gen.predicate.apply(gen, args));
+      GL[name].apply(GL, args);
+    }, 100);
+  }
+}
+
+</script>
+<style>canvas{position:absolute;}</style>
+</head><body>
+</body></html>
