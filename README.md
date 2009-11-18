@@ -1,5 +1,5 @@
-Tests for the OpenGL ES 2.0 canvas context (WebGL)
-==================================================
+Tests for the WebGL canvas context
+==================================
 
 These tests are intended to serve the following purposes:
 
