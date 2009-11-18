@@ -11,18 +11,21 @@
 
       1. Write a valid arg generator for each function
         1.1. Write valid arg predicates to use with random generator:
-            if value passes generator, accept it as valid.
+             if value passes generator, accept it as valid.
         1.2. Often needs initializing and cleanup:
-            setup - generate - cleanup
-            gl.createBuffer - test(bindBufferGenerator) - gl.deleteBuffer
+             setup - generate - cleanup
+             gl.createBuffer - test(bindBufferGenerator) - gl.deleteBuffer
 
       2. Write an invalid arg generator
-        2.1. Take valid args, modify an arg until it no longer passes the predicates.
+        2.1. Take valid args, modify an arg until the args no longer pass
+             checkArgValidity.
         2.2. Repeat for all args.
 
       3. Test functions using the generators
-        3.1. Args generated with the valid arg generator should pass assertOk(f(args))
-        3.2. Args generated with the invalid arg generator should pass assertFail(f(args))
+        3.1. Args generated with the valid arg generator should pass
+             assertOk(f(args))
+        3.2. Args generated with the invalid arg generator should pass
+             assertFail(f(args))
   */
   GL = document.createElement('canvas').getContext(GL_CONTEXT_ID);
   Array.from = function(o) {
@@ -36,6 +39,7 @@
     return this[Math.floor(this.length * Math.random())];
   }
 
+  // FIXME please document
   constCheck = function() {
     return Array.from(arguments);
   }
@@ -43,6 +47,45 @@
   bufferTarget = constCheck(GL.ARRAY_BUFFER, GL.ELEMENT_ARRAY_BUFFER);
   bufferMode = constCheck(GL.STREAM_DRAW, GL.STATIC_DRAW, GL.DYNAMIC_DRAW);
 
+  WebGLArrayTypes = [
+    WebGLFloatArray,
+    WebGLIntArray,
+    WebGLShortArray,
+    WebGLByteArray,
+    WebGLUnsignedIntArray,
+    WebGLUnsignedShortArray,
+    WebGLUnsignedByteArray
+  ];
+  webGLArrayContentGenerators = [randomLength, randomSmallIntArray];
+  randomWebGLArray = function() {
+    var t = WebGLArrayTypes.random();
+    return new t(webGLArrayContentGenerators.random()());
+  };
+
+  randomWebGLArrayBuffer = function() {
+    return new WebGLArrayBuffer(randomLength());
+  };
+
+  bufferDataGenerators = [randomLength, randomWebGLArray, randomWebGLArrayBuffer];
+  randomBufferData = function() {
+    return bufferDataGenerators.random()();
+  };
+
+  // FIXME please document
+  isBufferData = function(bufData) {
+    if (typeof bufData == 'number')
+      return true;
+    if (bufData instanceof WebGLArrayBuffer)
+      return true;
+    return WebGLArrayTypes.some(function(t) {
+      return bufData instanceof t;
+    });
+  };
+
+
+
+
+  // FIXME please document
   ArgGenerators = {
     // buffers
     createBuffer : {
@@ -55,7 +98,7 @@
       generate : function() {
         return [GL.createBuffer()];
       },
-      predicate : function(buf) {
+      checkArgValidity : function(buf) {
         return GL.isBuffer(buf);
       },
       cleanup : function(buf) {
@@ -65,17 +108,50 @@
 
     bindBuffer : {
       generate : function(buf) {
-        return [bufferTarget.random(), GL.createBuffer(), bufferMode.random()];
+        return [bufferTarget.random(), GL.createBuffer()];
       },
-      predicate : function(target, buf, mode) {
-        return bufferTarget.has(target) && GL.isBuffer(buf) && bufferMode.has(mode);
+      checkArgValidity : function(target, buf) {
+        return bufferTarget.has(target) && GL.isBuffer(buf);
       },
       cleanup : function(t, buf, m) {
         GL.deleteBuffer(buf);
       }
+    },
+
+    bufferData : {
+      setup : function() {
+        var buf = GL.createBuffer();
+        var ebuf = GL.createBuffer();
+        GL.bindBuffer(GL.ARRAY_BUFFER, buf);
+        GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, ebuf);
+        return [buf, ebuf];
+      },
+      generate : function(buf, ebuf) {
+        return [bufferTarget.random(), randomBufferData(), bufferMode.random()];
+      },
+      checkArgValidity : function(target, bufData, mode) {
+        return bufferTarget.has(target) && isBufferData(bufData) && bufferMode.has(mode);
+      },
+      teardown : function(buf, ebuf) {
+        GL.deleteBuffer(buf);
+        GL.deleteBuffer(ebuf);
+      },
+    },
+
+    bufferSubData : {
     }
+
+    // textures
+
+    // drawArrays
+
+    // drawElements
+
+    // state setters
+    // state getters
   };
 
+  // FIXME please document
   argGeneratorTestRunner = function(argGen, testFunction, numberOfTests) {
     var setupVars = argGen.setup ? argGen.setup() : [];
     var error;
@@ -101,13 +177,20 @@
 
 <script type="application/x-javascript">
 
+// FIXME please document
 Tests.testValidArgs = function() {
   for (var name in ArgGenerators) {
     var argGen = ArgGenerators[name];
+    if (!argGen.generate) continue;
     argGeneratorTestRunner(argGen, function(args, gen, setupVars) {
-      if (gen.predicate)
-        assert("Valid args: "+name+"("+args.join(",")+")", gen.predicate.apply(gen, args));
-      GL[name].apply(GL, args);
+      if (gen.checkArgValidity)
+        assert("Valid args: "+name+"("+args.join(",")+")",
+               gen.checkArgValidity.apply(gen, args));
+      var rv;
+      assertOk("Calling "+name+"("+args.join(",")+")",
+               function(){rv = GL[name].apply(GL, args);});
+      if (gen.returnValueCleanup)
+        gen.returnValueCleanup(rv);
     }, 100);
   }
 }
