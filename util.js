@@ -135,7 +135,25 @@ function throwError(gl, msg) {
 
 Math.cot = function(z) { return 1.0 / Math.tan(z); }
 
+/*
+  Matrix utilities, using the OpenGL element order where
+  the last 4 elements are the translation column.
 
+  Uses flat arrays as matrices for performance.
+
+  Most operations have in-place variants to avoid allocating temporary matrices.
+
+  Naming logic:
+    Matrix.method operates on a 4x4 Matrix and returns a new Matrix.
+    Matrix.method3x3 operates on a 3x3 Matrix and returns a new Matrix. Not all operations have a 3x3 version (as 3x3 is usually only used for the normal matrix: Matrix.transpose3x3(Matrix.inverseTo3x3(mat4x4)))
+    Matrix.method[3x3]InPlace(args, target) stores its result in the target matrix.
+
+    Matrix.scale([sx, sy, sz]) -- non-uniform scale by vector
+    Matrix.scale1(s)           -- uniform scale by scalar
+    Matrix.scale3(sx, sy, sz)  -- non-uniform scale by scalars
+    
+    Ditto for translate.
+*/
 Matrix = {
   identity : [
     1.0, 0.0, 0.0, 0.0,
@@ -144,12 +162,29 @@ Matrix = {
     0.0, 0.0, 0.0, 1.0
   ],
 
+  newIdentity : function() {
+    return [
+      1.0, 0.0, 0.0, 0.0,
+      0.0, 1.0, 0.0, 0.0,
+      0.0, 0.0, 1.0, 0.0,
+      0.0, 0.0, 0.0, 1.0
+    ];
+  },
+
+  newIdentity3x3 : function() {
+    return [
+      1.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 1.0
+    ];
+  },
+
   copyMatrix : function(src, dst) {
     for (var i=0; i<16; i++) dst[i] = src[i];
     return dst;
   },
 
-  make3x3 : function(m) {
+  to3x3 : function(m) {
     return [
       m[0], m[1], m[2],
       m[4], m[5], m[6],
@@ -158,13 +193,73 @@ Matrix = {
   },
 
   // orthonormal matrix inverse
-  inverse4x4ON : function(m) {
-    var n = this.transpose(m);
+  inverseON : function(m) {
+    var n = this.transpose4x4(m);
     var t = [m[12], m[13], m[14]];
     n[3] = n[7] = n[11] = 0;
     n[12] = -Vec3.dot([n[0], n[4], n[8]], t);
     n[13] = -Vec3.dot([n[1], n[5], n[9]], t);
     n[14] = -Vec3.dot([n[2], n[6], n[10]], t);
+    return n;
+  },
+
+  inverseTo3x3 : function(m) {
+    return this.inverse4x4to3x3InPlace(m, this.newIdentity3x3());
+  },
+
+  inverseTo3x3InPlace : function(m,n) {
+    var a11 = m[10]*m[5]-m[6]*m[9],
+        a21 = -m[10]*m[1]+m[2]*m[9],
+        a31 = m[6]*m[1]-m[2]*m[5],
+        a12 = -m[10]*m[4]+m[6]*m[8],
+        a22 = m[10]*m[0]-m[2]*m[8],
+        a32 = -m[6]*m[0]+m[2]*m[4],
+        a13 = m[9]*m[4]-m[5]*m[8],
+        a23 = -m[9]*m[0]+m[1]*m[8],
+        a33 = m[5]*m[0]-m[1]*m[4];
+    var det = m[0]*(a11) + m[1]*(a12) + m[2]*(a13);
+    if (det == 0) // no inverse
+      return [1,0,0,0,1,0,0,0,1];
+    var idet = 1 / det;
+    n[0] = idet*a11;
+    n[1] = idet*a21;
+    n[2] = idet*a31;
+    n[3] = idet*a12;
+    n[4] = idet*a22;
+    n[5] = idet*a32;
+    n[6] = idet*a13;
+    n[7] = idet*a23;
+    n[8] = idet*a33;
+    return n;
+  },
+
+  inverse3x3 : function(m) {
+    return this.inverse3x3InPlace(m, this.newIdentity3x3());
+  },
+  
+  inverse3x3InPlace : function(m,n) {
+    var a11 = m[8]*m[4]-m[5]*m[7],
+        a21 = -m[8]*m[1]+m[2]*m[7],
+        a31 = m[5]*m[1]-m[2]*m[4],
+        a12 = -m[8]*m[3]+m[5]*m[6],
+        a22 = m[8]*m[0]-m[2]*m[6],
+        a32 = -m[5]*m[0]+m[2]*m[3],
+        a13 = m[7]*m[4]-m[4]*m[8],
+        a23 = -m[7]*m[0]+m[1]*m[6],
+        a33 = m[4]*m[0]-m[1]*m[3];
+    var det = m[0]*(a11) + m[1]*(a12) + m[2]*(a13);
+    if (det == 0) // no inverse
+      return [1,0,0,0,1,0,0,0,1];
+    var idet = 1 / det;
+    n[0] = idet*a11;
+    n[1] = idet*a21;
+    n[2] = idet*a31;
+    n[3] = idet*a12;
+    n[4] = idet*a22;
+    n[5] = idet*a32;
+    n[6] = idet*a13;
+    n[7] = idet*a23;
+    n[8] = idet*a33;
     return n;
   },
 
@@ -194,7 +289,7 @@ Matrix = {
   },
 
   mul4x4 : function (a,b) {
-    return this.mul4x4InPlace(a,b,new Array(16));
+    return this.mul4x4InPlace(a,b,this.newIdentity());
   },
 
   mul4x4InPlace : function (a, b, c) {
@@ -390,14 +485,41 @@ Matrix = {
     return this.mul4x4(m,t);
   },
 
-  transpose : function(m) {
+  transpose4x4 : function(m) {
     return [
       m[0], m[4], m[8], m[12],
       m[1], m[5], m[9], m[13],
       m[2], m[6], m[10], m[14],
       m[3], m[7], m[11], m[15]
     ];
-  }
+  },
+
+  transpose4x4InPlace : function(m) {
+    var tmp = 0.0;
+    tmp = m[1]; m[1] = m[4]; m[4] = tmp;
+    tmp = m[2]; m[2] = m[8]; m[8] = tmp;
+    tmp = m[3]; m[3] = m[12]; m[12] = tmp;
+    tmp = m[6]; m[6] = m[9]; m[9] = tmp;
+    tmp = m[7]; m[7] = m[13]; m[13] = tmp;
+    tmp = m[11]; m[11] = m[14]; m[14] = tmp;
+    return m;
+  },
+
+  transpose3x3 : function(m) {
+    return [
+      m[0], m[3], m[6],
+      m[1], m[4], m[7],
+      m[2], m[5], m[8]
+    ];
+  },
+
+  transpose3x3InPlace : function(m) {
+    var tmp = 0.0;
+    tmp = m[1]; m[1] = m[3]; m[3] = tmp;
+    tmp = m[2]; m[2] = m[6]; m[6] = tmp;
+    tmp = m[5]; m[5] = m[7]; m[7] = tmp;
+    return m;
+  },
 }
 
 Vec3 = {
