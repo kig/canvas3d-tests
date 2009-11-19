@@ -45,7 +45,17 @@ function drawCube (gl, shader, angle, axis, x,y,z, s, va, na, ta) {
     Matrix.scale1InPlace(s,vmat);
     Matrix.rotateInPlace(angle, axis, vmat);
 
+    // Note: we could just use mat3(MVMatrix) as the normal matrix
+    // as MVMatrix has only rotations, translations and uniform scaling
+    // <=> MVMatrix is a scaled orthonormal matrix
+    // hence normalize(mat3(MVMatrix)*v) == normalize(mat3(transpose(inverse(MVMatrix))*v)
+    //
+    // But let's do it the hard way to see if Matrix.inverse3x3 works...
+    Matrix.inverseTo3x3InPlace(vmat, nmat);
+    Matrix.transpose3x3InPlace(nmat);
+
     shader.uniformMatrix4fv("MVMatrix", vmat);
+    shader.uniformMatrix3fv("NMatrix", nmat);
 
     var cube = Cube.getCachedVBO(gl);
     cube.draw(va, na, ta);
@@ -77,9 +87,10 @@ function drawScene (gl, shader, va, na, ta) {
     }
 }
 
-var vmat = new Array(16);
-var vmat2 = new Array(16);
-var pmat;
+var nmat = Matrix.newIdentity3x3();
+var vmat = Matrix.newIdentity();
+var vmat2 = Matrix.newIdentity();
+var pmat = null;
 var look = Matrix.lookAt([4,-1,8], [-0.2,0,0], [0,1,0]);
 var useDoF = false;
 
@@ -185,6 +196,7 @@ window.addEventListener("load", init, false);
 
       uniform mat4 PMatrix;
       uniform mat4 MVMatrix;
+      uniform mat3 NMatrix;
 
       uniform vec4 MaterialAmbient;
       uniform vec4 MaterialDiffuse;
@@ -207,7 +219,7 @@ window.addEventListener("load", init, false);
         vec4 v = vec4(Vertex, 1.0);
 
         /* transform vertex normal into world space and normalize */
-        normal = normalize(mat3(MVMatrix) * Normal);
+        normal = normalize(NMatrix * Normal);
 
         /* transform vertex into world space and compute the vector
           from it to the light */
