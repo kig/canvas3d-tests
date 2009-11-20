@@ -81,7 +81,9 @@ Object.toSource = function(a, seen){
 
 function formatError(e) {
   if (window.console) console.log(e);
-  var trace = e.filename + ":" + e.lineNumber + (e.trace ? "\n"+e.trace : "");
+  var pathSegs = location.href.toString().split("/");
+  var currentDoc = e.lineNumber != null ? pathSegs[pathSegs.length - 1] : null;
+  var trace = (e.filename || currentDoc) + ":" + e.lineNumber + (e.trace ? "\n"+e.trace : "");
   return e.message + "\n" + trace;
 }
 
