@@ -81,6 +81,11 @@
     GL.NEVER, GL.LESS, GL.EQUAL, GL.LEQUAL, GL.GREATER, GL.NOTEQUAL,
     GL.GEQUAL, GL.ALWAYS
   );
+  enableCap = constCheck(
+    GL.BLEND, GL.CULL_FACE, GL.DEPTH_TEST, GL.DITHER, GL.POLYGON_OFFSET_FILL,
+    GL.SAMPLE_ALPHA_TO_COVERAGE, GL.SAMPLE_COVERAGE, GL.SCISSOR_TEST,
+    GL.STENCIL_TEST
+  );
   shaderType = constCheck(GL.VERTEX_SHADER, GL.FRAGMENT_SHADER);
   textureUnit = constCheck.apply(this, (function(){
     var textureUnits = [];
@@ -93,6 +98,18 @@
   var MaxStencilValue = 1 << StencilBits;
   
   var MaxVertexAttribs = GL.getParameter(GL.MAX_VERTEX_ATTRIBS);
+
+  // Returns true if bufData can be passed to GL.bufferData
+  isBufferData = function(bufData) {
+    if (typeof bufData == 'number')
+      return bufData >= 0;
+    if (bufData instanceof WebGLArrayBuffer)
+      return true;
+    return WebGLArrayTypes.some(function(t) {
+      return bufData instanceof t;
+    });
+  };
+  
   isVertexAttribute = function(idx) {
     if (typeof idx != 'number') return false;
     return idx >= 0 && idx < MaxVertexAttribs;
@@ -152,17 +169,6 @@
     var data = bufferSubDataGenerators.random()(buflen);
     var offset = randomInt(buflen - data.byteLength);
     return {data:data, offset:offset};
-  };
-
-  // Returns true if bufData can be passed to GL.bufferData
-  isBufferData = function(bufData) {
-    if (typeof bufData == 'number')
-      return bufData >= 0;
-    if (bufData instanceof WebGLArrayBuffer)
-      return true;
-    return WebGLArrayTypes.some(function(t) {
-      return bufData instanceof t;
-    });
   };
 
   randomColor = function() {
@@ -523,15 +529,30 @@
         try {GL.deleteShader(sh);} catch(e) {}
       }
     },
-    disable : {}, // FIXME
-    disableVertexAttribArray : {}, // FIXME
+    disable : {
+      generate : function() { return [enableCap.random()]; },
+      checkArgValidity : function(c) { return enableCap.has(c); },
+      cleanup : function(c) { if (c == GL.DITHER) GL.enable(c); }
+    },
+    disableVertexAttribArray : {
+      generate : function() { return [randomVertexAttribute()]; },
+      checkArgValidity : function(v) { return isVertexAttribute(v); }
+    },
     drawArrays : {}, // FIXME
     drawElements : {}, // FIXME
 
   // E
 
-    enable : {}, // FIXME
-    enableVertexAttribArray : {}, // FIXME
+    enable : {
+      generate : function() { return [enableCap.random()]; },
+      checkArgValidity : function(c) { return enableCap.has(c); },
+      cleanup : function(c) { if (c != GL.DITHER) GL.disable(c); }
+    },
+    enableVertexAttribArray : {
+      generate : function() { return [randomVertexAttribute()]; },
+      checkArgValidity : function(v) { return isVertexAttribute(v); },
+      cleanup : function(v) { GL.disableVertexAttribArray(v); }
+    },
 
   // F
     
