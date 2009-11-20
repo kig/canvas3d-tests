@@ -36,7 +36,7 @@
   }
   Array.prototype.has = function(v) { return this.indexOf(v) != -1; }
   Array.prototype.random = function() {
-    return this[Math.floor(this.length * Math.random())];
+    return this[randomInt(this.length)];
   }
 
   // Creates a constant checker / generator from its arguments.
@@ -53,6 +53,20 @@
     return Array.from(arguments);
   }
 
+  bindTextureTarget = constCheck(GL.TEXTURE_2D, GL.TEXTURE_CUBE_MAP);
+  blendEquationMode = constCheck(GL.FUNC_ADD, GL.FUNC_SUBTRACT, GL.FUNC_REVERSE_SUBTRACT);
+  blendFuncSfactor = constCheck(
+    GL.ZERO, GL.ONE, GL.SRC_COLOR, GL.ONE_MINUS_SRC_COLOR, GL.DST_COLOR,
+    GL.ONE_MINUS_DST_COLOR, GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.DST_ALPHA,
+    GL.ONE_MINUS_DST_ALPHA, GL.CONSTANT_COLOR, GL.ONE_MINUS_CONSTANT_COLOR,
+    GL.CONSTANT_ALPHA, GL.ONE_MINUS_CONSTANT_ALPHA, GL.SRC_ALPHA_SATURATE
+  );
+  blendFuncDfactor = constCheck(
+    GL.ZERO, GL.ONE, GL.SRC_COLOR, GL.ONE_MINUS_SRC_COLOR, GL.DST_COLOR,
+    GL.ONE_MINUS_DST_COLOR, GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.DST_ALPHA,
+    GL.ONE_MINUS_DST_ALPHA, GL.CONSTANT_COLOR, GL.ONE_MINUS_CONSTANT_COLOR,
+    GL.CONSTANT_ALPHA, GL.ONE_MINUS_CONSTANT_ALPHA
+  );
   bufferTarget = constCheck(GL.ARRAY_BUFFER, GL.ELEMENT_ARRAY_BUFFER);
   bufferMode = constCheck(GL.STREAM_DRAW, GL.STATIC_DRAW, GL.DYNAMIC_DRAW);
   cullFace = constCheck(GL.FRONT, GL.BACK, GL.FRONT_AND_BACK);
@@ -63,6 +77,23 @@
     for (var i=0; i<texUnits; i++) textureUnits.push(GL['TEXTURE'+i]);
     return textureUnits;
   })());
+
+  var MaxVertexAttribs = GL.getParameter(GL.MAX_VERTEX_ATTRIBS);
+  isVertexAttribute = function(idx) {
+    if (typeof idx != 'number') return false;
+    return idx >= 0 && idx < MaxVertexAttribs;
+  };
+
+  isValidName = function(name) {
+    if (typeof name != 'string') return false;
+    for (var i=0; i<name.length; i++) {
+      var c = name.charCodeAt(i);
+      if (c & 0x00FF == 0 || c & 0xFF00 == 0) {
+        return false;
+      }
+    }
+    return true;
+  };
 
   WebGLArrayTypes = [
     WebGLFloatArray,
@@ -81,7 +112,7 @@
 
   randomWebGLArrayBuffer = function(buflen) {
     if (buflen == null) buflen = 256;
-    var len = Math.floor(Math.random()*buflen)+1;
+    var len = randomInt(buflen)+1;
     var rv;
     try {
       rv = new WebGLArrayBuffer(len);
@@ -99,13 +130,13 @@
 
   randomSmallWebGLArray = function(buflen) {
     var t = WebGLArrayTypes.random();
-    return new t(Math.floor(Math.random()*(buflen/4))+1);
+    return new t(randomInt(buflen/4)+1);
   };
 
   bufferSubDataGenerators = [randomSmallWebGLArray, randomWebGLArrayBuffer];
   randomBufferSubData = function(buflen) {
     var data = bufferSubDataGenerators.random()(buflen);
-    var offset = Math.floor(Math.random()*(buflen - data.byteLength));
+    var offset = randomInt(buflen - data.byteLength);
     return {data:data, offset:offset};
   };
 
@@ -120,7 +151,25 @@
     });
   };
 
+  randomColor = function() {
+    return [Math.random(), Math.random(), Math.random(), Math.random()];
+  };
 
+  randomName = function() {
+    var arr = [];
+    var len = randomLength()+1;
+    for (var i=0; i<len; i++) {
+      var l = randomInt(255)+1;
+      var h = randomInt(255)+1;
+      var c = (h << 8) | l;
+      arr.push(String.fromCharCode(c));
+    }
+    return arr.join('');
+  };
+
+  randomVertexAttribute = function() {
+    return randomInt(MaxVertexAttribs);
+  };
 
 
   // ArgGenerators contains argument generators for WebGL functions.
@@ -187,7 +236,18 @@
 
   // B
 
-    bindAttribLocation : {}, // FIXME
+    bindAttribLocation : {
+      generate : function() {
+        var program = GL.createProgram();
+        return [program, randomVertexAttribute(), randomName()];
+      },
+      checkArgValidity : function(program, index, name) {
+        return GL.isProgram(program) && isVertexAttribute(index) && isValidName(name);
+      },
+      cleanup : function(program, index, name) {
+        try { GL.deleteProgram(program); } catch(e) {}
+      }
+    },
     bindBuffer : {
       generate : function(buf) {
         return [bufferTarget.random(), GL.createBuffer()];
@@ -225,12 +285,60 @@
           GL.deleteRenderbuffer(rbo);
       }
     },
-    bindTexture : {}, // FIXME
-    blendColor : {}, // FIXME
-    blendEquation : {}, // FIXME
-    blendEquationSeparate : {}, // FIXME
-    blendFunc : {}, // FIXME
-    blendFuncSeparate : {}, // FIXME
+    bindTexture : {
+      generate : function() {
+        return [bindTextureTarget.random(), Math.random() > 0.5 ? null : GL.createTexture()];
+      },
+      checkArgValidity : function(target, o) {
+        return bindTextureTarget.has(target) && (o == null || GL.isTexture(o));
+      },
+      cleanup : function(target, o) {
+        GL.bindTexture(target, null);
+        if (o)
+          GL.deleteTexture(o);
+      }
+    },
+    blendColor : {
+      generate : function() { return randomColor(); },
+      checkArgValidity : function(r,g,b,a) { return true; },
+      teardown : function() { GL.blendColor(0,0,0,0); }
+    },
+    blendEquation : {
+      generate : function() { return [blendEquationMode.random()]; },
+      checkArgValidity : function(o) { return blendEquationMode.has(o); },
+      teardown : function() { GL.blendEquation(GL.FUNC_ADD); }
+    },
+    blendEquationSeparate : {
+      generate : function() {
+        return [blendEquationMode.random(), blendEquationMode.random()];
+      },
+      checkArgValidity : function(o,p) {
+        return blendEquationMode.has(o) && blendEquationMode.has(p);
+      },
+      teardown : function() { GL.blendEquationSeparate(GL.FUNC_ADD, GL.FUNC_ADD); }
+    },
+    blendFunc : {
+      generate : function() {
+        return [blendFuncSfactor.random(), blendFuncDfactor.random()];
+      },
+      checkArgValidity : function(s,d) {
+        return blendFuncSfactor.has(s) && blendFuncDfactor.has(d);
+      },
+      teardown : function() { GL.blendFunc(GL.ONE, GL.ZERO); }
+    },
+    blendFuncSeparate : {
+      generate : function() {
+        return [blendFuncSfactor.random(), blendFuncDfactor.random(),
+                blendFuncSfactor.random(), blendFuncDfactor.random()];
+      },
+      checkArgValidity : function(s,d,as,ad) {
+        return blendFuncSfactor.has(s) && blendFuncDfactor.has(d) &&
+               blendFuncSfactor.has(as) && blendFuncDfactor.has(ad) ;
+      },
+      teardown : function() {
+        GL.blendFuncSeparate(GL.ONE, GL.ZERO, GL.ONE, GL.ZERO);
+      }
+    },
     bufferData : {
       setup : function() {
         var buf = GL.createBuffer();
