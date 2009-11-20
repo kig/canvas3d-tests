@@ -324,7 +324,7 @@ function randomFloat () {
     return -0.5*fac + Math.random() * fac;
 }
 function randomInt (sz) {
-  if (sz)
+  if (sz != null)
     return Math.floor(Math.random()*sz);
   else
     return Math.floor(randomFloat());
