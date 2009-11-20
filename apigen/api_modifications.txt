@@ -1,5 +1,5 @@
 -ES_VERSION_2_0
--VIEWPORT
+#-VIEWPORT
 -SHADER_BINARY_FORMATS
 -NUM_SHADER_BINARY_FORMATS
 -MULTISAMPLE
@@ -7,7 +7,7 @@
 -TRUE
 +GL_FALSE 0
 +GL_TRUE 1
-+VIEWPORT_RECT 0x0BA2
+#+VIEWPORT_RECT 0x0BA2
 
 bindAttribLocation -> void bindAttribLocation (uint program, uint index, string name)
 bufferData -> void bufferData (uint target, WebGLArray data, uint usage)
