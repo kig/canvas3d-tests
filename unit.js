@@ -323,7 +323,12 @@ function randomFloat () {
         fac = NaN;
     return -0.5*fac + Math.random() * fac;
 }
-function randomInt () { return Math.floor(randomFloat()); }
+function randomInt (sz) {
+  if (sz)
+    return Math.floor(Math.random()*sz);
+  else
+    return Math.floor(randomFloat());
+}
 function randomLength () {
     var l = Math.floor(Math.random() * 256);
     if (Math.random < 0.5) l = l / 10;
