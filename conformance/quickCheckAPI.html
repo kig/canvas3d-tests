@@ -81,7 +81,15 @@
 
   randomWebGLArrayBuffer = function(buflen) {
     if (buflen == null) buflen = 256;
-    return new WebGLArrayBuffer(Math.floor(Math.random()*(buflen+1)));
+    var len = Math.floor(Math.random()*buflen)+1;
+    var rv;
+    try {
+      rv = new WebGLArrayBuffer(len);
+    } catch(e) {
+      log("Error creating WebGLArrayBuffer with length " + len);
+      throw(e);
+    }
+    return rv;
   };
 
   bufferDataGenerators = [randomLength, randomWebGLArray, randomWebGLArrayBuffer];
@@ -157,17 +165,25 @@
   // A
   
     activeTexture : {
+      generate : function() { return [textureUnit.random()]; },
+      checkArgValidity : function(t) { return textureUnit.has(t); },
+      teardown : function() { GL.activeTexture(GL.TEXTURE0); }
+    },
+    attachShader : {
       generate : function() {
-        return [textureUnit.random()];
+        var p = GL.createProgram();
+        var sh = GL.createShader(shaderType.random());
+        return [p, sh];
       },
-      checkArgValidity : function(t) {
-        return textureUnit.has(t);
+      checkArgValidity : function(p, sh) {
+        return GL.isProgram(p) && GL.isShader(sh) && !GL.getAttachedShaders(p).has(sh);
       },
-      teardown : function() {
-        GL.activeTexture(GL.TEXTURE0);
+      cleanup : function(p, sh) {
+        try {GL.detachShader(p,sh);} catch(e) {}
+        try {GL.deleteProgram(p);} catch(e) {}
+        try {GL.deleteShader(sh);} catch(e) {}
       }
     },
-    attachShader : {}, // FIXME
 
   // B
 
@@ -196,7 +212,19 @@
           GL.deleteFramebuffer(fbo);
       }
     },
-    bindRenderbuffer : {}, // FIXME
+    bindRenderbuffer : {
+      generate : function() {
+        return [GL.RENDERBUFFER, Math.random() > 0.5 ? null : GL.createRenderbuffer()];
+      },
+      checkArgValidity : function(target, rbo) {
+        return target == GL.RENDERBUFFER && (rbo == null || GL.isRenderbuffer(rbo));
+      },
+      cleanup : function(target, rbo) {
+        GL.bindRenderbuffer(target, null);
+        if (rbo)
+          GL.deleteRenderbuffer(rbo);
+      }
+    },
     bindTexture : {}, // FIXME
     blendColor : {}, // FIXME
     blendEquation : {}, // FIXME
@@ -222,7 +250,6 @@
         GL.deleteBuffer(ebuf);
       },
     },
-
     bufferSubData : {
       setup : function() {
         var buf = GL.createBuffer();
@@ -488,23 +515,28 @@
 Tests.testValidArgs = function() {
   var randomTestCount = 100;
   for (var name in ArgGenerators) {
-    var argGen = ArgGenerators[name];
-    if (!argGen.generate) continue;
-    // test each GL function with randomTestCount randomly generated valid args
-    argGeneratorTestRunner(argGen, function(args, gen, setupVars) {
-      // if we have an validity checker, assert that the generated args are valid
-      if (gen.checkArgValidity)
-        assert("Valid args: "+name+"("+args.join(",")+")",
-               gen.checkArgValidity.apply(gen, args));
-      var rv;
-      // assert that GL function works when called with valid args
-      assertOk("Calling "+name+"("+args.join(",")+")",
-               function(){rv = GL[name].apply(GL, args);});
-      // if we need to cleanup the return value, do it here
-      // e.g. calling gl.deleteBuffer(rv) after testing gl.createBuffer() above
-      if (gen.returnValueCleanup)
-        gen.returnValueCleanup(rv);
-    }, randomTestCount);
+    try {
+      var argGen = ArgGenerators[name];
+      if (!argGen.generate) continue;
+      // test each GL function with randomTestCount randomly generated valid args
+      argGeneratorTestRunner(argGen, function(args, gen, setupVars) {
+        // if we have an validity checker, assert that the generated args are valid
+        if (gen.checkArgValidity)
+          assert("Valid args: "+name+"("+args.join(",")+")",
+                gen.checkArgValidity.apply(gen, args));
+        var rv;
+        // assert that GL function works when called with valid args
+        assertOk("Calling "+name+"("+args.join(",")+")",
+                function(){rv = GL[name].apply(GL, args);});
+        // if we need to cleanup the return value, do it here
+        // e.g. calling gl.deleteBuffer(rv) after testing gl.createBuffer() above
+        if (gen.returnValueCleanup)
+          assertOk("Cleaning up return value after "+name+"("+args.join(",")+")",
+                   function() { gen.returnValueCleanup(rv); });
+      }, randomTestCount);
+    } catch(e) {
+      testFailed(name, e.name, formatError(e));
+    }
   }
 }
 
