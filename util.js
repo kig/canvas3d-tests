@@ -798,11 +798,16 @@ VBO.prototype = {
       if (this.elementsVBO != null) {
         var d = this.elements;
         this.elementsLength = d.data.length;
-        if (!d.ushortArray)
-          d.ushortArray = new CanvasUnsignedShortArray(d.data);
+        this.elementsType = d.type == gl.UNSIGNED_BYTE ? d.type : gl.UNSIGNED_SHORT;
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.elementsVBO);
         throwError(gl, "bindBuffer ELEMENT_ARRAY_BUFFER");
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, d.ushortArray, gl.STATIC_DRAW);
+        if (this.elementsType == gl.UNSIGNED_SHORT && !d.ushortArray) {
+          d.ushortArray = new CanvasUnsignedShortArray(d.data);
+          gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, d.ushortArray, gl.STATIC_DRAW);
+        } else if (this.elementsType == gl.UNSIGNED_BYTE && !d.ubyteArray) {
+          d.ubyteArray = new CanvasUnsignedByteArray(d.data);
+          gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, d.ubyteArray, gl.STATIC_DRAW);
+        }
         throwError(gl, "bufferData ELEMENT_ARRAY_BUFFER");
       }
     } catch(e) {
@@ -839,7 +844,7 @@ VBO.prototype = {
     this.use.apply(this, arguments);
     var gl = this.gl;
     if (this.elementsVBO != null) {
-      gl.drawElements(gl[this.type], this.elementsLength, gl.UNSIGNED_SHORT, 0);
+      gl.drawElements(gl[this.type], this.elementsLength, this.elementsType, 0);
     } else {
       gl.drawArrays(gl[this.type], 0, this.length);
     }
