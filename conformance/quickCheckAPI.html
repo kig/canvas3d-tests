@@ -151,25 +151,27 @@
   //   argGen.teardown.apply(argGen, setupArgs);
   // 
   ArgGenerators = {
-    // buffers
-    createBuffer : {
-      returnValueCleanup : function(buf) {
-        GL.deleteBuffer(buf);
-      }
-    },
-    
-    deleteBuffer : {
-      generate : function() {
-        return [GL.createBuffer()];
-      },
-      checkArgValidity : function(buf) {
-        return GL.isBuffer(buf);
-      },
-      cleanup : function(buf) {
-        try { GL.deleteBuffer(buf); } catch(e) {}
-      }
-    },
 
+  // GL functions in alphabetical order
+
+  // A
+  
+    activeTexture : {
+      generate : function() {
+        return [textureUnit.random()];
+      },
+      checkArgValidity : function(t) {
+        return textureUnit.has(t);
+      },
+      teardown : function() {
+        GL.activeTexture(GL.TEXTURE0);
+      }
+    },
+    attachShader : {}, // FIXME
+
+  // B
+
+    bindAttribLocation : {}, // FIXME
     bindBuffer : {
       generate : function(buf) {
         return [bufferTarget.random(), GL.createBuffer()];
@@ -181,7 +183,26 @@
         GL.deleteBuffer(buf);
       }
     },
-
+    bindFramebuffer : {
+      generate : function() {
+        return [GL.FRAMEBUFFER, Math.random() > 0.5 ? null : GL.createFramebuffer()];
+      },
+      checkArgValidity : function(target, fbo) {
+        return target == GL.FRAMEBUFFER && (fbo == null || GL.isFramebuffer(fbo));
+      },
+      cleanup : function(target, fbo) {
+        GL.bindFramebuffer(target, null);
+        if (fbo)
+          GL.deleteFramebuffer(fbo);
+      }
+    },
+    bindRenderbuffer : {}, // FIXME
+    bindTexture : {}, // FIXME
+    blendColor : {}, // FIXME
+    blendEquation : {}, // FIXME
+    blendEquationSeparate : {}, // FIXME
+    blendFunc : {}, // FIXME
+    blendFuncSeparate : {}, // FIXME
     bufferData : {
       setup : function() {
         var buf = GL.createBuffer();
@@ -225,56 +246,20 @@
       },
     },
 
-    // shaders
+  // C
 
-    activeTexture : {
-      generate : function() {
-        return [textureUnit.random()];
-      },
-      checkArgValidity : function(t) {
-        return textureUnit.has(t);
-      },
-      teardown : function() {
-        GL.activeTexture(GL.TEXTURE0);
-      }
+    checkFramebufferStatus : {}, // FIXME
+    clear : {}, // FIXME
+    clearColor : {}, // FIXME
+    clearDepth : {}, // FIXME
+    clearStencil : {}, // FIXME
+    colorMask : {}, // FIXME
+    compileShader : {}, // FIXME
+    copyTexImage2D : {}, // FIXME
+    copyTexSubImage2D : {}, // FIXME
+    createBuffer : {
+      returnValueCleanup : function(o) { GL.deleteBuffer(o); }
     },
-    attachShader : {},
-
-    bindAttribLocation : {},
-    // bindBuffer : {},
-    bindFramebuffer : {
-      generate : function() {
-        return [GL.FRAMEBUFFER, Math.random() > 0.5 ? null : GL.createFramebuffer()];
-      },
-      checkArgValidity : function(target, fbo) {
-        return target == GL.FRAMEBUFFER && (fbo == null || GL.isFramebuffer(fbo));
-      },
-      cleanup : function(target, fbo) {
-        GL.bindFramebuffer(target, null);
-        if (fbo)
-          GL.deleteFramebuffer(fbo);
-      }
-    },
-    bindRenderbuffer : {},
-    bindTexture : {},
-    blendColor : {},
-    blendEquation : {},
-    blendEquationSeparate : {},
-    blendFunc : {},
-    blendFuncSeparate : {},
-    // bufferData : {},
-    // bufferSubData : {},
-
-    checkFramebufferStatus : {},
-    clear : {},
-    clearColor : {},
-    clearDepth : {},
-    clearStencil : {},
-    colorMask : {},
-    compileShader : {},
-    copyTexImage2D : {},
-    copyTexSubImage2D : {},
-    // createBuffer : {},
     createFramebuffer : {
       returnValueCleanup : function(o) { GL.deleteFramebuffer(o); }
     },
@@ -291,18 +276,18 @@
       returnValueCleanup : function(o) { GL.deleteTexture(o); }
     },
     cullFace : {
-      generate : function() {
-        return [cullFace.random()];
-      },
-      checkArgValidity : function(f) {
-        return cullFace.has(f);
-      },
-      teardown : function() {
-        GL.cullFace(GL.BACK);
-      }
+      generate : function() { return [cullFace.random()]; },
+      checkArgValidity : function(f) { return cullFace.has(f); },
+      teardown : function() { GL.cullFace(GL.BACK); }
     },
 
-    // deleteBuffer : {},
+  // D
+
+    deleteBuffer : {
+      generate : function() { return [GL.createBuffer()]; },
+      checkArgValidity : function(o) { return GL.isBuffer(o); },
+      cleanup : function(o) { try { GL.deleteBuffer(o); } catch(e) {} }
+    },
     deleteFramebuffer : {
       generate : function() { return [GL.createFramebuffer()]; },
       checkArgValidity : function(o) { return GL.isFramebuffer(o); },
@@ -328,112 +313,136 @@
       checkArgValidity : function(o) { return GL.isTexture(o); },
       cleanup : function(o) { try { GL.deleteTexture(o); } catch(e) {} }
     },
-    depthFunc : {},
-    depthMask : {},
-    depthRange : {},
-    detachShader : {},
-    disable : {},
-    disableVertexAttribArray : {},
-    drawArrays : {},
-    drawElements : {},
+    depthFunc : {}, // FIXME
+    depthMask : {}, // FIXME
+    depthRange : {}, // FIXME
+    detachShader : {}, // FIXME
+    disable : {}, // FIXME
+    disableVertexAttribArray : {}, // FIXME
+    drawArrays : {}, // FIXME
+    drawElements : {}, // FIXME
 
-    enable : {},
-    enableVertexAttribArray : {},
+  // E
+
+    enable : {}, // FIXME
+    enableVertexAttribArray : {}, // FIXME
+
+  // F
     
-    finish : {},
-    flush : {},
-    framebufferRenderbuffer : {},
-    framebufferTexture2D : {},
-    frontFace : {},
+    finish : {}, // FIXME
+    flush : {}, // FIXME
+    framebufferRenderbuffer : {}, // FIXME
+    framebufferTexture2D : {}, // FIXME
+    frontFace : {}, // FIXME
 
-    generateMipmap : {},
-    getActiveAttrib : {},
-    getActiveUniform : {},
-    getAttachedShaders : {},
-    getAttribLocation : {},
-    getParameter : {},
-    getBufferParameter : {},
-    getError : {},
-    getFramebufferAttachmentParameter : {},
-    getProgramParameter : {},
-    getProgramInfoLog : {},
-    getRenderbufferParameter : {},
-    getShaderParameter : {},
-    getShaderInfoLog : {},
-    getShaderSource : {},
-    getString : {},
-    getTexParameter : {},
-    getUniform : {},
-    getUniformLocation : {},
-    getVertexAttrib : {},
-    getVertexAttribOffset : {},
+  // G
 
-    hint : {},
+    generateMipmap : {}, // FIXME
+    getActiveAttrib : {}, // FIXME
+    getActiveUniform : {}, // FIXME
+    getAttachedShaders : {}, // FIXME
+    getAttribLocation : {}, // FIXME
+    getParameter : {}, // FIXME
+    getBufferParameter : {}, // FIXME
+    getError : {}, // FIXME
+    getFramebufferAttachmentParameter : {}, // FIXME
+    getProgramParameter : {}, // FIXME
+    getProgramInfoLog : {}, // FIXME
+    getRenderbufferParameter : {}, // FIXME
+    getShaderParameter : {}, // FIXME
+    getShaderInfoLog : {}, // FIXME
+    getShaderSource : {}, // FIXME
+    getString : {}, // FIXME
+    getTexParameter : {}, // FIXME
+    getUniform : {}, // FIXME
+    getUniformLocation : {}, // FIXME
+    getVertexAttrib : {}, // FIXME
+    getVertexAttribOffset : {}, // FIXME
 
-    isBuffer : {},
-    isEnabled : {},
-    isFramebuffer : {},
-    isProgram : {},
-    isRenderbuffer : {},
-    isShader : {},
-    isTexture : {},
+  // H
 
-    lineWidth : {},
-    linkProgram : {},
+    hint : {}, // FIXME
+
+  // I
+
+    isBuffer : {}, // FIXME
+    isEnabled : {}, // FIXME
+    isFramebuffer : {}, // FIXME
+    isProgram : {}, // FIXME
+    isRenderbuffer : {}, // FIXME
+    isShader : {}, // FIXME
+    isTexture : {}, // FIXME
+
+  // L
+
+    lineWidth : {}, // FIXME
+    linkProgram : {}, // FIXME
+
+  // P
     
-    pixelStorei : {},
-    polygonOffset : {},
+    pixelStorei : {}, // FIXME
+    polygonOffset : {}, // FIXME
 
-    readPixels : {},
-    renderbufferStorage : {},
+  // R
 
-    sampleCoverage : {},
-    scissor : {},
-    shaderSource : {},
-    stencilFunc : {},
-    stencilFuncSeparate : {},
-    stencilMask : {},
-    stencilMaskSeparate : {},
-    stencilOp : {},
-    stencilOpSeparate : {},
+    readPixels : {}, // FIXME
+    renderbufferStorage : {}, // FIXME
 
-    texImage2D : {},
-    texParameterf : {},
-    texParameteri : {},
-    texSubImage2D : {},
+  // S
+
+    sampleCoverage : {}, // FIXME
+    scissor : {}, // FIXME
+    shaderSource : {}, // FIXME
+    stencilFunc : {}, // FIXME
+    stencilFuncSeparate : {}, // FIXME
+    stencilMask : {}, // FIXME
+    stencilMaskSeparate : {}, // FIXME
+    stencilOp : {}, // FIXME
+    stencilOpSeparate : {}, // FIXME
+
+  // T
+
+    texImage2D : {}, // FIXME
+    texParameterf : {}, // FIXME
+    texParameteri : {}, // FIXME
+    texSubImage2D : {}, // FIXME
+
+  // U
     
-    uniform1f : {},
-    uniform1fv : {},
-    uniform1i : {},
-    uniform1iv : {},
-    uniform2f : {},
-    uniform2fv : {},
-    uniform2i : {},
-    uniform2iv : {},
-    uniform3f : {},
-    uniform3fv : {},
-    uniform3i : {},
-    uniform3iv : {},
-    uniform4f : {},
-    uniform4fv : {},
-    uniform4i : {},
-    uniform4iv : {},
-    uniformMatrix2fv : {},
-    uniformMatrix3fv : {},
-    uniformMatrix4fv : {},
-    useProgram : {},
-    
-    validateProgram : {},
-    vertexAttrib1f : {},
-    vertexAttrib1fv : {},
-    vertexAttrib2f : {},
-    vertexAttrib2fv : {},
-    vertexAttrib3f : {},
-    vertexAttrib3fv : {},
-    vertexAttrib4f : {},
-    vertexAttrib4fv : {},
-    vertexAttribPointer : {},
-    viewport : {}
+    uniform1f : {}, // FIXME
+    uniform1fv : {}, // FIXME
+    uniform1i : {}, // FIXME
+    uniform1iv : {}, // FIXME
+    uniform2f : {}, // FIXME
+    uniform2fv : {}, // FIXME
+    uniform2i : {}, // FIXME
+    uniform2iv : {}, // FIXME
+    uniform3f : {}, // FIXME
+    uniform3fv : {}, // FIXME
+    uniform3i : {}, // FIXME
+    uniform3iv : {}, // FIXME
+    uniform4f : {}, // FIXME
+    uniform4fv : {}, // FIXME
+    uniform4i : {}, // FIXME
+    uniform4iv : {}, // FIXME
+    uniformMatrix2fv : {}, // FIXME
+    uniformMatrix3fv : {}, // FIXME
+    uniformMatrix4fv : {}, // FIXME
+    useProgram : {}, // FIXME
+
+  // V
+
+    validateProgram : {}, // FIXME
+    vertexAttrib1f : {}, // FIXME
+    vertexAttrib1fv : {}, // FIXME
+    vertexAttrib2f : {}, // FIXME
+    vertexAttrib2fv : {}, // FIXME
+    vertexAttrib3f : {}, // FIXME
+    vertexAttrib3fv : {}, // FIXME
+    vertexAttrib4f : {}, // FIXME
+    vertexAttrib4fv : {}, // FIXME
+    vertexAttribPointer : {}, // FIXME
+    viewport : {} // FIXME
 
   };
 
