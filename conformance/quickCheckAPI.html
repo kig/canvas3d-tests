@@ -86,6 +86,89 @@
     GL.SAMPLE_ALPHA_TO_COVERAGE, GL.SAMPLE_COVERAGE, GL.SCISSOR_TEST,
     GL.STENCIL_TEST
   );
+  frontFaceMode = constCheck(GL.CCW, GL.CW);
+  getParameterPname = constCheck(
+    GL.ACTIVE_TEXTURE || "GL.ACTIVE_TEXTURE",
+    GL.ALIASED_LINE_WIDTH_RANGE || "GL.ALIASED_LINE_WIDTH_RANGE",
+    GL.ALIASED_POINT_SIZE_RANGE || "GL.ALIASED_POINT_SIZE_RANGE",
+    GL.ALPHA_BITS || "GL.ALPHA_BITS",
+    GL.ARRAY_BUFFER_BINDING || "GL.ARRAY_BUFFER_BINDING",
+    GL.BLEND || "GL.BLEND",
+    GL.BLEND_COLOR || "GL.BLEND_COLOR",
+    GL.BLEND_DST_ALPHA || "GL.BLEND_DST_ALPHA",
+    GL.BLEND_DST_RGB || "GL.BLEND_DST_RGB",
+    GL.BLEND_EQUATION_ALPHA || "GL.BLEND_EQUATION_ALPHA",
+    GL.BLEND_EQUATION_RGB || "GL.BLEND_EQUATION_RGB",
+    GL.BLEND_SRC_ALPHA || "GL.BLEND_SRC_ALPHA",
+    GL.BLEND_SRC_RGB || "GL.BLEND_SRC_RGB",
+    GL.BLUE_BITS || "GL.BLUE_BITS",
+    GL.COLOR_CLEAR_VALUE || "GL.COLOR_CLEAR_VALUE",
+    GL.COLOR_WRITEMASK || "GL.COLOR_WRITEMASK",
+    GL.COMPRESSED_TEXTURE_FORMATS || "GL.COMPRESSED_TEXTURE_FORMATS",
+    GL.CULL_FACE || "GL.CULL_FACE",
+    GL.CULL_FACE_MODE || "GL.CULL_FACE_MODE",
+    GL.CURRENT_PROGRAM || "GL.CURRENT_PROGRAM",
+    GL.DEPTH_BITS || "GL.DEPTH_BITS",
+    GL.DEPTH_CLEAR_VALUE || "GL.DEPTH_CLEAR_VALUE",
+    GL.DEPTH_FUNC || "GL.DEPTH_FUNC",
+    GL.DEPTH_RANGE || "GL.DEPTH_RANGE",
+    GL.DEPTH_TEST || "GL.DEPTH_TEST",
+    GL.DEPTH_WRITEMASK || "GL.DEPTH_WRITEMASK",
+    GL.DITHER || "GL.DITHER",
+    GL.ELEMENT_ARRAY_BUFFER_BINDING || "GL.ELEMENT_ARRAY_BUFFER_BINDING",
+    GL.FRAMEBUFFER_BINDING || "GL.FRAMEBUFFER_BINDING",
+    GL.FRONT_FACE || "GL.FRONT_FACE",
+    GL.GENERATE_MIPMAP_HINT || "GL.GENERATE_MIPMAP_HINT",
+    GL.GREEN_BITS || "GL.GREEN_BITS",
+    GL.LINE_WIDTH || "GL.LINE_WIDTH",
+    GL.MAX_COMBINED_TEXTURE_IMAGE_UNITS || "GL.MAX_COMBINED_TEXTURE_IMAGE_UNITS",
+    GL.MAX_CUBE_MAP_TEXTURE_SIZE || "GL.MAX_CUBE_MAP_TEXTURE_SIZE",
+    GL.MAX_FRAGMENT_UNIFORM_VECTORS || "GL.MAX_FRAGMENT_UNIFORM_VECTORS",
+    GL.MAX_RENDERBUFFER_SIZE || "GL.MAX_RENDERBUFFER_SIZE",
+    GL.MAX_TEXTURE_IMAGE_UNITS || "GL.MAX_TEXTURE_IMAGE_UNITS",
+    GL.MAX_TEXTURE_SIZE || "GL.MAX_TEXTURE_SIZE",
+    GL.MAX_VARYING_VECTORS || "GL.MAX_VARYING_VECTORS",
+    GL.MAX_VERTEX_ATTRIBS || "GL.MAX_VERTEX_ATTRIBS",
+    GL.MAX_VERTEX_TEXTURE_IMAGE_UNITS || "GL.MAX_VERTEX_TEXTURE_IMAGE_UNITS",
+    GL.MAX_VERTEX_UNIFORM_VECTORS || "GL.MAX_VERTEX_UNIFORM_VECTORS",
+    GL.MAX_VIEWPORT_DIMS || "GL.MAX_VIEWPORT_DIMS",
+    GL.NUM_COMPRESSED_TEXTURE_FORMATS || "GL.NUM_COMPRESSED_TEXTURE_FORMATS",
+    GL.PACK_ALIGNMENT || "GL.PACK_ALIGNMENT",
+    GL.POLYGON_OFFSET_FACTOR || "GL.POLYGON_OFFSET_FACTOR",
+    GL.POLYGON_OFFSET_FILL || "GL.POLYGON_OFFSET_FILL",
+    GL.POLYGON_OFFSET_UNITS || "GL.POLYGON_OFFSET_UNITS",
+    GL.RED_BITS || "GL.RED_BITS",
+    GL.RENDERBUFFER_BINDING || "GL.RENDERBUFFER_BINDING",
+    GL.SAMPLE_BUFFERS || "GL.SAMPLE_BUFFERS",
+    GL.SAMPLE_COVERAGE_INVERT || "GL.SAMPLE_COVERAGE_INVERT",
+    GL.SAMPLE_COVERAGE_VALUE || "GL.SAMPLE_COVERAGE_VALUE",
+    GL.SAMPLES || "GL.SAMPLES",
+    GL.SCISSOR_BOX || "GL.SCISSOR_BOX",
+    GL.SCISSOR_TEST || "GL.SCISSOR_TEST",
+    GL.STENCIL_BACK_FAIL || "GL.STENCIL_BACK_FAIL",
+    GL.STENCIL_BACK_FUNC || "GL.STENCIL_BACK_FUNC",
+    GL.STENCIL_BACK_PASS_DEPTH_FAIL || "GL.STENCIL_BACK_PASS_DEPTH_FAIL",
+    GL.STENCIL_BACK_PASS_DEPTH_PASS || "GL.STENCIL_BACK_PASS_DEPTH_PASS",
+    GL.STENCIL_BACK_REF || "GL.STENCIL_BACK_REF",
+    GL.STENCIL_BACK_VALUE_MASK || "GL.STENCIL_BACK_VALUE_MASK",
+    GL.STENCIL_BACK_WRITEMASK || "GL.STENCIL_BACK_WRITEMASK",
+    GL.STENCIL_BITS || "GL.STENCIL_BITS",
+    GL.STENCIL_CLEAR_VALUE || "GL.STENCIL_CLEAR_VALUE",
+    GL.STENCIL_FAIL || "GL.STENCIL_FAIL",
+    GL.STENCIL_FUNC || "GL.STENCIL_FUNC",
+    GL.STENCIL_PASS_DEPTH_FAIL || "GL.STENCIL_PASS_DEPTH_FAIL",
+    GL.STENCIL_PASS_DEPTH_PASS || "GL.STENCIL_PASS_DEPTH_PASS",
+    GL.STENCIL_REF || "GL.STENCIL_REF",
+    GL.STENCIL_TEST || "GL.STENCIL_TEST",
+    GL.STENCIL_VALUE_MASK || "GL.STENCIL_VALUE_MASK",
+    GL.STENCIL_WRITEMASK || "GL.STENCIL_WRITEMASK",
+    GL.SUBPIXEL_BITS || "GL.SUBPIXEL_BITS",
+    GL.TEXTURE_BINDING_2D || "GL.TEXTURE_BINDING_2D",
+    GL.TEXTURE_BINDING_CUBE_MAP || "GL.TEXTURE_BINDING_CUBE_MAP",
+    GL.UNPACK_ALIGNMENT || "GL.UNPACK_ALIGNMENT",
+    GL.VIEWPORT || "GL.VIEWPORT"
+  );
+  mipmapHint = constCheck(GL.FASTEST, GL.NICEST, GL.DONT_CARE);
   shaderType = constCheck(GL.VERTEX_SHADER, GL.FRAGMENT_SHADER);
   textureUnit = constCheck.apply(this, (function(){
     var textureUnits = [];
@@ -445,21 +528,28 @@
     copyTexImage2D : {}, // FIXME
     copyTexSubImage2D : {}, // FIXME
     createBuffer : {
+      generate : function() { return []; },
       returnValueCleanup : function(o) { GL.deleteBuffer(o); }
     },
     createFramebuffer : {
+      generate : function() { return []; },
       returnValueCleanup : function(o) { GL.deleteFramebuffer(o); }
     },
     createProgram : {
+      generate : function() { return []; },
       returnValueCleanup : function(o) { GL.deleteProgram(o); }
     },
     createRenderbuffer : {
+      generate : function() { return []; },
       returnValueCleanup : function(o) { GL.deleteRenderbuffer(o); }
     },
     createShader : {
+      generate : function() { return [shaderType.random()]; },
+      checkArgValidity : function(t) { return shaderType.has(t); },
       returnValueCleanup : function(o) { GL.deleteShader(o); }
     },
     createTexture : {
+      generate : function() { return []; },
       returnValueCleanup : function(o) { GL.deleteTexture(o); }
     },
     cullFace : {
@@ -556,22 +646,97 @@
 
   // F
     
-    finish : {}, // FIXME
-    flush : {}, // FIXME
+    finish : {
+      generate : function() { return []; }
+    },
+    flush : {
+      generate : function() { return []; }
+    },
     framebufferRenderbuffer : {}, // FIXME
     framebufferTexture2D : {}, // FIXME
-    frontFace : {}, // FIXME
+    frontFace : {
+      generate : function() { return [frontFaceMode.random()]; },
+      checkArgValidity : function(c) { return frontFaceMode.has(c); },
+      cleanup : function(c) { GL.frontFace(GL.CCW); }
+    },
 
   // G
 
-    generateMipmap : {}, // FIXME
-    getActiveAttrib : {}, // FIXME
+    generateMipmap : {
+      setup : function() {
+        var tex = GL.createTexture();
+        var tex2 = GL.createTexture();
+        GL.bindTexture(GL.TEXTURE_2D, tex);
+        GL.bindTexture(GL.TEXTURE_CUBE_MAP, tex2);
+        // FIXME call texImage2D to set up the textures
+      },
+      generate : function() { return [bindTextureTarget.random()]; },
+      checkArgValidity : function(t) { return bindTextureTarget.has(t); },
+      teardown : function(tex, tex2) {
+        GL.bindTexture(GL.TEXTURE_2D, null);
+        GL.bindTexture(GL.TEXTURE_CUBE_MAP, null);
+        GL.deleteTexture(tex);
+        GL.deleteTexture(tex2);
+      }
+    },
+    getActiveAttrib : {
+    /* FIXME the queried attrib needs to be an active one
+      generate : function() {
+        var program = GL.createProgram();
+        return [program, randomVertexAttribute()];
+      },
+      checkArgValidity : function(program, index) {
+        return GL.isProgram(program) && isVertexAttribute(index);
+      },
+      cleanup : function(program, index) {
+        GL.deleteProgram(program);
+      }
+    */
+    },
     getActiveUniform : {}, // FIXME
-    getAttachedShaders : {}, // FIXME
-    getAttribLocation : {}, // FIXME
-    getParameter : {}, // FIXME
+    getAttachedShaders : {
+      setup : function() {
+        var program = GL.createProgram();
+        var s1 = GL.createShader(GL.VERTEX_SHADER);
+        var s2 = GL.createShader(GL.FRAGMENT_SHADER);
+        GL.attachShader(program, s1);
+        GL.attachShader(program, s2);
+        return [program, s1, s2];
+      },
+      generate : function(program, s1, s2) {
+        return [program]
+      },
+      checkArgValidity : function(program) {
+        return GL.isProgram(program);
+      },
+      teardown : function(program, s1, s2) {
+        GL.deleteProgram(program);
+        GL.deleteShader(s1);
+        GL.deleteShader(s2);
+      }
+    },
+    getAttribLocation : {
+      generate : function() {
+        var program = GL.createProgram();
+        var name = randomName();
+        GL.bindAttribLocation(program, randomVertexAttribute(), name);
+        return [program, name];
+      },
+      checkArgValidity : function(program, name) {
+        return GL.isProgram(program) && isValidName(name);
+      },
+      cleanup : function(program, name) {
+        try { GL.deleteProgram(program); } catch(e) {}
+      }
+    },
+    getParameter : {
+      generate : function() { return [getParameterPname.random()]; },
+      checkArgValidity : function(p) { return getParameterPname.has(p); }
+    },
     getBufferParameter : {}, // FIXME
-    getError : {}, // FIXME
+    getError : {
+      generate : function() { return []; }
+    },
     getFramebufferAttachmentParameter : {}, // FIXME
     getProgramParameter : {}, // FIXME
     getProgramInfoLog : {}, // FIXME
@@ -588,17 +753,44 @@
 
   // H
 
-    hint : {}, // FIXME
+    hint : {
+      generate : function() { return [GL.GENERATE_MIPMAP_HINT, mipmapHint.random()]; },
+      checkValidArgs : function(h, m) {
+        return h == GL.GENERATE_MIPMAP_HINT && mipmapHint.has(m);
+      },
+      teardown : function(){ GL.hint(GL.GENERATE_MIPMAP_HINT, GL.DONT_CARE); }
+    },
 
   // I
 
-    isBuffer : {}, // FIXME
-    isEnabled : {}, // FIXME
-    isFramebuffer : {}, // FIXME
-    isProgram : {}, // FIXME
-    isRenderbuffer : {}, // FIXME
-    isShader : {}, // FIXME
-    isTexture : {}, // FIXME
+    isBuffer : {
+      generate : function() { return [GL.createBuffer()]; },
+      cleanup : function(o) { try { GL.deleteBuffer(o); } catch(e) {} }
+    },
+    isEnabled : {
+      generate : function() { return [enableCap.random()]; },
+      checkArgValidity : function(c) { return enableCap.has(c); }
+    },
+    isFramebuffer : {
+      generate : function() { return [GL.createFramebuffer()]; },
+      cleanup : function(o) { try { GL.deleteFramebuffer(o); } catch(e) {} }
+    },
+    isProgram : {
+      generate : function() { return [GL.createProgram()]; },
+      cleanup : function(o) { try { GL.deleteProgram(o); } catch(e) {} }
+    },
+    isRenderbuffer : {
+      generate : function() { return [GL.createRenderbuffer()]; },
+      cleanup : function(o) { try { GL.deleteRenderbuffer(o); } catch(e) {} }
+    },
+    isShader : {
+      generate : function() { return [GL.createShader(shaderType.random())]; },
+      cleanup : function(o) { try { GL.deleteShader(o); } catch(e) {} }
+    },
+    isTexture : {
+      generate : function() { return [GL.createTexture()]; },
+      cleanup : function(o) { try { GL.deleteTexture(o); } catch(e) {} }
+    },
 
   // L
 
@@ -716,10 +908,19 @@ Tests.testValidArgs = function() {
   var randomTestCount = 100;
   for (var name in ArgGenerators) {
     try {
+      if (!GL[name])
+        throw (new Error(name + " is missing from the WebGL context"));
       var argGen = ArgGenerators[name];
+      var alreadyTriedArgs = {};
       if (!argGen.generate) continue;
       // test each GL function with randomTestCount randomly generated valid args
       argGeneratorTestRunner(argGen, function(args, gen, setupVars) {
+        var src = Object.toSource(args);
+        if (alreadyTriedArgs[src])
+          return true;
+          
+        alreadyTriedArgs[src] = true;
+        var ok = false;
         // if we have an validity checker, assert that the generated args are valid
         if (gen.checkArgValidity)
           assert("Valid args: "+name+"("+args.join(",")+")",
@@ -727,12 +928,13 @@ Tests.testValidArgs = function() {
         var rv;
         // assert that GL function works when called with valid args
         assertOk("Calling "+name+"("+args.join(",")+")",
-                function(){rv = GL[name].apply(GL, args);});
+                function(){rv = GL[name].apply(GL, args); ok = true;});
         // if we need to cleanup the return value, do it here
         // e.g. calling gl.deleteBuffer(rv) after testing gl.createBuffer() above
         if (gen.returnValueCleanup)
           assertOk("Cleaning up return value after "+name+"("+args.join(",")+")",
                    function() { gen.returnValueCleanup(rv); });
+        return ok;
       }, randomTestCount);
     } catch(e) {
       testFailed(name, e.name, formatError(e));
