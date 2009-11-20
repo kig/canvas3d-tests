@@ -55,6 +55,8 @@
 
   bufferTarget = constCheck(GL.ARRAY_BUFFER, GL.ELEMENT_ARRAY_BUFFER);
   bufferMode = constCheck(GL.STREAM_DRAW, GL.STATIC_DRAW, GL.DYNAMIC_DRAW);
+  cullFace = constCheck(GL.FRONT, GL.BACK, GL.FRONT_AND_BACK);
+  shaderType = constCheck(GL.VERTEX_SHADER, GL.FRAGMENT_SHADER);
   textureUnit = constCheck.apply(this, (function(){
     var textureUnits = [];
     var texUnits = GL.getParameter(GL.MAX_TEXTURE_IMAGE_UNITS);
@@ -223,19 +225,36 @@
       },
     },
 
+    // shaders
+
     activeTexture : {
       generate : function() {
         return [textureUnit.random()];
+      },
+      checkArgValidity : function(t) {
+        return textureUnit.has(t);
       },
       teardown : function() {
         GL.activeTexture(GL.TEXTURE0);
       }
     },
     attachShader : {},
-    
+
     bindAttribLocation : {},
     // bindBuffer : {},
-    bindFramebuffer : {},
+    bindFramebuffer : {
+      generate : function() {
+        return [GL.FRAMEBUFFER, Math.random() > 0.5 ? null : GL.createFramebuffer()];
+      },
+      checkArgValidity : function(target, fbo) {
+        return target == GL.FRAMEBUFFER && (fbo == null || GL.isFramebuffer(fbo));
+      },
+      cleanup : function(target, fbo) {
+        GL.bindFramebuffer(target, null);
+        if (fbo)
+          GL.deleteFramebuffer(fbo);
+      }
+    },
     bindRenderbuffer : {},
     bindTexture : {},
     blendColor : {},
@@ -256,19 +275,59 @@
     copyTexImage2D : {},
     copyTexSubImage2D : {},
     // createBuffer : {},
-    createFramebuffer : {},
-    createProgram : {},
-    createRenderbuffer : {},
-    createShader : {},
-    createTexture : {},
-    cullFace : {},
+    createFramebuffer : {
+      returnValueCleanup : function(o) { GL.deleteFramebuffer(o); }
+    },
+    createProgram : {
+      returnValueCleanup : function(o) { GL.deleteProgram(o); }
+    },
+    createRenderbuffer : {
+      returnValueCleanup : function(o) { GL.deleteRenderbuffer(o); }
+    },
+    createShader : {
+      returnValueCleanup : function(o) { GL.deleteShader(o); }
+    },
+    createTexture : {
+      returnValueCleanup : function(o) { GL.deleteTexture(o); }
+    },
+    cullFace : {
+      generate : function() {
+        return [cullFace.random()];
+      },
+      checkArgValidity : function(f) {
+        return cullFace.has(f);
+      },
+      teardown : function() {
+        GL.cullFace(GL.BACK);
+      }
+    },
 
     // deleteBuffer : {},
-    deleteFramebuffer : {},
-    deleteProgram : {},
-    deleteRenderbuffer : {},
-    deleteShader : {},
-    deleteTexture : {},
+    deleteFramebuffer : {
+      generate : function() { return [GL.createFramebuffer()]; },
+      checkArgValidity : function(o) { return GL.isFramebuffer(o); },
+      cleanup : function(o) { try { GL.deleteFramebuffer(o); } catch(e) {} }
+    },
+    deleteProgram : {
+      generate : function() { return [GL.createProgram()]; },
+      checkArgValidity : function(o) { return GL.isProgram(o); },
+      cleanup : function(o) { try { GL.deleteProgram(o); } catch(e) {} }
+    },
+    deleteRenderbuffer : {
+      generate : function() { return [GL.createRenderbuffer()]; },
+      checkArgValidity : function(o) { return GL.isRenderbuffer(o); },
+      cleanup : function(o) { try { GL.deleteRenderbuffer(o); } catch(e) {} }
+    },
+    deleteShader : {
+      generate : function() { return [GL.createShader(shaderType.random())]; },
+      checkArgValidity : function(o) { return GL.isShader(o); },
+      cleanup : function(o) { try { GL.deleteShader(o); } catch(e) {} }
+    },
+    deleteTexture : {
+      generate : function() { return [GL.createTexture()]; },
+      checkArgValidity : function(o) { return GL.isTexture(o); },
+      cleanup : function(o) { try { GL.deleteTexture(o); } catch(e) {} }
+    },
     depthFunc : {},
     depthMask : {},
     depthRange : {},
