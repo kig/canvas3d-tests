@@ -55,6 +55,12 @@
 
   bufferTarget = constCheck(GL.ARRAY_BUFFER, GL.ELEMENT_ARRAY_BUFFER);
   bufferMode = constCheck(GL.STREAM_DRAW, GL.STATIC_DRAW, GL.DYNAMIC_DRAW);
+  textureUnit = constCheck.apply(this, (function(){
+    var textureUnits = [];
+    var texUnits = GL.getParameter(GL.MAX_TEXTURE_IMAGE_UNITS);
+    for (var i=0; i<texUnits; i++) textureUnits.push(GL['TEXTURE'+i]);
+    return textureUnits;
+  })());
 
   WebGLArrayTypes = [
     WebGLFloatArray,
@@ -71,13 +77,26 @@
     return new t(webGLArrayContentGenerators.random()());
   };
 
-  randomWebGLArrayBuffer = function() {
-    return new WebGLArrayBuffer(randomLength());
+  randomWebGLArrayBuffer = function(buflen) {
+    if (buflen == null) buflen = 256;
+    return new WebGLArrayBuffer(Math.floor(Math.random()*(buflen+1)));
   };
 
   bufferDataGenerators = [randomLength, randomWebGLArray, randomWebGLArrayBuffer];
   randomBufferData = function() {
     return bufferDataGenerators.random()();
+  };
+
+  randomSmallWebGLArray = function(buflen) {
+    var t = WebGLArrayTypes.random();
+    return new t(Math.floor(Math.random()*(buflen/4))+1);
+  };
+
+  bufferSubDataGenerators = [randomSmallWebGLArray, randomWebGLArrayBuffer];
+  randomBufferSubData = function(buflen) {
+    var data = bufferSubDataGenerators.random()(buflen);
+    var offset = Math.floor(Math.random()*(buflen - data.byteLength));
+    return {data:data, offset:offset};
   };
 
   // Returns true if bufData can be passed to GL.bufferData
@@ -182,16 +201,181 @@
     },
 
     bufferSubData : {
-    }
+      setup : function() {
+        var buf = GL.createBuffer();
+        var ebuf = GL.createBuffer();
+        GL.bindBuffer(GL.ARRAY_BUFFER, buf);
+        GL.bufferData(GL.ARRAY_BUFFER, 256, GL.STATIC_DRAW);
+        GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, ebuf);
+        GL.bufferData(GL.ELEMENT_ARRAY_BUFFER, 256, GL.STATIC_DRAW);
+        return [buf, ebuf];
+      },
+      generate : function(buf, ebuf) {
+        var d = randomBufferSubData(256);
+        return [bufferTarget.random(), d.offset, d.data];
+      },
+      checkArgValidity : function(target, offset, data) {
+        return bufferTarget.has(target) && offset >= 0 && data.byteLength >= 0 && offset + data.byteLength <= 256;
+      },
+      teardown : function(buf, ebuf) {
+        GL.deleteBuffer(buf);
+        GL.deleteBuffer(ebuf);
+      },
+    },
 
-    // textures
+    activeTexture : {
+      generate : function() {
+        return [textureUnit.random()];
+      },
+      teardown : function() {
+        GL.activeTexture(GL.TEXTURE0);
+      }
+    },
+    attachShader : {},
+    
+    bindAttribLocation : {},
+    // bindBuffer : {},
+    bindFramebuffer : {},
+    bindRenderbuffer : {},
+    bindTexture : {},
+    blendColor : {},
+    blendEquation : {},
+    blendEquationSeparate : {},
+    blendFunc : {},
+    blendFuncSeparate : {},
+    // bufferData : {},
+    // bufferSubData : {},
 
-    // drawArrays
+    checkFramebufferStatus : {},
+    clear : {},
+    clearColor : {},
+    clearDepth : {},
+    clearStencil : {},
+    colorMask : {},
+    compileShader : {},
+    copyTexImage2D : {},
+    copyTexSubImage2D : {},
+    // createBuffer : {},
+    createFramebuffer : {},
+    createProgram : {},
+    createRenderbuffer : {},
+    createShader : {},
+    createTexture : {},
+    cullFace : {},
 
-    // drawElements
+    // deleteBuffer : {},
+    deleteFramebuffer : {},
+    deleteProgram : {},
+    deleteRenderbuffer : {},
+    deleteShader : {},
+    deleteTexture : {},
+    depthFunc : {},
+    depthMask : {},
+    depthRange : {},
+    detachShader : {},
+    disable : {},
+    disableVertexAttribArray : {},
+    drawArrays : {},
+    drawElements : {},
 
-    // state setters
-    // state getters
+    enable : {},
+    enableVertexAttribArray : {},
+    
+    finish : {},
+    flush : {},
+    framebufferRenderbuffer : {},
+    framebufferTexture2D : {},
+    frontFace : {},
+
+    generateMipmap : {},
+    getActiveAttrib : {},
+    getActiveUniform : {},
+    getAttachedShaders : {},
+    getAttribLocation : {},
+    getParameter : {},
+    getBufferParameter : {},
+    getError : {},
+    getFramebufferAttachmentParameter : {},
+    getProgramParameter : {},
+    getProgramInfoLog : {},
+    getRenderbufferParameter : {},
+    getShaderParameter : {},
+    getShaderInfoLog : {},
+    getShaderSource : {},
+    getString : {},
+    getTexParameter : {},
+    getUniform : {},
+    getUniformLocation : {},
+    getVertexAttrib : {},
+    getVertexAttribOffset : {},
+
+    hint : {},
+
+    isBuffer : {},
+    isEnabled : {},
+    isFramebuffer : {},
+    isProgram : {},
+    isRenderbuffer : {},
+    isShader : {},
+    isTexture : {},
+
+    lineWidth : {},
+    linkProgram : {},
+    
+    pixelStorei : {},
+    polygonOffset : {},
+
+    readPixels : {},
+    renderbufferStorage : {},
+
+    sampleCoverage : {},
+    scissor : {},
+    shaderSource : {},
+    stencilFunc : {},
+    stencilFuncSeparate : {},
+    stencilMask : {},
+    stencilMaskSeparate : {},
+    stencilOp : {},
+    stencilOpSeparate : {},
+
+    texImage2D : {},
+    texParameterf : {},
+    texParameteri : {},
+    texSubImage2D : {},
+    
+    uniform1f : {},
+    uniform1fv : {},
+    uniform1i : {},
+    uniform1iv : {},
+    uniform2f : {},
+    uniform2fv : {},
+    uniform2i : {},
+    uniform2iv : {},
+    uniform3f : {},
+    uniform3fv : {},
+    uniform3i : {},
+    uniform3iv : {},
+    uniform4f : {},
+    uniform4fv : {},
+    uniform4i : {},
+    uniform4iv : {},
+    uniformMatrix2fv : {},
+    uniformMatrix3fv : {},
+    uniformMatrix4fv : {},
+    useProgram : {},
+    
+    validateProgram : {},
+    vertexAttrib1f : {},
+    vertexAttrib1fv : {},
+    vertexAttrib2f : {},
+    vertexAttrib2fv : {},
+    vertexAttrib3f : {},
+    vertexAttrib3fv : {},
+    vertexAttrib4f : {},
+    vertexAttrib4fv : {},
+    vertexAttribPointer : {},
+    viewport : {}
+
   };
 
   // Calls testFunction numberOfTests times with arguments generated by
