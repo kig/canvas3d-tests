@@ -789,7 +789,7 @@ VBO.prototype = {
         if (i == 0 || dlen < length)
             length = dlen;
         if (!d.floatArray)
-          d.floatArray = new CanvasFloatArray(d.data);
+          d.floatArray = new WebGLFloatArray(d.data);
         gl.bindBuffer(gl.ARRAY_BUFFER, vbos[i]);
         throwError(gl, "bindBuffer");
         gl.bufferData(gl.ARRAY_BUFFER, d.floatArray, gl.STATIC_DRAW);
@@ -802,10 +802,10 @@ VBO.prototype = {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.elementsVBO);
         throwError(gl, "bindBuffer ELEMENT_ARRAY_BUFFER");
         if (this.elementsType == gl.UNSIGNED_SHORT && !d.ushortArray) {
-          d.ushortArray = new CanvasUnsignedShortArray(d.data);
+          d.ushortArray = new WebGLUnsignedShortArray(d.data);
           gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, d.ushortArray, gl.STATIC_DRAW);
         } else if (this.elementsType == gl.UNSIGNED_BYTE && !d.ubyteArray) {
-          d.ubyteArray = new CanvasUnsignedByteArray(d.data);
+          d.ubyteArray = new WebGLUnsignedByteArray(d.data);
           gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, d.ubyteArray, gl.STATIC_DRAW);
         }
         throwError(gl, "bufferData ELEMENT_ARRAY_BUFFER");
