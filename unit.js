@@ -323,6 +323,15 @@ function randomFloat () {
         fac = NaN;
     return -0.5*fac + Math.random() * fac;
 }
+function randomFloatFromRange(lo, hi) {
+  var r = Math.random();
+  if (r < 0.05)
+    return lo;
+  else if (r > 0.95)
+    return hi;
+  else
+    return lo + Math.random()*(hi-lo);
+}
 function randomInt (sz) {
   if (sz != null)
     return Math.floor(Math.random()*sz);
