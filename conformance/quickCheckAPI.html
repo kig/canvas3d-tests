@@ -81,6 +81,7 @@
     GL.NEVER, GL.LESS, GL.EQUAL, GL.LEQUAL, GL.GREATER, GL.NOTEQUAL,
     GL.GEQUAL, GL.ALWAYS
   );
+  stencilFuncFunc = depthFuncFunc;
   enableCap = constCheck(
     GL.BLEND, GL.CULL_FACE, GL.DEPTH_TEST, GL.DITHER, GL.POLYGON_OFFSET_FILL,
     GL.SAMPLE_ALPHA_TO_COVERAGE, GL.SAMPLE_COVERAGE, GL.SCISSOR_TEST,
@@ -169,7 +170,11 @@
     GL.VIEWPORT || "GL.VIEWPORT"
   );
   mipmapHint = constCheck(GL.FASTEST, GL.NICEST, GL.DONT_CARE);
+  pixelStoreiPname = constCheck(GL.PACK_ALIGNMENT, GL.UNPACK_ALIGNMENT);
+  pixelStoreiParam = constCheck(1,2,4,8);
   shaderType = constCheck(GL.VERTEX_SHADER, GL.FRAGMENT_SHADER);
+  stencilOp = constCheck(GL.KEEP, GL.ZERO, GL.REPLACE, GL.INCR, GL.INCR_WRAP,
+                         GL.DECR, GL.DECR_WRAP, GL.INVERT);
   textureUnit = constCheck.apply(this, (function(){
     var textureUnits = [];
     var texUnits = GL.getParameter(GL.MAX_TEXTURE_IMAGE_UNITS);
@@ -181,6 +186,7 @@
   var MaxStencilValue = 1 << StencilBits;
   
   var MaxVertexAttribs = GL.getParameter(GL.MAX_VERTEX_ATTRIBS);
+  var LineWidthRange = GL.getParameter(GL.ALIASED_LINE_WIDTH_RANGE);
 
   // Returns true if bufData can be passed to GL.bufferData
   isBufferData = function(bufData) {
@@ -277,6 +283,12 @@
 
   randomStencil = function() {
     return randomInt(MaxStencilValue);
+  };
+
+  randomLineWidth = function() {
+    var lo = LineWidthRange[0],
+        hi = LineWidthRange[1];
+    return randomFloatFromRange(lo, hi);
   };
 
 
@@ -794,13 +806,29 @@
 
   // L
 
-    lineWidth : {}, // FIXME
+    lineWidth : {
+      generate : function() { return [randomLineWidth()]; },
+      teardown : function() { GL.lineWidth(1); }
+    },
     linkProgram : {}, // FIXME
 
   // P
-    
-    pixelStorei : {}, // FIXME
-    polygonOffset : {}, // FIXME
+    pixelStorei : {
+      generate : function() {
+        return [pixelStoreiPname.random(), pixelStoreiParam.random()];
+      },
+      checkArgValidity : function(pname, param) {
+        return pixelStoreiPname.has(pname) && pixelStoreiParam.has(param);
+      },
+      teardown : function() {
+        GL.pixelStorei(GL.PACK_ALIGNMENT, 4);
+        GL.pixelStorei(GL.UNPACK_ALIGNMENT, 4);
+      }
+    },
+    polygonOffset : {
+      generate : function() { return [randomFloat(), randomFloat()]; },
+      teardown : function() { GL.polygonOffset(0,0); }
+    },
 
   // R
 
@@ -809,15 +837,74 @@
 
   // S
 
-    sampleCoverage : {}, // FIXME
-    scissor : {}, // FIXME
+    sampleCoverage : {
+      generate : function() { return [randomFloatFromRange(0,1), randomBool()] },
+      teardown : function() { GL.sampleCoverage(1, false); }
+    },
+    scissor : {
+      generate : function() {
+        return [randomInt(3000)-1500, randomInt(3000)-1500, randomInt(3000), randomInt(3000)];
+      },
+      checkArgValidity : function(x,y,w,h) {
+        return w > 0 && h > 0;
+      },
+      teardown : function() {
+        GL.scissor(0,0,GL.canvas.width, GL.canvas.height);
+      }
+    },
     shaderSource : {}, // FIXME
-    stencilFunc : {}, // FIXME
-    stencilFuncSeparate : {}, // FIXME
-    stencilMask : {}, // FIXME
-    stencilMaskSeparate : {}, // FIXME
-    stencilOp : {}, // FIXME
-    stencilOpSeparate : {}, // FIXME
+    stencilFunc : {
+      generate : function(){
+        return [stencilFuncFunc.random(), randomInt(MaxStencilValue), randomInt(0xffffffff)];
+      },
+      checkArgValidity : function(func, ref, mask) {
+        return stencilFuncFunc.has(func) && ref >= 0 && ref < MaxStencilValue;
+      },
+      teardown : function() {
+        GL.stencilFunc(GL.ALWAYS, 0, 0xffffffff);
+      }
+    },
+    stencilFuncSeparate : {
+      generate : function(){
+        return [cullFace.random(), stencilFuncFunc.random(), randomInt(MaxStencilValue), randomInt(0xffffffff)];
+      },
+      checkArgValidity : function(face, func, ref, mask) {
+        return cullFace.has(face) && stencilFuncFunc.has(func) && ref >= 0 && ref < MaxStencilValue;
+      },
+      teardown : function() {
+        GL.stencilFunc(GL.ALWAYS, 0, 0xffffffff);
+      }
+    },
+    stencilMask : {
+      generate : function() { return [randomInt(0xffffffff)]; },
+      teardown : function() { GL.stencilMask(0xffffffff); }
+    },
+    stencilMaskSeparate : {
+      generate : function() { return [cullFace.random(), randomInt(0xffffffff)]; },
+      checkArgValidity : function(face, mask) {
+        return cullFace.has(face);
+      },
+      teardown : function() { GL.stencilMask(0xffffffff); }
+    },
+    stencilOp : {
+      generate : function() {
+        return [stencilOp.random(), stencilOp.random(), stencilOp.random()];
+      },
+      checkArgValidity : function(sfail, dpfail, dppass) {
+        return stencilOp.has(sfail) && stencilOp.has(dpfail) && stencilOp.has(dppass);
+      },
+      teardown : function() { GL.stencilOp(GL.KEEP, GL.KEEP, GL.KEEP); }
+    },
+    stencilOpSeparate : {
+      generate : function() {
+        return [cullFace.random(), stencilOp.random(), stencilOp.random(), stencilOp.random()];
+      },
+      checkArgValidity : function(face, sfail, dpfail, dppass) {
+        return cullFace.has(face) && stencilOp.has(sfail) &&
+               stencilOp.has(dpfail) && stencilOp.has(dppass);
+      },
+      teardown : function() { GL.stencilOp(GL.KEEP, GL.KEEP, GL.KEEP); }
+    },
 
   // T
 
