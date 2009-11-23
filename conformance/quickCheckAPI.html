@@ -175,6 +175,17 @@
   shaderType = constCheck(GL.VERTEX_SHADER, GL.FRAGMENT_SHADER);
   stencilOp = constCheck(GL.KEEP, GL.ZERO, GL.REPLACE, GL.INCR, GL.INCR_WRAP,
                          GL.DECR, GL.DECR_WRAP, GL.INVERT);
+  texParameterPname = constCheck(
+    GL.TEXTURE_MIN_FILTER, GL.TEXTURE_MAG_FILTER,
+    GL.TEXTURE_WRAP_S, GL.TEXTURE_WRAP_T);
+  texParameterParam = {};
+  texParameterParam[GL.TEXTURE_MIN_FILTER] = constCheck(
+    GL.NEAREST, GL.LINEAR, GL.NEAREST_MIPMAP_NEAREST, GL.LINEAR_MIPMAP_NEAREST,
+    GL.NEAREST_MIPMAP_LINEAR, GL.LINEAR_MIPMAP_LINEAR);
+  texParameterParam[GL.TEXTURE_MAG_FILTER] = constCheck(GL.NEAREST, GL.LINEAR);
+  texParameterParam[GL.TEXTURE_WRAP_S] = constCheck(
+    GL.CLAMP_TO_EDGE, GL.MIRRORED_REPEAT, GL.REPEAT);
+  texParameterParam[GL.TEXTURE_WRAP_T] = texParameterParam[GL.TEXTURE_WRAP_S];
   textureUnit = constCheck.apply(this, (function(){
     var textureUnits = [];
     var texUnits = GL.getParameter(GL.MAX_TEXTURE_IMAGE_UNITS);
@@ -907,10 +918,35 @@
     },
 
   // T
-
     texImage2D : {}, // FIXME
-    texParameterf : {}, // FIXME
-    texParameteri : {}, // FIXME
+    texParameterf : {
+      generate : function() {
+        var pname = texParameterPname.random();
+        var param = texParameterParam[pname].random();
+        return [bindTextureTarget.random(), pname, param];
+      },
+      checkArgValidity : function(target, pname, param) {
+        if (!bindTextureTarget.has(target))
+          return false;
+        if (!texParameterPname.has(pname))
+          return false;
+        return texParameterParam[pname].has(param);
+      }
+    },
+    texParameteri : {
+      generate : function() {
+        var pname = texParameterPname.random();
+        var param = texParameterParam[pname].random();
+        return [bindTextureTarget.random(), pname, param];
+      },
+      checkArgValidity : function(target, pname, param) {
+        if (!bindTextureTarget.has(target))
+          return false;
+        if (!texParameterPname.has(pname))
+          return false;
+        return texParameterParam[pname].has(param);
+      }
+    },
     texSubImage2D : {}, // FIXME
 
   // U
@@ -948,7 +984,17 @@
     vertexAttrib4f : {}, // FIXME
     vertexAttrib4fv : {}, // FIXME
     vertexAttribPointer : {}, // FIXME
-    viewport : {} // FIXME
+    viewport : {
+      generate : function() {
+        return [randomInt(3000)-1500, randomInt(3000)-1500, randomInt(3000), randomInt(3000)];
+      },
+      checkArgValidity : function(x,y,w,h) {
+        return w > 0 && h > 0;
+      },
+      teardown : function() {
+        GL.viewport(0,0,GL.canvas.width, GL.canvas.height);
+      }
+    }
 
   };
 
