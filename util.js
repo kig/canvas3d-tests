@@ -43,6 +43,8 @@ function loadTexture(gl, elem, mipmaps) {
 
 function getShader(gl, id) {
   var shaderScript = document.getElementById(id);
+  if (!gl.getShaderParameter)
+    gl.getShaderParameter = gl.getShaderi;
   if (!shaderScript) {
     throw(new Error("No shader element with id: "+id));
   }
@@ -67,7 +69,7 @@ function getShader(gl, id) {
   gl.shaderSource(shader, str);
   gl.compileShader(shader);
 
-  if (gl.getShaderi(shader, gl.COMPILE_STATUS) != 1) {
+  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) != 1) {
     var ilog = gl.getShaderInfoLog(shader);
     gl.deleteShader(shader);
     throw(new Error("Failed to compile shader "+shaderScript.id + ", Shader info log: " + ilog));
@@ -77,6 +79,8 @@ function getShader(gl, id) {
 
 function loadShaderArray(gl, shaders) {
   var id = gl.createProgram();
+  if (!gl.getProgramParameter)
+    gl.getProgramParameter = gl.getProgrami;
   var shaderObjs = [];
   for (var i=0; i<shaders.length; ++i) {
     try {
@@ -92,11 +96,11 @@ function loadShaderArray(gl, shaders) {
   var prog = {program: id, shaders: shaderObjs};
   gl.linkProgram(id);
   gl.validateProgram(id);
-  if (gl.getProgrami(id, gl.LINK_STATUS) != 1) {
+  if (gl.getProgramParameter(id, gl.LINK_STATUS) != 1) {
     deleteShader(gl,prog);
     throw(new Error("Failed to link shader"));
   }
-  if (gl.getProgrami(id, gl.VALIDATE_STATUS) != 1) {
+  if (gl.getProgramParameter(id, gl.VALIDATE_STATUS) != 1) {
     deleteShader(gl,prog);
     throw(new Error("Failed to validate shader"));
   }
@@ -941,36 +945,37 @@ FBO.prototype = {
 }
 
 function makeGLErrorWrapper(gl, fname) {
-    return (function() {
-        var rv;
-        try {
-            rv = gl[fname].apply(gl, arguments);
-        } catch (e) {
-            throw(new Error("GL error " + e.name + " in "+fname+ "\n"+ e.message+"\n" +arguments.callee.caller));
-        }
-        var e = gl.getError();
-        if (e != 0) {
-            throw(new Error("GL error "+e+" in "+fname));
-        }
-        return rv;
-    });
+  return (function() {
+    try {
+      var rv = gl[fname].apply(gl, arguments);
+      var err = gl.getError();
+      if (err != 0)
+        throw(new Error("GL error "+err+" in "+fname));
+      return rv;
+    } catch (e) {
+      throw(new Error("GL error " + e.name +
+                      " in " + fname + "\n" +
+                      e.message + "\n" +
+                      arguments.callee.caller));
+    }
+  });
 }
 
 function wrapGLContext(gl) {
-    var wrap = {};
-    for (var i in gl) {
-      try {
-        if (typeof gl[i] == 'function') {
-            wrap[i] = makeGLErrorWrapper(gl, i);
-        } else {
-            wrap[i] = gl[i];
-        }
-      } catch (e) {
-        // log("wrapGLContext: Error accessing " + i);
+  var wrap = {};
+  for (var i in gl) {
+    try {
+      if (typeof gl[i] == 'function') {
+          wrap[i] = makeGLErrorWrapper(gl, i);
+      } else {
+          wrap[i] = gl[i];
       }
+    } catch (e) {
+      // log("wrapGLContext: Error accessing " + i);
     }
-    wrap.getError = function(){ return gl.getError(); };
-    return wrap;
+  }
+  wrap.getError = function(){ return gl.getError(); };
+  return wrap;
 }
 
 
