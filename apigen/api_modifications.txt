@@ -37,9 +37,7 @@ genRenderbuffers -> Renderbuffer createRenderbuffer ()
 genTextures -> Texture createTexture ()
 getActiveAttrib -> Object getActiveAttrib (uint program, uint index)
 getActiveUniform -> Object getActiveUniform (uint program, uint index)
-# TBD
--getAttachedShaders
-#getAttachedShaders -> Array getAttachedShaders (uint program)
+getAttachedShaders -> Array getAttachedShaders (uint program)
 getAttribLocation -> int getAttribLocation (uint program, string name)
 +Object getParameter (uint pname)
 -getBooleanv
@@ -49,10 +47,14 @@ getAttribLocation -> int getAttribLocation (uint program, string name)
 -getString
 getBufferParameteriv -> int getBufferParameteri (uint target, uint value)
 getFramebufferAttachmentParameteriv -> int getFramebufferAttachmentParameteri (uint target, uint attachment, uint pname)
-getProgramiv -> int getProgrami (uint program, uint pname)
+-getProgrami
+-getProgramiv
++Object getProgramParameter (uint program, uint pname)
 getProgramInfoLog -> string getProgramInfoLog (uint program)
 getRenderbufferParameteriv -> int getRenderbufferParameteri (uint target, uint pname)
-getShaderiv -> string getShaderi (uint shader, uint pname)
+-getShaderi
+-getShaderiv
++Object getShaderParameter (uint shader, uint pname)
 getShaderInfoLog -> string getShaderInfoLog (uint shader)
 # not supported by desktop drivers
 # getShaderPrecisionFormat -> Object getShaderPrecisionFormat (uint shaderType, uint precisionType)

@@ -249,6 +249,9 @@ Tests.test_getActiveUniform = function(gl) {
   assertFail(function(){ gl.getActiveUniform(); });
   assertFail(function(){ gl.getActiveUniform(0); });
 }
+Tests.test_getAttachedShaders = function(gl) {
+  assertFail(function(){ gl.getAttachedShaders(); });
+}
 Tests.test_getAttribLocation = function(gl) {
   assertFail(function(){ gl.getAttribLocation(); });
   assertFail(function(){ gl.getAttribLocation(0); });
@@ -264,20 +267,12 @@ Tests.test_getFramebufferAttachmentParameteri = function(gl) {
   assertFail(function(){ gl.getFramebufferAttachmentParameteri(0); });
   assertFail(function(){ gl.getFramebufferAttachmentParameteri(0,0); });
 }
-Tests.test_getProgrami = function(gl) {
-  assertFail(function(){ gl.getProgrami(); });
-  assertFail(function(){ gl.getProgrami(0); });
-}
 Tests.test_getProgramInfoLog = function(gl) {
   assertFail(function(){ gl.getProgramInfoLog(); });
 }
 Tests.test_getRenderbufferParameteri = function(gl) {
   assertFail(function(){ gl.getRenderbufferParameteri(); });
   assertFail(function(){ gl.getRenderbufferParameteri(0); });
-}
-Tests.test_getShaderi = function(gl) {
-  assertFail(function(){ gl.getShaderi(); });
-  assertFail(function(){ gl.getShaderi(0); });
 }
 Tests.test_getShaderInfoLog = function(gl) {
   assertFail(function(){ gl.getShaderInfoLog(); });
@@ -567,6 +562,14 @@ Tests.test_currentProgram = function(gl) {
 }
 Tests.test_getParameter = function(gl) {
   assertFail(function(){ gl.getParameter(); });
+}
+Tests.test_getProgramParameter = function(gl) {
+  assertFail(function(){ gl.getProgramParameter(); });
+  assertFail(function(){ gl.getProgramParameter(0); });
+}
+Tests.test_getShaderParameter = function(gl) {
+  assertFail(function(){ gl.getShaderParameter(); });
+  assertFail(function(){ gl.getShaderParameter(0); });
 }
 Tests.test_getTexParameteri = function(gl) {
   assertFail(function(){ gl.getTexParameteri(); });
