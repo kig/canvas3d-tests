@@ -338,6 +338,9 @@ function randomInt (sz) {
   else
     return Math.floor(randomFloat());
 }
+function randomIntFromRange(lo, hi) {
+  return Math.floor(randomFloatFromRange(lo, hi));
+}
 function randomLength () {
     var l = Math.floor(Math.random() * 256);
     if (Math.random < 0.5) l = l / 10;
