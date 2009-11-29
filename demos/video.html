@@ -3,15 +3,19 @@
 <script type="application/x-javascript" src="../util.js"></script>
 <script>
 var processor = {
+  lastTime : new Date,
   timerCallback: function() {
     if (this.video.paused || this.video.ended) {
       return;
     }
     this.computeFrame();
+    var t = new Date;
+    var elapsed = t - this.lastTime;
+    this.lastTime = t;
     var self = this;
     setTimeout(function () {
         self.timerCallback();
-      }, 0);
+      }, Math.max(0, 33-elapsed));
   },
 
   init: function() {
@@ -38,6 +42,7 @@ var processor = {
         self.init();
         self.width = self.video.videoWidth;
         self.height = self.video.videoHeight;
+        self.lastTime = new Date;
         self.timerCallback();
       }, false);
   },
