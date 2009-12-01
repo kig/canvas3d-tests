@@ -1186,7 +1186,7 @@ try {
 
 initGL_CONTEXT_ID = function(){
   var c = document.createElement('canvas');
-  var contextNames = ['webkit-3d','moz-webgl','webgl'];
+  var contextNames = ['experimental-webgl','webgl','webkit-3d','moz-webgl'];
   GL_CONTEXT_ID = null;
   for (var i=0; i<contextNames.length; i++) {
     try {
