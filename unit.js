@@ -61,14 +61,19 @@ Object.toSource = function(a, seen){
     seen.unshift(a);
     var members = [];
     var name;
-    for (var i in a) {
-      if (i.search(/^[a-zA-Z0-9]+$/) != -1)
-        name = i;
-      else
-        name = '"' + i.replace(/"/g, '\\"') + '"';
-      var s = name + ':' + Object.toSource(a[i], seen);
-      members.push(s);
-    }
+    try {
+      for (var i in a) {
+        if (i.search(/^[a-zA-Z0-9]+$/) != -1)
+          name = i;
+        else
+          name = '"' + i.replace(/"/g, '\\"') + '"';
+        var ai;
+        try { ai = a[i]; }
+        catch(e) { ai = 'null /*ERROR_ACCESSING*/'; }
+        var s = name + ':' + Object.toSource(ai, seen);
+        members.push(s);
+      }
+    } catch (e) {}
     var prefix = '';
     idx = seen.indexOf(a);
     if (idx != -1) prefix = '#'+(idx+1)+'=';
