@@ -124,10 +124,10 @@ Tests.testDrawElementsVBO = function(gl, prog, v,n,t) {
                        {elements:true, data:Quad.indices});
   vbo.draw(v);
   assert(0 == checkError(gl, "vbo.draw"));
-  assertOk(function(){gl.drawElements(gl.TRIANGLES, 5, gl.UNSIGNED_SHORT, 1);});
-  assertOk(function(){gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);});
-  assertOk(function(){gl.drawElements(gl.TRIANGLES, 0, gl.UNSIGNED_SHORT, 2);});
-  assertOk(function(){gl.drawElements(gl.TRIANGLES, 1, gl.UNSIGNED_SHORT, 5);});
+  assertOk(function(){gl.drawElements(gl.TRIANGLES, 5, gl.UNSIGNED_SHORT, 1*2);});
+  assertOk(function(){gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0*2);});
+  assertOk(function(){gl.drawElements(gl.TRIANGLES, 0, gl.UNSIGNED_SHORT, 2*1);});
+  assertOk(function(){gl.drawElements(gl.TRIANGLES, 1, gl.UNSIGNED_SHORT, 5*2);});
   vbo.destroy();
   assert(0 == checkError(gl, "vbo.destroy"));
 }
@@ -142,21 +142,21 @@ Tests.testDrawElementsVBOMulti = function(gl, prog, v,n,t) {
                     {elements:true, data:Quad.indices});
   vbo.draw(v, n, t);
   assert(0 == checkError(gl, "vbo.draw"));
-  assertOk(function(){gl.drawElements(gl.TRIANGLES, 5, gl.UNSIGNED_SHORT, 1);});
-  assertOk(function(){gl.drawElements(gl.TRIANGLES, 0, gl.UNSIGNED_SHORT, 2);});
-  assertOk(function(){gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);});
-  assertOk(function(){gl.drawElements(gl.TRIANGLES, 1, gl.UNSIGNED_SHORT, 5);});
-  assertFail(function(){gl.drawElements(gl.TRIANGLES, 1, gl.UNSIGNED_SHORT, 6);});
-  assertFail(function(){gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 1);});
+  assertOk(function(){gl.drawElements(gl.TRIANGLES, 5, gl.UNSIGNED_SHORT, 1*2);});
+  assertOk(function(){gl.drawElements(gl.TRIANGLES, 0, gl.UNSIGNED_SHORT, 2*2);});
+  assertOk(function(){gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0*2);});
+  assertOk(function(){gl.drawElements(gl.TRIANGLES, 1, gl.UNSIGNED_SHORT, 5*2);});
+  assertFail(function(){gl.drawElements(gl.TRIANGLES, 1, gl.UNSIGNED_SHORT, 6*2);});
+  assertFail(function(){gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 1*2);});
   gl.bindBuffer(gl.ARRAY_BUFFER, null);
   gl.bindBuffer(gl.ARRAY_BUFFER, vbo.vbos[1]);
   gl.vertexAttribPointer(n, 3, gl.FLOAT, false, 0, 0);
-  assertOk(function(){gl.drawElements(gl.TRIANGLES, 5, gl.UNSIGNED_SHORT, 1);});
-  assertOk(function(){gl.drawElements(gl.TRIANGLES, 0, gl.UNSIGNED_SHORT, 2);});
-  assertOk(function(){gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);});
-  assertOk(function(){gl.drawElements(gl.TRIANGLES, 1, gl.UNSIGNED_SHORT, 5);});
-  assertFail(function(){gl.drawElements(gl.TRIANGLES, 1, gl.UNSIGNED_SHORT, 6);});
-  assertFail(function(){gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 1);});
+  assertOk(function(){gl.drawElements(gl.TRIANGLES, 5, gl.UNSIGNED_SHORT, 1*2);});
+  assertOk(function(){gl.drawElements(gl.TRIANGLES, 0, gl.UNSIGNED_SHORT, 2*2);});
+  assertOk(function(){gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0*2);});
+  assertOk(function(){gl.drawElements(gl.TRIANGLES, 1, gl.UNSIGNED_SHORT, 5*2);});
+  assertFail(function(){gl.drawElements(gl.TRIANGLES, 1, gl.UNSIGNED_SHORT, 6*2);});
+  assertFail(function(){gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 1*2);});
   vbo.destroy();
   assert(0 == checkError(gl, "vbo.destroy"));
 }
