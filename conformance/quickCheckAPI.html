@@ -27,7 +27,10 @@
         3.2. Args generated with the invalid arg generator should pass
              assertFail(f(args))
   */
-  GL = document.createElement('canvas').getContext(GL_CONTEXT_ID);
+  var GLcanvas = document.createElement('canvas');
+  var canvas2D = document.createElement('canvas');
+  GLcanvas.width = GLcanvas.height = 256;
+  GL = GLcanvas.getContext(GL_CONTEXT_ID);
   Array.from = function(o) {
     var a = [];
     for (var i=0; i<o.length; i++)
@@ -39,7 +42,7 @@
 
   castToInt = function(o) {
     if (typeof o == 'number')
-      return Math.floor(o);
+      return isNaN(o) ? 0 : Math.floor(o);
     if (o == true) return 1;
     return 0;
   };
@@ -183,6 +186,30 @@
   shaderType = constCheck(GL.VERTEX_SHADER, GL.FRAGMENT_SHADER);
   stencilOp = constCheck(GL.KEEP, GL.ZERO, GL.REPLACE, GL.INCR, GL.INCR_WRAP,
                          GL.DECR, GL.DECR_WRAP, GL.INVERT);
+  texImageTarget = constCheck(
+    GL.TEXTURE_2D,
+    GL.TEXTURE_CUBE_MAP_POSITIVE_X,
+    GL.TEXTURE_CUBE_MAP_NEGATIVE_X,
+    GL.TEXTURE_CUBE_MAP_POSITIVE_Y,
+    GL.TEXTURE_CUBE_MAP_NEGATIVE_Y,
+    GL.TEXTURE_CUBE_MAP_POSITIVE_Z,
+    GL.TEXTURE_CUBE_MAP_NEGATIVE_Z
+  );
+  texImageInternalFormat = constCheck(
+    GL.ALPHA,
+    GL.LUMINANCE,
+    GL.LUMINANCE_ALPHA,
+    GL.RGB,
+    GL.RGBA
+  );
+  texImageFormat = constCheck(
+    GL.ALPHA,
+    GL.LUMINANCE,
+    GL.LUMINANCE_ALPHA,
+    GL.RGB,
+    GL.RGBA
+  );
+  texImageType = constCheck(GL.UNSIGNED_BYTE);
   texParameterPname = constCheck(
     GL.TEXTURE_MIN_FILTER, GL.TEXTURE_MAG_FILTER,
     GL.TEXTURE_WRAP_S, GL.TEXTURE_WRAP_T);
@@ -310,6 +337,24 @@
     return randomFloatFromRange(lo, hi);
   };
 
+  randomImage = function(w,h) {
+    var img;
+    var r = Math.random();
+    if (r < 0.5) {
+      img = document.createElement('canvas');
+      img.width = w; img.height = h;
+      img.getContext('2d').fillRect(0,0,w,h);
+    } else if (r < 0.5) {
+      img = document.createElement('video');
+      img.width = w; img.height = h;
+    } else if (r < 0.75) {
+      img = document.createElement('img');
+      img.width = w; img.height = h;
+    } else {
+      img = canvas2D.getContext('2d').createImageData(w,h);
+    }
+    return img
+  };
 
   // ArgGenerators contains argument generators for WebGL functions.
   // The argument generators are used for running random tests against the WebGL
@@ -698,7 +743,14 @@
         var tex2 = GL.createTexture();
         GL.bindTexture(GL.TEXTURE_2D, tex);
         GL.bindTexture(GL.TEXTURE_CUBE_MAP, tex2);
-        // FIXME call texImage2D to set up the textures
+        var pix = new WebGLUnsignedByteArray(16*16*4);
+        GL.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, 16, 16, 0, GL.RGBA, GL.UNSIGNED_BYTE, pix);
+        GL.texImage2D(GL.TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL.RGBA, 16, 16, 0, GL.RGBA, GL.UNSIGNED_BYTE, pix);
+        GL.texImage2D(GL.TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL.RGBA, 16, 16, 0, GL.RGBA, GL.UNSIGNED_BYTE, pix);
+        GL.texImage2D(GL.TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL.RGBA, 16, 16, 0, GL.RGBA, GL.UNSIGNED_BYTE, pix);
+        GL.texImage2D(GL.TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL.RGBA, 16, 16, 0, GL.RGBA, GL.UNSIGNED_BYTE, pix);
+        GL.texImage2D(GL.TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL.RGBA, 16, 16, 0, GL.RGBA, GL.UNSIGNED_BYTE, pix);
+        GL.texImage2D(GL.TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL.RGBA, 16, 16, 0, GL.RGBA, GL.UNSIGNED_BYTE, pix);
       },
       generate : function() { return [bindTextureTarget.random()]; },
       checkArgValidity : function(t) { return bindTextureTarget.has(t); },
@@ -925,7 +977,60 @@
     },
 
   // T
-    texImage2D : {}, // FIXME
+    texImage2D : {
+      noAlreadyTriedCheck : true, // Object.toSource is very slow here
+      setup : function() {
+        var tex = GL.createTexture();
+        var tex2 = GL.createTexture();
+        GL.bindTexture(GL.TEXTURE_2D, tex);
+        GL.bindTexture(GL.TEXTURE_CUBE_MAP, tex2);
+        return [tex, tex2];
+      },
+      generate : function() {
+        if (Math.random() < 0.5) {
+          var img = randomImage(16,16);
+          var a = [ texImageTarget.random(), 0, img ];
+          if (Math.random() < 0.5) a.push(randomBool());
+          if (Math.random() < 0.5) a.push(randomBool());
+          return a;
+        } else {
+          var pix = null;
+          if (Math.random > 0.5) {
+            pix = new WebGLUnsignedByteArray(16*16*4);
+          }
+          return [
+            texImageTarget.random(), 0,
+            texImageInternalFormat.random(), 16, 16, 0,
+            texImageFormat.random(), GL.UNSIGNED_BYTE, pix
+          ];
+        }
+      },
+      checkArgValidity : function(target, level, internalformat, width, height, border, format, type, data) {
+        if (!texImageTarget.has(target) || castToInt(level) < 0)
+          return false;
+        if (arguments.length <= 5) {
+          var image = internalformat;
+          var flipY = width;
+          var asPremultipliedAlpha = height;
+          if (image instanceof HTMLImageElement ||
+              image instanceof HTMLVideoElement ||
+              image instanceof HTMLCanvasElement ||
+              (image.width && image.length && image.data))
+            return true;
+          return false;
+        }
+        var w = castToInt(width), h = castToInt(height), b = castToInt(border);
+        return texImageInternalFormat.has(internalformat) && w >= 0 && h >= 0 &&
+              b == 0 && (data == null || data.byteLength == w*h*4) &&
+              texImageFormat.has(format) && texImageType.has(type);
+      },
+      teardown : function(tex, tex2) {
+        GL.bindTexture(GL.TEXTURE_2D, null);
+        GL.bindTexture(GL.TEXTURE_CUBE_MAP, null);
+        GL.deleteTexture(tex);
+        GL.deleteTexture(tex2);
+      }
+    },
     texParameterf : {
       generate : function() {
         var pname = texParameterPname.random();
@@ -1065,11 +1170,13 @@ Tests.testValidArgs = function() {
       if (!argGen.generate) continue;
       // test each GL function with randomTestCount randomly generated valid args
       argGeneratorTestRunner(argGen, function(args, gen, setupVars) {
-        var src = Object.toSource(args);
-        if (alreadyTriedArgs[src])
-          return true;
-          
-        alreadyTriedArgs[src] = true;
+        if (!gen.noAlreadyTriedCheck) {
+          var src = Object.toSource(args);
+          if (alreadyTriedArgs[src])
+            return true;
+
+          alreadyTriedArgs[src] = true;
+        }
         var ok = false;
         // if we have an validity checker, assert that the generated args are valid
         if (gen.checkArgValidity)
@@ -1085,7 +1192,7 @@ Tests.testValidArgs = function() {
           assertOk("Cleaning up return value after "+name+"("+args.join(",")+")",
                    function() { gen.returnValueCleanup(rv); });
         return ok;
-      }, randomTestCount);
+      }, argGen.testCount || randomTestCount);
     } catch(e) {
       testFailed(name, e.name, formatError(e));
     }
@@ -1096,7 +1203,7 @@ Tests.testValidArgs = function() {
 // when called with randomly generated invalid arguments
 // Works only on tests with checkArgValidity defined
 Tests.testInvalidArgs = function() {
-  var randomTestCount = 1;
+  var randomTestCount = 100;
   for (var name in ArgGenerators) {
     try {
       if (!GL[name])
@@ -1115,6 +1222,10 @@ Tests.testInvalidArgs = function() {
             validArgs = gen.checkArgValidity.apply(gen, mutatedArgs);
           } catch(e) {}
           if (!validArgs) {
+            if (gen.noAlreadyTriedCheck) {
+              foundArgs = true;
+              break; // found new invalid args
+            }
             var src = Object.toSource(mutatedArgs);
             if (!alreadyTriedArgs[src]) {
               alreadyTriedArgs[src] = true;
@@ -1130,6 +1241,7 @@ Tests.testInvalidArgs = function() {
         // assert that GL function fails when called with invalid args
         assertFail("This should fail: "+name+"("+mutatedArgs.map(function(a){return Object.toSource(a)}).join(",")+")",
           function(){
+            GL.getError(); // clear off existing error
             rv = GL[name].apply(GL, mutatedArgs);
             throwError(GL, name);
             ok = true;
@@ -1142,7 +1254,7 @@ Tests.testInvalidArgs = function() {
         }
         GL.getError();
         return !ok;
-      }, randomTestCount);
+      }, argGen.testCount || randomTestCount);
     } catch(e) {
       testFailed(name, e.name, formatError(e));
     }
