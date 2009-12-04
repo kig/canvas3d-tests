@@ -43,6 +43,8 @@ Object.toSource = function(a, seen){
   if (a == null) return "null";
   if (typeof a == 'boolean') return a ? "true" : "false";
   if (typeof a == 'string') return '"' + a.replace(/"/g, '\\"') + '"';
+  if (a instanceof HTMLElement) return a.toString();
+  if (a.width && a.height && a.data) return "[ImageData]";
   if (a instanceof Array) {
     if (!seen) seen = [];
     var idx = seen.indexOf(a);
