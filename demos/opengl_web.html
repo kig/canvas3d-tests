@@ -94,6 +94,8 @@ var pmat = null;
 var look = Matrix.lookAt([4,-1,8], [-0.2,0,0], [0,1,0]);
 var useDoF = false;
 
+var firstFrame = true;
+
 function redraw(canvas, gl, shader, fbo, fbo2, fbo3, depth, identity, unpremult, hblur, vblur, hdof, vdof) {
     
     var doDoF = useDoF;
@@ -134,7 +136,7 @@ function redraw(canvas, gl, shader, fbo, fbo2, fbo3, depth, identity, unpremult,
 
     drawScene(gl, shader, va, na);
 
-    if (doDoF) {
+    if (doDoF || firstFrame) {
 
         fbo3.use();
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -172,6 +174,7 @@ function redraw(canvas, gl, shader, fbo, fbo2, fbo3, depth, identity, unpremult,
         }
 
     }
+    firstFrame = false;
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
