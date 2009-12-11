@@ -220,6 +220,7 @@ Tests.gpuGaussianBlur = function(gl) {
   var t0 = new Date().getTime();
 
   var fbo1 = new FBO(gl, 256, 256);
+  var fbo2 = new FBO(gl, 256, 256);
   var hblur = new Filter(gl, 'identity-vert', 'hblur-frag');
   var vblur = new Filter(gl, 'identity-vert', 'vblur-frag');
   var identity = new Filter(gl, 'identity-vert', 'identity-frag');
@@ -232,18 +233,20 @@ Tests.gpuGaussianBlur = function(gl) {
   gl.activeTexture(gl.TEXTURE0);
 
   fbo1.use();
-
   var tex = loadTexture(gl, document.getElementById('logo'));
   gl.bindTexture(gl.TEXTURE_2D, tex);
   identityFlip.apply(); // draw image
 
-  gl.bindTexture(gl.TEXTURE_2D, fbo1.texture);
   // gaussian blur
   for (var i=0; i<1000; i++) {
+    fbo2.use();
+    gl.bindTexture(gl.TEXTURE_2D, fbo1.texture);
     hblur.apply(function(f){
       f.uniform1f('width', 256.0);
       f.uniform1i('Texture', 0);
     });
+    fbo1.use();
+    gl.bindTexture(gl.TEXTURE_2D, fbo2.texture);
     vblur.apply(function(f){
       f.uniform1f('height', 256.0);
       f.uniform1i('Texture', 0);
@@ -251,9 +254,11 @@ Tests.gpuGaussianBlur = function(gl) {
   }
 
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  gl.bindTexture(gl.TEXTURE_2D, fbo1.texture);
   identity.apply(); // draw blurred image on screen
 
   fbo1.destroy();
+  fbo2.destroy();
   hblur.destroy();
   vblur.destroy();
   identity.destroy();

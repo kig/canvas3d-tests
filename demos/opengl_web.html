@@ -148,16 +148,20 @@ function redraw(canvas, gl, shader, fbo, fbo2, fbo3, depth, identity, unpremult,
         gl.bindTexture(gl.TEXTURE_2D, fbo3.texture);
         gl.activeTexture(gl.TEXTURE0);
 
-        fbo.use();
-        gl.bindTexture(gl.TEXTURE_2D, fbo.texture);
 
         for (var i=0; i<3; i++) {
+            fbo2.use();
+            gl.bindTexture(gl.TEXTURE_2D, fbo.texture);
+        
             hdof.apply(function(f){
                 f.uniform1i("Texture", 0);
                 f.uniform1i("Depth", 1);
                 f.uniform1f("iter", i);
                 f.uniform1f("step", 1.0/canvas.width);
             });
+
+            fbo.use();
+            gl.bindTexture(gl.TEXTURE_2D, fbo2.texture);
 
             vdof.apply(function(f){
                 f.uniform1i("Texture", 0);
