@@ -170,9 +170,11 @@ function runTests() {
 }
 
 function doTestNotify(name) {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "http://localhost:8888/"+name, true);
-  xhr.send(null);
+  try {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://localhost:8888/"+name, true);
+    xhr.send(null);
+  } catch(e) {}
 }
 
 function testFailed(assertName, name) {
