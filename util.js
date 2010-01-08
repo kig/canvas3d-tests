@@ -43,8 +43,6 @@ function loadTexture(gl, elem, mipmaps) {
 
 function getShader(gl, id) {
   var shaderScript = document.getElementById(id);
-  if (!gl.getShaderParameter)
-    gl.getShaderParameter = gl.getShaderi;
   if (!shaderScript) {
     throw(new Error("No shader element with id: "+id));
   }
@@ -79,8 +77,6 @@ function getShader(gl, id) {
 
 function loadShaderArray(gl, shaders) {
   var id = gl.createProgram();
-  if (!gl.getProgramParameter)
-    gl.getProgramParameter = gl.getProgrami;
   var shaderObjs = [];
   for (var i=0; i<shaders.length; ++i) {
     try {
@@ -1147,46 +1143,9 @@ Sphere = {
 
 Sphere.create();
 
-try {
-  if (!window.CanvasArrayBuffer)
-    CanvasArrayBuffer = WebGLArrayBuffer;
-  if (!window.CanvasFloatArray)
-    CanvasFloatArray = WebGLFloatArray;
-  if (!window.CanvasUnsignedIntArray)
-    CanvasUnsignedIntArray = WebGLUnsignedIntArray;
-  if (!window.CanvasIntArray)
-    CanvasIntArray = WebGLIntArray;
-  if (!window.CanvasUnsignedShortArray)
-    CanvasUnsignedShortArray = WebGLUnsignedShortArray;
-  if (!window.CanvasShortArray)
-    CanvasShortArray = WebGLShortArray;
-  if (!window.CanvasUnsignedByteArray)
-    CanvasUnsignedByteArray = WebGLUnsignedByteArray;
-  if (!window.CanvasByteArray)
-    CanvasByteArray = WebGLByteArray;
-} catch(e) {}
-try {
-  if (!window.WebGLArrayBuffer)
-    WebGLArrayBuffer = CanvasArrayBuffer;
-  if (!window.WebGLFloatArray)
-    WebGLFloatArray = CanvasFloatArray;
-  if (!window.WebGLUnsignedIntArray)
-    WebGLUnsignedIntArray = CanvasUnsignedIntArray;
-  if (!window.WebGLIntArray)
-    WebGLIntArray = CanvasIntArray;
-  if (!window.WebGLUnsignedShortArray)
-    WebGLUnsignedShortArray = CanvasUnsignedShortArray;
-  if (!window.WebGLShortArray)
-    WebGLShortArray = CanvasShortArray;
-  if (!window.WebGLUnsignedByteArray)
-    WebGLUnsignedByteArray = CanvasUnsignedByteArray;
-  if (!window.WebGLByteArray)
-    WebGLByteArray = CanvasByteArray;
-} catch(e) {}
-
 initGL_CONTEXT_ID = function(){
   var c = document.createElement('canvas');
-  var contextNames = ['experimental-webgl','webgl','webkit-3d','moz-webgl'];
+  var contextNames = ['experimental-webgl'];
   GL_CONTEXT_ID = null;
   for (var i=0; i<contextNames.length; i++) {
     try {
