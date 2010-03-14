@@ -1,7 +1,9 @@
 THESE TESTS ARE DEPRECATED IN FAVOR OF THE WEBGL TESTS
 ======================================================
 
-I don't know if I can be arsed to port these over to the WebGL test harness (programming does not align with my happiness vector right now, and has never aligned with my financial well-being vector). But if You, Dear Reader, have such fire and gusto burning in your bright beacon of a mind as to undertake the task, feel free to nick whatever you deem useful.
+Please see <a href="http://www.khronos.org/webgl/wiki/Testing/Conformance">the official WebGL test suite</a>.
+
+I'm not going to port these tests over to the WebGL test harness (programming does not align with my happiness vector right now, and has never aligned with my financial well-being vector). But if You, Dear Reader, have such fire and gusto burning in your bright beacon of a mind as to undertake the task, feel free to nick whatever you deem useful.
 
 
 Tests for the WebGL canvas context
